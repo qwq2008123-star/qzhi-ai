@@ -1,0 +1,1796 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 智能简历生成 · 智职AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--glow-i:rgba(99,102,241,0.6);--glow-p:rgba(139,92,246,0.6);--glow-c:rgba(6,182,212,0.6)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#050510;color:#fff;overflow-x:hidden;-webkit-font-smoothing:antialiased;min-height:100vh}
+h1,h2,h3,h4{font-family:'Orbitron',sans-serif}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(139,92,246,0.12);border-radius:2px}
+
+/* BG Layers */
+.space-bg{position:fixed;inset:0;z-index:0;background:
+  radial-gradient(ellipse at 15% 40%,rgba(30,20,100,0.5) 0%,transparent 55%),
+  radial-gradient(ellipse at 85% 25%,rgba(80,10,120,0.35) 0%,transparent 50%),
+  radial-gradient(ellipse at 45% 75%,rgba(10,50,100,0.4) 0%,transparent 50%),
+  radial-gradient(ellipse at 50% 50%,rgba(15,5,50,0.9) 0%,transparent 70%),
+  #050510}
+.nebula{position:fixed;border-radius:50%;pointer-events:none;z-index:1;filter:blur(100px);mix-blend-mode:screen}
+.n1{width:700px;height:700px;top:-12%;left:8%;background:radial-gradient(circle,rgba(99,102,241,0.15) 0%,transparent 70%);animation:nd1 25s ease-in-out infinite}
+.n2{width:500px;height:500px;bottom:-8%;right:10%;background:radial-gradient(circle,rgba(139,92,246,0.12) 0%,transparent 70%);animation:nd2 22s ease-in-out infinite}
+.n3{width:350px;height:350px;top:50%;left:50%;background:radial-gradient(circle,rgba(6,182,212,0.06) 0%,transparent 70%);animation:nd3 30s ease-in-out infinite}
+@keyframes nd1{0%,100%{transform:translate(0,0)}50%{transform:translate(50px,-60px)}}
+@keyframes nd2{0%,100%{transform:translate(0,0)}50%{transform:translate(-40px,50px)}}
+@keyframes nd3{0%,100%{transform:translate(0,0)}50%{transform:translate(70px,40px)}}
+.grid-ov{position:fixed;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(99,102,241,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.015) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at center,black 20%,transparent 70%)}
+.vignette{position:fixed;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse at center,transparent 35%,rgba(5,5,16,0.55) 100%)}
+.energy-fog{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 30% 50%,rgba(99,102,241,0.02) 0%,transparent 50%);animation:fogD 20s linear infinite}
+@keyframes fogD{0%,100%{opacity:0.3}50%{opacity:0.7}}
+
+/* Nav */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(5,5,16,0.7);backdrop-filter:blur(28px) saturate(1.6);border-bottom:1px solid rgba(255,255,255,0.04);height:60px;display:flex;align-items:center;padding:0 40px}
+.nav-logo{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:800;background:linear-gradient(135deg,#fff,#a5b4fc,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:1px;text-decoration:none}
+.nav-back{font-size:12px;color:rgba(255,255,255,0.4);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .3s;margin-right:20px}
+.nav-back:hover{color:rgba(255,255,255,0.8)}
+.nav-links{display:flex;gap:24px;margin-left:auto}
+.nav-links a{font-size:12px;font-weight:500;color:rgba(255,255,255,0.4);text-decoration:none;transition:color .3s}
+.nav-links a:hover,.nav-links a.active{color:#a78bfa}
+
+/* Hero */
+.hero{position:relative;z-index:10;padding:90px 0 40px;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:5px 14px 5px 7px;border-radius:100px;border:1px solid rgba(99,102,241,0.12);background:rgba(99,102,241,0.05);font-size:10px;color:rgba(255,255,255,0.5);margin-bottom:18px}
+.hero-badge-dot{width:5px;height:5px;border-radius:50%;background:#22c55e;animation:dp 2s ease-in-out infinite}
+@keyframes dp{0%,100%{opacity:1}50%{opacity:.5;transform:scale(1.3)}}
+.hero h1{font-size:clamp(26px,3.2vw,40px);font-weight:900;line-height:1.1;margin-bottom:10px}
+.hero h1 .g{background:linear-gradient(135deg,#fff,#e0e7ff,#c4b5fd,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:13px;color:rgba(255,255,255,0.4);max-width:500px;margin:0 auto 0;line-height:1.5}
+
+/* Main 3-col */
+.main-layout{position:relative;z-index:10;max-width:1520px;margin:0 auto;padding:0 30px 120px;display:grid;grid-template-columns:1.3fr 1.0fr 1.3fr;gap:24px;align-items:start}
+
+/* Global Glass Card - Enhanced with gradient borders and depth */
+.glass{background:rgba(12,8,35,0.8);backdrop-filter:blur(32px) saturate(1.6);border:1px solid rgba(139,92,246,0.1);border-radius:20px;overflow:hidden;box-shadow:0 16px 60px rgba(0,0,0,0.5),0 0 0 1px rgba(139,92,246,0.05),0 0 80px rgba(99,102,241,0.025);transition:all .4s cubic-bezier(.4,0,.2,1);position:relative}
+.glass::before{content:'';position:absolute;inset:-1px;border-radius:21px;padding:1px;background:linear-gradient(135deg,rgba(99,102,241,0.2),transparent 50%,rgba(139,92,246,0.1));-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;opacity:0;transition:opacity .4s}
+.glass:hover{transform:translateY(-3px);box-shadow:0 20px 70px rgba(0,0,0,0.6),0 0 0 1px rgba(139,92,246,0.08),0 0 100px rgba(99,102,241,0.04)}
+.glass:hover::before{opacity:1}
+.glass-h{padding:16px 24px;border-bottom:1px solid rgba(139,92,246,0.1);background:linear-gradient(135deg,rgba(25,15,55,0.9),rgba(12,8,35,0.7));display:flex;align-items:center;gap:12px;position:relative;z-index:1}
+.glass-h .ic{font-size:20px;filter:drop-shadow(0 0 12px rgba(139,92,246,0.4))}.glass-h .nm{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;color:#a78bfa;text-shadow:0 0 30px rgba(139,92,246,0.35)}
+.glass-h .tag{margin-left:auto;padding:3px 12px;border-radius:12px;font-size:9px;background:rgba(99,102,241,0.15);color:#c4b5fd;border:1px solid rgba(99,102,241,0.12);font-weight:600;letter-spacing:0.3px}
+.glass-b{padding:20px 24px}
+
+/* ===== LEFT: AI Chat Form ===== */
+.form-scroll{max-height:520px;overflow-y:auto;padding-right:4px}
+.form-scroll::-webkit-scrollbar{width:3px}
+.form-scroll::-webkit-scrollbar-thumb{background:rgba(139,92,246,0.1);border-radius:2px}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:11px;color:rgba(148,163,184,0.4);margin-bottom:5px;font-weight:500}
+.form-group input,.form-group textarea,.form-group select{width:100%;background:rgba(0,0,0,0.2);border:1px solid rgba(139,92,246,0.05);border-radius:10px;padding:10px 14px;font-size:13px;color:rgba(255,255,255,0.85);outline:none;font-family:'Plus Jakarta Sans',sans-serif;transition:all .3s}
+
+/* Model Selector */
+.model-select{display:flex;align-items:center;gap:8px;margin-bottom:14px;padding:8px 12px;border-radius:12px;background:rgba(99,102,241,0.02);border:1px solid rgba(139,92,246,0.04)}
+.model-select .lbl{font-size:10px;color:rgba(148,163,184,0.3);font-family:'Orbitron',sans-serif;letter-spacing:0.3px;flex-shrink:0}
+.model-select select{flex:1;background:rgba(0,0,0,0.15);border:1px solid rgba(139,92,246,0.04);border-radius:8px;padding:6px 10px;font-size:11px;color:rgba(255,255,255,0.7);outline:none;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all .2s;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23818cf8' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center}
+.model-select select:focus{border-color:rgba(139,92,246,0.15);background:rgba(99,102,241,0.03)}
+.model-select select option{background:#0a0823;color:rgba(255,255,255,0.7)}
+.model-select .status-badge{padding:2px 8px;border-radius:6px;font-size:8px;font-family:'Orbitron',sans-serif;background:rgba(34,197,94,0.08);color:#4ade80;border:1px solid rgba(34,197,94,0.06);flex-shrink:0}
+.form-group input:focus,.form-group textarea:focus{border-color:rgba(139,92,246,0.2);background:rgba(99,102,241,0.02);box-shadow:0 0 0 3px rgba(139,92,246,0.04)}
+.form-group input::placeholder,.form-group textarea::placeholder{color:rgba(148,163,184,0.12);font-style:italic}
+.form-group textarea{resize:vertical;min-height:50px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-tag-input{display:flex;flex-wrap:wrap;gap:6px;padding:8px 10px;background:rgba(0,0,0,0.15);border:1px solid rgba(139,92,246,0.05);border-radius:10px;min-height:44px;cursor:text}
+.form-tag{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:8px;font-size:11px;background:rgba(99,102,241,0.08);color:#a78bfa;border:1px solid rgba(99,102,241,0.06)}
+.form-tag .x{width:14px;height:14px;border-radius:50%;background:rgba(239,68,68,0.1);color:#f87171;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.form-tag .x:hover{background:rgba(239,68,68,0.2)}
+.form-tag-input input{flex:1;min-width:80px;border:none;background:transparent;color:rgba(255,255,255,0.85);font-size:13px;outline:none;font-family:'Plus Jakarta Sans',sans-serif}
+.form-tag-input input::placeholder{color:rgba(148,163,184,0.12)}
+
+/* Upload zone */
+.upload-zone{border:1.5px dashed rgba(139,92,246,0.1);border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .3s;background:rgba(99,102,241,0.015);margin-bottom:14px}
+.upload-zone:hover,.upload-zone.dragover{border-color:rgba(139,92,246,0.25);background:rgba(99,102,241,0.03)}
+.upload-zone .ic{font-size:28px;margin-bottom:6px}
+.upload-zone .t{font-size:12px;color:rgba(148,163,184,0.3)}
+.upload-zone .st{font-size:10px;color:rgba(148,163,184,0.15);margin-top:4px}
+
+/* ===== CENTER: AI Workflow ===== */
+.ai-flow{position:relative}
+.ai-flow-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;opacity:0.3}
+.ai-flow-bg .p{position:absolute;width:4px;height:4px;border-radius:50%;background:rgba(139,92,246,0.4);animation:flowP 8s linear infinite}
+@keyframes flowP{0%{transform:translateY(100%) scale(0);opacity:0}20%{opacity:1}80%{opacity:1}100%{transform:translateY(-100%) scale(1);opacity:0}}
+.step-list{display:flex;flex-direction:column;gap:8px}
+.step{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:12px;background:rgba(255,255,255,0.01);border:1px solid rgba(255,255,255,0.02);transition:all .5s;position:relative;overflow:hidden}
+.step.active{background:rgba(139,92,246,0.04);border-color:rgba(139,92,246,0.08)}
+.step.done{background:rgba(34,197,94,0.03);border-color:rgba(34,197,94,0.04)}
+.step .ind{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;font-family:'Orbitron',sans-serif;transition:all .5s}
+.step .ind.idle{background:rgba(148,163,184,0.05);color:rgba(148,163,184,0.2)}
+.step .ind.active-ring{background:rgba(99,102,241,0.12);color:#818cf8;box-shadow:0 0 20px rgba(99,102,241,0.15);animation:indPulse 1.5s ease-in-out infinite}
+.step .ind.done-ring{background:rgba(34,197,94,0.1);color:#4ade80;box-shadow:0 0 15px rgba(34,197,94,0.1)}
+@keyframes indPulse{0%,100%{box-shadow:0 0 10px rgba(99,102,241,0.1)}50%{box-shadow:0 0 30px rgba(99,102,241,0.25)}}
+.step .info{flex:1}
+.step .info .tt{font-size:12px;color:rgba(255,255,255,0.5);font-weight:500}
+.step .info .sb{font-size:10px;color:rgba(148,163,184,0.25);margin-top:2px}
+.step .st{font-size:9px;font-family:'Orbitron',sans-serif;padding:3px 8px;border-radius:6px;letter-spacing:0.3px}
+.step .st.wait{color:rgba(148,163,184,0.15);background:rgba(148,163,184,0.03)}
+.step .st.proc{color:#818cf8;background:rgba(99,102,241,0.08);animation:stPulse 1s ease-in-out infinite}
+.step .st.fin{color:#4ade80;background:rgba(34,197,94,0.06)}
+@keyframes stPulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.step .glow-bar{position:absolute;left:0;top:0;height:100%;width:2px;border-radius:0 2px 2px 0;transition:all .5s}
+.step .glow-bar.idle-bar{background:transparent}
+.step .glow-bar.act-bar{background:linear-gradient(180deg,#6366f1,#a78bfa);box-shadow:0 0 10px rgba(99,102,241,0.3)}
+.step .glow-bar.done-bar{background:linear-gradient(180deg,#22c55e,#4ade80);box-shadow:0 0 10px rgba(34,197,94,0.2)}
+
+/* ATS Score Ring */
+.ats-ring{width:100px;height:100px;position:relative;margin:0 auto}
+.ats-ring svg{transform:rotate(-90deg)}
+.ats-ring .bg{fill:none;stroke:rgba(148,163,184,0.05);stroke-width:6}
+.ats-ring .pg{fill:none;stroke:url(#atsGrad);stroke-width:6;stroke-linecap:round;stroke-dasharray:283;stroke-dashoffset:283;transition:stroke-dashoffset 2s cubic-bezier(.4,0,.2,1)}
+.ats-ring .sc{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Orbitron',sans-serif;font-size:24px;font-weight:700;background:linear-gradient(135deg,#fff,#a5b4fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.ats-ring .lb{position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);font-size:9px;color:rgba(148,163,184,0.2);white-space:nowrap}
+
+/* Score bars */
+.score-bar-row{display:flex;align-items:center;gap:8px;margin:6px 0}
+.score-bar-row .lb{font-size:10px;color:rgba(148,163,184,0.3);width:60px;flex-shrink:0}
+.score-bar-row .tk{flex:1;height:4px;border-radius:2px;background:rgba(148,163,184,0.03);overflow:hidden}
+.score-bar-row .fl{height:100%;border-radius:2px;width:0%;transition:width 1.5s cubic-bezier(.4,0,.2,1)}
+.score-bar-row .pct{font-size:10px;color:rgba(148,163,184,0.2);width:30px;text-align:right;font-family:'Orbitron',sans-serif}
+
+/* ===== RIGHT: Preview + Templates ===== */
+.template-tabs{display:flex;gap:4px;margin-bottom:12px}
+.temp-btn{padding:5px 12px;border-radius:8px;font-size:10px;font-family:'Orbitron',sans-serif;border:1px solid rgba(255,255,255,0.03);cursor:pointer;transition:all .3s;background:transparent;color:rgba(148,163,184,0.2);letter-spacing:0.3px}
+.temp-btn:hover{color:rgba(148,163,184,0.5)}
+.temp-btn.active{background:rgba(99,102,241,0.06);border-color:rgba(99,102,241,0.1);color:#a78bfa}
+
+/* Resume Preview */
+.resume-preview{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03);border-radius:14px;padding:0;overflow:hidden}
+.preview-inner{padding:24px;min-height:350px}
+.preview-inner .p-name{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:700;background:linear-gradient(135deg,#fff,#a5b4fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:2px}
+.preview-inner .p-title{font-size:12px;color:rgba(148,163,184,0.4);margin-bottom:4px}
+.preview-inner .p-contact{font-size:10px;color:rgba(148,163,184,0.15);margin-bottom:10px}
+.preview-inner .p-sep{height:1px;background:rgba(139,92,246,0.06);margin:10px 0}
+.preview-inner .p-sec-t{font-size:10px;color:rgba(148,163,184,0.2);font-family:'Orbitron',sans-serif;letter-spacing:1px;margin-bottom:6px}
+.preview-inner .p-tags{display:flex;flex-wrap:wrap;gap:4px}
+.preview-inner .p-tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;background:rgba(99,102,241,0.06);color:#a78bfa;border:1px solid rgba(99,102,241,0.04)}
+.preview-inner .p-item{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.6;margin-bottom:4px}
+.preview-inner .p-item strong{color:rgba(255,255,255,0.6)}
+.preview-inner .p-placeholder{text-align:center;padding:40px 20px;color:rgba(148,163,184,0.08);font-size:13px;font-family:'Orbitron',sans-serif;letter-spacing:0.5px}
+
+/* Template styles */
+.tmpl-dark .p-name{background:linear-gradient(135deg,#fff,#a5b4fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.tmpl-minimal .p-name{-webkit-text-fill-color:rgba(255,255,255,0.9);font-size:20px}
+.tmpl-minimal .p-sep{background:rgba(255,255,255,0.04)}
+.tmpl-minimal .p-tag{background:rgba(255,255,255,0.02);border-color:rgba(255,255,255,0.02);color:rgba(255,255,255,0.5)}
+.tmpl-designer .p-name{background:linear-gradient(135deg,#f472b6,#a78bfa,#67e8f9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:24px;letter-spacing:2px}
+.tmpl-designer .p-sep{background:linear-gradient(90deg,transparent,rgba(244,114,182,0.1),transparent);height:2px}
+.tmpl-designer .p-tag{background:rgba(244,114,182,0.04);border-color:rgba(244,114,182,0.04);color:#f472b6}
+
+/* Diff highlight */
+.diff-highlight{background:rgba(239,68,68,0.04);border-left:2px solid rgba(239,68,68,0.15);padding:6px 10px;border-radius:4px;margin:4px 0;font-size:11px;color:rgba(148,163,184,0.4)}
+.diff-highlight .old{color:#f87171;text-decoration:line-through;opacity:0.5}
+.diff-highlight .new{color:#4ade80}
+
+/* Generate Btn */
+.gen-btn{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;cursor:pointer;transition:all .3s;letter-spacing:0.5px;width:100%;box-shadow:0 4px 20px rgba(99,102,241,0.25);position:relative;overflow:hidden;margin-top:8px}
+.gen-btn:hover{transform:translateY(-2px);box-shadow:0 8px 35px rgba(99,102,241,0.35)}
+.gen-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+.gen-btn .shimmer{position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent);transform:translateX(-100%);animation:shimmer 2s ease-in-out infinite}
+@keyframes shimmer{0%{transform:translateX(-100%)}50%{transform:translateX(100%)}100%{transform:translateX(100%)}}
+
+/* Auto Save & History Styles */
+.save-status{font-size:10px;color:rgba(148,163,184,0.3);text-align:right;margin-top:4px;display:flex;align-items:center;gap:4px;justify-content:flex-end}
+.save-status .dot{width:6px;height:6px;border-radius:50%;background:#22c55e;animation:dotPulse 2s ease-in-out infinite}
+@keyframes dotPulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.save-status.saving .dot{background:#f59e0b}
+.save-status.error .dot{background:#ef4444}
+
+.history-panel{max-height:0;overflow:hidden;transition:max-height 0.4s cubic-bezier(.4,0,.2,1),opacity 0.3s;opacity:0;margin-top:8px}
+.history-panel.open{max-height:300px;opacity:1}
+.history-list{display:flex;flex-direction:column;gap:6px;max-height:260px;overflow-y:auto;padding-right:4px}
+.history-item{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;background:rgba(99,102,241,0.03);border:1px solid rgba(139,92,246,0.05);cursor:pointer;transition:all .2s}
+.history-item:hover{background:rgba(99,102,241,0.08);border-color:rgba(139,92,246,0.12)}
+.history-item .time{font-size:11px;color:#a78bfa;font-family:'Orbitron',sans-serif;min-width:120px}
+.history-item .preview{font-size:10px;color:rgba(148,163,184,0.4);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.history-item .actions{display:flex;gap:6px}
+.history-item .action-btn{font-size:10px;padding:4px 8px;border-radius:6px;border:1px solid rgba(139,92,246,0.1);background:transparent;color:#818cf8;cursor:pointer;transition:all .2s}
+.history-item .action-btn:hover{background:rgba(99,102,241,0.12)}
+.history-item .action-btn.del{color:#f87171;border-color:rgba(239,68,68,0.15)}
+.history-item .action-btn.del:hover{background:rgba(239,68,68,0.1)}
+
+.smart-suggestions{position:absolute;top:100%;left:0;right:0;margin-top:4px;background:rgba(12,8,35,0.98);backdrop-filter:blur(20px);border:1px solid rgba(139,92,246,0.12);border-radius:10px;padding:8px;z-index:100;display:none;max-height:200px;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,0.3)}
+.smart-suggestions.show{display:block}
+.suggestion-item{font-size:11px;padding:8px 10px;border-radius:6px;color:rgba(255,255,255,0.7);cursor:pointer;transition:all .2s}
+.suggestion-item:hover{background:rgba(99,102,241,0.12);color:#a78bfa}
+.suggestion-item .label{font-size:9px;color:#818cf8;font-family:'Orbitron',sans-serif;margin-bottom:2px}
+
+.form-group-with-suggest{position:relative}
+
+.clear-draft-btn{font-size:10px;padding:4px 10px;border-radius:6px;border:1px solid rgba(239,68,68,0.15);background:transparent;color:#f87171;cursor:pointer;transition:all .2s;margin-left:auto}
+.clear-draft-btn:hover{background:rgba(239,68,68,0.1)}
+
+/* Export Btns */
+.export-row{display:flex;gap:8px;margin-top:8px}
+.exp-btn{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(139,92,246,0.06);background:rgba(99,102,241,0.02);color:rgba(255,255,255,0.4);cursor:pointer;font-size:11px;font-family:'Orbitron',sans-serif;transition:all .3s;text-align:center}
+.exp-btn:hover{background:rgba(99,102,241,0.05);border-color:rgba(139,92,246,0.12);color:#a78bfa}
+.exp-btn.loading{opacity:0.5;pointer-events:none}
+.exp-btn .done{color:#4ade80}
+
+/* Print styles */
+
+/* ===== API Settings Panel ===== */
+.api-settings-toggle{background:transparent;border:1px solid rgba(139,92,246,0.04);border-radius:6px;color:rgba(148,163,184,0.2);cursor:pointer;font-size:10px;padding:2px 8px;transition:all .3s;font-family:'Orbitron',sans-serif;letter-spacing:0.3px;flex-shrink:0}
+.api-settings-toggle:hover{color:#a78bfa;border-color:rgba(139,92,246,0.1)}
+.api-settings{max-height:0;overflow:hidden;transition:max-height 0.4s cubic-bezier(.4,0,.2,1),opacity 0.3s;opacity:0;margin-top:0}
+.api-settings.open{max-height:320px;opacity:1;margin-bottom:14px}
+.api-settings-inner{padding:12px;border-radius:12px;background:rgba(0,0,0,0.15);border:1px solid rgba(139,92,246,0.04)}
+.api-settings-inner .title{font-size:10px;color:rgba(148,163,184,0.25);font-family:'Orbitron',sans-serif;letter-spacing:0.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.api-key-group{margin-bottom:10px}
+.api-key-group:last-child{margin-bottom:0}
+.api-key-group .lbl{font-size:10px;color:rgba(148,163,184,0.3);margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.api-key-group .lbl .tag{padding:1px 6px;border-radius:4px;font-size:8px;background:rgba(99,102,241,0.06);color:#818cf8;font-family:'Orbitron',sans-serif}
+.api-key-group .lbl .tag.cyan{background:rgba(6,182,212,0.06);color:#22d3ee}
+.api-key-group .input-row{display:flex;gap:6px}
+.api-key-group .input-row input{flex:1;background:rgba(0,0,0,0.2);border:1px solid rgba(139,92,246,0.04);border-radius:8px;padding:7px 10px;font-size:11px;color:rgba(255,255,255,0.6);outline:none;font-family:'Plus Jakarta Sans',sans-serif;transition:all .3s}
+.api-key-group .input-row input:focus{border-color:rgba(139,92,246,0.12);background:rgba(99,102,241,0.02);color:rgba(255,255,255,0.85)}
+.api-key-group .input-row input::placeholder{color:rgba(148,163,184,0.08)}
+.api-key-group .input-row input.masked{-webkit-text-security:disc;text-security:disc}
+.api-key-group .input-row .toggle-vis{width:28px;height:28px;border-radius:6px;border:1px solid rgba(148,163,184,0.03);background:transparent;color:rgba(148,163,184,0.15);cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;transition:all .3s;flex-shrink:0}
+.api-key-group .input-row .toggle-vis:hover{color:rgba(148,163,184,0.4);border-color:rgba(148,163,184,0.06)}
+.api-save-btn{width:100%;padding:7px;border-radius:8px;border:none;background:linear-gradient(135deg,rgba(99,102,241,0.12),rgba(139,92,246,0.08));color:#a78bfa;cursor:pointer;font-size:10px;font-family:'Orbitron',sans-serif;letter-spacing:0.3px;transition:all .3s;margin-top:8px}
+.api-save-btn:hover{background:linear-gradient(135deg,rgba(99,102,241,0.2),rgba(139,92,246,0.15))}
+.api-save-btn .done{color:#4ade80}
+.api-note{font-size:9px;color:rgba(148,163,184,0.08);text-align:center;margin-top:6px;line-height:1.4}
+
+@media print{
+  body{background:#fff!important;color:#000!important}
+  .space-bg,.nebula,.grid-ov,.vignette,.energy-fog,nav,.hero,.sidebar,.glass-h,.glass-b .tag,.glass-b>.gen-btn,.glass-b>.export-row,.glass-b>.template-tabs,.diff-highlight{display:none!important}
+  .main-layout{display:block!important;padding:0!important;max-width:100%!important}
+  .glass{border:none!important;box-shadow:none!important;background:transparent!important;backdrop-filter:none!important}
+  .glass-b{padding:0!important}
+  .resume-preview{border:1px solid #ddd!important;background:#fff!important;border-radius:0!important}
+  .preview-inner{padding:20mm!important}
+  .preview-inner .p-name{-webkit-text-fill-color:#222!important;color:#222!important}
+  .preview-inner .p-title{color:#555!important}
+  .preview-inner .p-contact{color:#999!important}
+  .preview-inner .p-item{color:#444!important}
+  .preview-inner .p-item strong{color:#222!important}
+  .preview-inner .p-sec-t{color:#666!important}
+  .preview-inner .p-tag{color:#555!important;border-color:#ddd!important;background:#f5f5f5!important}
+  .preview-inner .p-sep{background:#ddd!important}
+  .tmpl-dark .p-name,.tmpl-minimal .p-name,.tmpl-designer .p-name{-webkit-text-fill-color:#222!important;color:#222!important}
+  .tmpl-designer .p-name{color:#e040a0!important;-webkit-text-fill-color:#e040a0!important}
+  @page{margin:0}
+}
+
+/* Responsive */
+@media(max-width:1200px){.main-layout{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){.main-layout{grid-template-columns:1fr;padding:0 16px 40px}}
+/* ===== BOTTOM MODEL TOOLBAR ===== */
+.ai-model-toolbar{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;align-items:center;gap:12px;padding:12px 20px;background:rgba(15,10,40,0.85);backdrop-filter:blur(32px) saturate(1.6);border:1px solid rgba(99,102,241,0.12);border-radius:16px;box-shadow:0 16px 60px rgba(0,0,0,0.5),0 0 0 1px rgba(139,92,246,0.04),0 0 80px rgba(99,102,241,0.03);transition:all .3s cubic-bezier(.4,0,.2,1);max-width:calc(100vw - 48px);white-space:nowrap}
+.ai-model-toolbar:hover{transform:translateX(-50%) translateY(-2px);box-shadow:0 20px 70px rgba(0,0,0,0.6),0 0 0 1px rgba(139,92,246,0.06),0 0 100px rgba(99,102,241,0.04)}
+.ai-model-toolbar .model-btn{display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:10px;background:linear-gradient(135deg,rgba(99,102,241,0.08),rgba(139,92,246,0.06));border:1px solid rgba(99,102,241,0.1);cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+.ai-model-toolbar .model-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent,rgba(255,255,255,0.05));opacity:0;transition:opacity .3s}
+.ai-model-toolbar .model-btn:hover::before{opacity:1}
+.ai-model-toolbar .model-btn:hover{transform:scale(1.02);box-shadow:0 4px 20px rgba(99,102,241,0.15)}
+.ai-model-toolbar .model-icon{font-size:18px;filter:drop-shadow(0 0 8px rgba(99,102,241,0.3))}
+.ai-model-toolbar .model-info{display:flex;flex-direction:column;gap:2px}
+.ai-model-toolbar .model-name{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:600;color:#a78bfa}
+.ai-model-toolbar .model-provider{font-size:9px;color:rgba(148,163,184,0.4)}
+.ai-model-toolbar .model-status{width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 10px rgba(74,222,128,0.4);animation:modelPulse 2s ease-in-out infinite}
+@keyframes modelPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.7;transform:scale(1.2)}}
+.ai-model-toolbar .model-status.configured{background:#4ade80;box-shadow:0 0 12px rgba(74,222,128,0.5)}
+.ai-model-toolbar .toolbar-divider{width:1px;height:32px;background:rgba(139,92,246,0.08)}
+
+/* ===== MODEL CONFIG MODAL (Trae风格) ===== */
+.ai-model-modal-overlay{position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.55);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center}
+.ai-model-modal-overlay.open{display:flex}
+.ai-model-modal{width:480px;max-width:calc(100vw - 40px);border-radius:14px;background:#1c1c1e;box-shadow:0 25px 80px rgba(0,0,0,0.6);overflow:hidden;display:flex;flex-direction:column;animation:modalIn .25s cubic-bezier(.4,0,.2,1)}
+@keyframes modalIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.ai-modal-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.ai-modal-header h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:600;color:rgba(255,255,255,0.9);margin:0}
+.ai-modal-close{width:28px;height:28px;border-radius:8px;border:none;background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.3);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.ai-modal-close:hover{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.6)}
+.ai-modal-body{padding:20px;overflow-y:auto;flex:1}
+.trae-section-title{font-size:11px;font-weight:600;color:rgba(255,255,255,0.35);margin-bottom:12px;letter-spacing:0.3px}
+
+/* Model chips row */
+.model-chip-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.04)}
+.model-chip{padding:6px 14px;border-radius:8px;font-size:12px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:all .2s;background:rgba(255,255,255,0.02);color:rgba(255,255,255,0.4);white-space:nowrap}
+.model-chip:hover{border-color:rgba(255,255,255,0.12);color:rgba(255,255,255,0.6)}
+.model-chip.active{background:rgba(99,102,241,0.1);border-color:rgba(99,102,241,0.2);color:#818cf8}
+.model-chip .chip-dot{display:inline-block;width:5px;height:5px;border-radius:50%;margin-left:6px;vertical-align:middle}
+.model-chip .chip-dot.on{background:#4ade80;box-shadow:0 0 6px rgba(74,222,128,0.3)}
+
+/* Trae style form */
+.trae-row{display:flex;gap:10px;margin-bottom:14px}
+.trae-row .trae-group{flex:1}
+.trae-group{margin-bottom:14px}
+.trae-group:last-of-type{margin-bottom:0}
+.trae-group label{display:block;font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:6px;font-weight:500}
+.trae-group input,.trae-group select{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:9px 12px;font-size:13px;color:rgba(255,255,255,0.85);outline:none;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s}
+.trae-group input:focus,.trae-group select:focus{border-color:rgba(99,102,241,0.35);background:rgba(99,102,241,0.03)}
+.trae-group input::placeholder{color:rgba(255,255,255,0.12)}
+.trae-group select option{background:#1c1c1e;color:rgba(255,255,255,0.85)}
+.trae-hint{font-size:10px;color:rgba(255,255,255,0.12);margin-top:5px;line-height:1.4}
+
+/* Modal footer */
+.ai-modal-footer{padding:16px 20px;border-top:1px solid rgba(255,255,255,0.06);display:flex;gap:8px;background:rgba(0,0,0,0.15)}
+.trae-btn{flex:1;padding:9px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-weight:600;transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif}
+.trae-btn.primary{background:#4f46e5;color:#fff}
+.trae-btn.primary:hover{background:#6366f1}
+.trae-btn.secondary{background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.06)}
+.trae-btn.secondary:hover{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.8)}
+.trae-btn.test{background:rgba(99,102,241,0.06);color:#818cf8;border:1px solid rgba(99,102,241,0.1)}
+.trae-btn.test:hover{background:rgba(99,102,241,0.1)}
+.trae-btn:disabled{opacity:0.4;cursor:not-allowed}
+
+/* Custom model list in modal */
+.custom-model-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:6px;margin:3px 0;cursor:pointer;transition:all .15s;border:1px solid transparent;font-size:12px;color:rgba(255,255,255,0.45)}
+.custom-model-item:hover{background:rgba(255,255,255,0.02);border-color:rgba(255,255,255,0.04);color:rgba(255,255,255,0.6)}
+.custom-model-item.active{background:rgba(99,102,241,0.04);border-color:rgba(99,102,241,0.1);color:#818cf8}
+
+@media(max-width:640px){.ai-model-modal{width:calc(100vw - 32px)}.trae-row{flex-direction:column;gap:14px}}
+
+/* ===== WELCOME HERO (Right Panel Placeholder) ===== */
+.welcome-hero{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px;min-height:400px}
+.welcome-hero .hero-icon{font-size:80px;margin-bottom:24px;filter:drop-shadow(0 0 30px rgba(99,102,241,0.3));animation:heroFloat 4s ease-in-out infinite}
+@keyframes heroFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+.welcome-hero h3{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:700;color:#a78bfa;margin-bottom:12px;text-shadow:0 0 30px rgba(139,92,246,0.3)}
+.welcome-hero p{font-size:13px;color:rgba(148,163,184,0.4);max-width:280px;line-height:1.7;margin-bottom:24px}
+.welcome-hero .step-guide{display:flex;flex-direction:column;gap:10px;width:100%}
+.welcome-hero .guide-step{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:10px;background:rgba(99,102,241,0.02);border:1px solid rgba(139,92,246,0.04);text-align:left}
+.welcome-hero .guide-step .num{width:24px;height:24px;border-radius:8px;background:linear-gradient(135deg,rgba(99,102,241,0.15),rgba(139,92,246,0.1));color:#a78bfa;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.welcome-hero .guide-step .text{font-size:11px;color:rgba(148,163,184,0.5)}
+.welcome-hero .guide-step .text strong{color:rgba(255,255,255,0.6)}
+
+@media(max-width:640px){.hero{padding:75px 16px 25px}.glass-h{padding:10px 14px}.glass-b{padding:12px 14px}.ai-model-toolbar{padding:10px 14px;gap:8px}.ai-model-modal{width:calc(100vw - 32px)}}
+</style>
+</head>
+<body>
+<div class="space-bg"></div>
+<div class="nebula n1"></div><div class="nebula n2"></div><div class="nebula n3"></div>
+<div class="grid-ov"></div><div class="vignette"></div><div class="energy-fog"></div>
+
+<nav>
+  <a href="app.html" class="nav-back">← 返回首页</a>
+  <a href="app.html" class="nav-logo">智职AI</a>
+  <div class="nav-links">
+    <a href="feature-resume-builder.html">制作简历</a>
+    <a href="feature-ai-resume.html" class="active">AI 智能生成</a>
+    <a href="feature-resume.html">简历分析</a>
+    <a href="feature-job.html">岗位匹配</a>
+    <a href="feature-interview.html">面试模拟</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge"><span class="hero-badge-dot"></span>AI 驱动 · 智能生成</div>
+  <h1><span class="g">AI 智能简历生成系统</span></h1>
+  <p>只需输入基本信息，AI 自动生成专业级简历 — 优化表达、补充关键词、提升 ATS 匹配率</p>
+</section>
+
+<div class="main-layout">
+  <!-- ===== LEFT：AI 引导式表单 ===== -->
+  <div class="glass">
+    <div class="glass-h">
+          <span class="ic">📝</span>
+          <span class="nm">AI 引导填写</span>
+          <span class="tag">Step 1/3</span>
+          <button class="clear-draft-btn" onclick="clearDraft()" title="清除当前草稿">🗑️ 清除</button>
+        </div>
+        <div class="glass-b">
+          <!-- Save Status -->
+          <div class="save-status" id="saveStatus">
+            <span class="dot"></span>
+            <span id="saveStatusText">草稿已保存</span>
+          </div>
+          <!-- History Toggle -->
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <span style="font-size:10px;color:rgba(148,163,184,0.3);font-family:'Orbitron',sans-serif;letter-spacing:0.5px">📜 历史版本</span>
+            <button class="api-settings-toggle" onclick="toggleHistory()">查看历史</button>
+          </div>
+          <!-- History Panel -->
+          <div class="history-panel" id="historyPanel">
+            <div class="history-list" id="historyList">
+              <!-- History items will be populated here -->
+            </div>
+          </div>
+
+      <!-- Upload -->
+      <div class="upload-zone" id="uploadZone">
+        <div class="ic">📄</div>
+        <div class="t">拖拽简历文件到此处或点击上传</div>
+        <div class="st">支持 .docx, .pdf, .txt 格式</div>
+        <input type="file" accept=".docx,.pdf,.txt" style="display:none" id="fileInput">
+      </div>
+
+      <div class="form-scroll" id="formScroll">
+        <div class="form-row">
+          <div class="form-group"><label>👤 姓名</label><input type="text" id="fName" placeholder="请输入姓名" oninput="autoSaveDraft()"></div>
+          <div class="form-group"><label>🎂 年龄</label><input type="text" id="fAge" placeholder="如: 24" oninput="autoSaveDraft()"></div>
+        </div>
+        <div class="form-group"><label>📧 邮箱</label><input type="email" id="fEmail" placeholder="your@email.com" oninput="autoSaveDraft()"></div>
+        <div class="form-row">
+          <div class="form-group"><label>🎓 学校</label><input type="text" id="fSchool" placeholder="华中科技大学" oninput="autoSaveDraft()"></div>
+          <div class="form-group"><label>📜 学历</label>
+            <select id="fDegree" onchange="autoSaveDraft()"><option value="">选择学历</option><option>高中</option><option>大专</option><option selected>本科</option><option>硕士</option><option>博士</option></select>
+          </div>
+        </div>
+        <div class="form-group"><label>💪 技能</label>
+          <div class="form-tag-input" id="skillInput" onclick="document.getElementById('skillField').focus()">
+            <div id="skillTags" style="display:flex;flex-wrap:wrap;gap:4px"></div>
+            <input type="text" id="skillField" placeholder="输入技能后按回车添加" onkeydown="addSkill(event)" oninput="autoSaveDraft()">
+          </div>
+        </div>
+        <div class="form-group"><label>📋 项目经历</label><textarea id="fProject" rows="2" placeholder="描述你的项目经历，如：基于React开发的AI面试平台..." oninput="autoSaveDraft()"></textarea></div>
+        <div class="form-group"><label>🏆 比赛经历</label><textarea id="fComp" rows="2" placeholder="ACM 竞赛 / 创新创业大赛..." oninput="autoSaveDraft()"></textarea></div>
+        <div class="form-group"><label>💼 实习经历</label><textarea id="fIntern" rows="2" placeholder="公司名 · 岗位 · 工作内容..." oninput="autoSaveDraft()"></textarea></div>
+        <div class="form-group"><label>📝 自我评价</label><textarea id="fSelf" rows="2" placeholder="性格特点 / 职业目标..." oninput="autoSaveDraft()"></textarea></div>
+        <div class="form-group-with-suggest form-group">
+          <label>🎯 目标岗位</label>
+          <input type="text" id="fTarget" placeholder="前端工程师 / 产品经理..." oninput="handleTargetInput(event)" onfocus="showTargetSuggestions()" onblur="hideTargetSuggestions()">
+          <div class="smart-suggestions" id="targetSuggestions"></div>
+        </div>
+      </div>
+
+      <button class="gen-btn" id="genBtn" onclick="startGeneration()">
+        <span class="shimmer"></span>
+        🤖 AI 智能生成简历
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== CENTER：AI 工作流 ===== -->
+  <div class="glass ai-flow">
+    <div class="ai-flow-bg" id="flowBg"></div>
+    <div class="glass-h">
+      <span class="ic">⚡</span>
+      <span class="nm">AI 工作流</span>
+      <span class="tag" id="flowStatus">等待启动</span>
+      <span style="font-size:8px;color:rgba(148,163,184,0.12);margin-left:4px;font-family:'Orbitron',sans-serif" id="flowModel">DS-Flash</span>
+    </div>
+    <div class="glass-b">
+      <!-- ATS Score Ring -->
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px">
+        <div class="ats-ring">
+          <svg viewBox="0 0 100 100" width="100" height="100">
+            <defs><linearGradient id="atsGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#a78bfa"/></linearGradient></defs>
+            <circle class="bg" cx="50" cy="50" r="45"/>
+            <circle class="pg" id="atsPg" cx="50" cy="50" r="45"/>
+          </svg>
+          <div class="sc" id="atsScore">--</div>
+          <div class="lb">ATS 匹配</div>
+        </div>
+        <div style="flex:1">
+          <div class="score-bar-row"><span class="lb">关键词</span><div class="tk"><div class="fl" id="barKw" style="background:linear-gradient(90deg,#6366f1,#a78bfa)"></div></div><span class="pct" id="pctKw">0%</span></div>
+          <div class="score-bar-row"><span class="lb">项目描述</span><div class="tk"><div class="fl" id="barProj" style="background:linear-gradient(90deg,#a78bfa,#c084fc)"></div></div><span class="pct" id="pctProj">0%</span></div>
+          <div class="score-bar-row"><span class="lb">数据量化</span><div class="tk"><div class="fl" id="barQuant" style="background:linear-gradient(90deg,#60a5fa,#38bdf8)"></div></div><span class="pct" id="pctQuant">0%</span></div>
+          <div class="score-bar-row"><span class="lb">岗位匹配</span><div class="tk"><div class="fl" id="barMatch" style="background:linear-gradient(90deg,#4ade80,#22c55e)"></div></div><span class="pct" id="pctMatch">0%</span></div>
+        </div>
+      </div>
+
+      <div class="step-list" id="stepList">
+        <div class="step" data-step="0"><div class="glow-bar idle-bar"></div><div class="ind idle">01</div><div class="info"><div class="tt">分析输入信息</div><div class="sb">解析用户填写的所有字段</div></div><span class="st wait">等待</span></div>
+        <div class="step" data-step="1"><div class="glow-bar idle-bar"></div><div class="ind idle">02</div><div class="info"><div class="tt">技能关键词增强</div><div class="sb">补充岗位相关关键词，提升 ATS 匹配</div></div><span class="st wait">等待</span></div>
+        <div class="step" data-step="2"><div class="glow-bar idle-bar"></div><div class="ind idle">03</div><div class="info"><div class="tt">项目经历优化</div><div class="sb">STAR 法则重构，量化成果</div></div><span class="st wait">等待</span></div>
+        <div class="step" data-step="3"><div class="glow-bar idle-bar"></div><div class="ind idle">04</div><div class="info"><div class="tt">ATS 评分计算</div><div class="sb">多维评分模型评估简历质量</div></div><span class="st wait">等待</span></div>
+        <div class="step" data-step="4"><div class="glow-bar idle-bar"></div><div class="ind idle">05</div><div class="info"><div class="tt">生成专业表达</div><div class="sb">自动生成简历中的专业话术</div></div><span class="st wait">等待</span></div>
+        <div class="step" data-step="5"><div class="glow-bar idle-bar"></div><div class="ind idle">06</div><div class="info"><div class="tt">简历排版输出</div><div class="sb">选择模板，生成最终简历</div></div><span class="st wait">等待</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RIGHT：欢迎插画 ===== -->
+  <div class="glass" id="welcomePanel">
+    <div class="glass-h">
+      <span class="ic">✨</span>
+      <span class="nm">开始使用</span>
+      <span class="tag">新手指南</span>
+    </div>
+    <div class="glass-b">
+      <div class="welcome-hero" id="welcomeHero">
+        <div class="hero-icon">🤖</div>
+        <h3>欢迎使用 AI 简历生成</h3>
+        <p>只需简单几步，AI 即可为你生成专业级简历</p>
+        <div class="step-guide">
+          <div class="guide-step">
+            <div class="num">01</div>
+            <div class="text"><strong>填写基本信息</strong> - 输入姓名、学历、技能等</div>
+          </div>
+          <div class="guide-step">
+            <div class="num">02</div>
+            <div class="text"><strong>描述项目经历</strong> - 添加项目细节和成就</div>
+          </div>
+          <div class="guide-step">
+            <div class="num">03</div>
+            <div class="text"><strong>选择目标岗位</strong> - AI 针对性优化</div>
+          </div>
+          <div class="guide-step">
+            <div class="num">04</div>
+            <div class="text"><strong>点击生成</strong> - 获取专业简历</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RIGHT：预览 + 模板（默认隐藏） ===== -->
+  <div class="glass" id="previewPanel" style="display:none">
+    <div class="glass-h">
+      <span class="ic">👁️</span>
+      <span class="nm">简历预览</span>
+      <span class="tag">实时更新</span>
+    </div>
+    <div class="glass-b">
+      <div class="template-tabs">
+        <button class="temp-btn active" onclick="switchTemplate('dark',this)">🌌 科技深色</button>
+        <button class="temp-btn" onclick="switchTemplate('minimal',this)">📄 极简商务</button>
+        <button class="temp-btn" onclick="switchTemplate('designer',this)">🎨 高级设计</button>
+      </div>
+
+      <div class="resume-preview tmpl-dark" id="preview">
+        <div class="preview-inner" id="previewInner">
+          <div class="p-placeholder">🤖 点击左侧「AI 智能生成简历」<br>查看你的专属简历</div>
+        </div>
+      </div>
+
+      <div class="export-row">
+        <button class="exp-btn" onclick="exportPDF()">📄 导出 PDF</button>
+        <button class="exp-btn" onclick="copyText()">📋 复制文本</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ========== GLOBAL MODEL BRIDGE ==========
+// Delegates to ai-model-switcher.js for model selection + API config
+// 读取 localStorage 获取当前模型（不依赖 ai-model-switcher.js）
+function getCurrentModelId(){
+  return localStorage.getItem('ai_global_model') || 'deepseek-v4-flash';
+}
+function getCurrentApiKey(){
+  var mid = getCurrentModelId();
+  // 先检查是否是自定义模型
+  try {
+    var cmList = JSON.parse(localStorage.getItem('ai_custom_models') || '[]');
+    for (var i = 0; i < cmList.length; i++) { if (cmList[i].id === mid) return cmList[i].apiKey || ''; }
+  } catch(e) {}
+  try {
+    var cfg = JSON.parse(localStorage.getItem('ai_model_configs') || '{}');
+    return (cfg[mid] && cfg[mid].apiKey) || '';
+  } catch(e) { return ''; }
+}
+function getCurrentEndpoint(){
+  var mid = getCurrentModelId();
+  try {
+    var cmList = JSON.parse(localStorage.getItem('ai_custom_models') || '[]');
+    for (var i = 0; i < cmList.length; i++) { if (cmList[i].id === mid) return cmList[i].baseUrl || ''; }
+  } catch(e) {}
+  try {
+    var cfg = JSON.parse(localStorage.getItem('ai_model_configs') || '{}');
+    if (cfg[mid] && cfg[mid].endpoint) return cfg[mid].endpoint;
+  } catch(e) {}
+  // 回退到默认端点
+  var localMeta = {
+    'gpt-4o':'https://api.openai.com/v1','gpt-4o-mini':'https://api.openai.com/v1',
+    'claude-3-opus':'https://api.anthropic.com/v1','claude-3-sonnet':'https://api.anthropic.com/v1',
+    'gemini-1.5-pro':'https://generativelanguage.googleapis.com/v1beta','gemini-1.5-flash':'https://generativelanguage.googleapis.com/v1beta',
+    'deepseek-v4':'https://api.deepseek.com','deepseek-v4-flash':'https://api.deepseek.com',
+    'qwen-max':'https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation','qwen-plus':'https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation',
+    'doubao-pro':'https://ark.cn-beijing.volces.com/api/v3','doubao-lite':'https://ark.cn-beijing.volces.com/api/v3',
+    'minimax-2.7':'https://api.minimax.chat/v1/text/chatcompletion_v2'
+  };
+  return localMeta[mid] || '';
+}
+function getCurrentModelName(){
+  var mid = getCurrentModelId();
+  try {
+    var cmList = JSON.parse(localStorage.getItem('ai_custom_models') || '[]');
+    for (var i = 0; i < cmList.length; i++) { if (cmList[i].id === mid) return cmList[i].name; }
+  } catch(e) {}
+  return mid;
+}
+
+var localModelMeta = {
+  'gpt-4o':           { icon: '🤖', provider: 'OpenAI' },'gpt-4o-mini':{ icon: '🤖', provider: 'OpenAI' },
+  'claude-3-opus':    { icon: '✨', provider: 'Anthropic' },'claude-3-sonnet':{ icon: '✨', provider: 'Anthropic' },
+  'gemini-1.5-pro':   { icon: '🔮', provider: 'Google' },'gemini-1.5-flash':{ icon: '🔮', provider: 'Google' },
+  'deepseek-v4':      { icon: '🧠', provider: 'DeepSeek' },'deepseek-v4-flash':{ icon: '🧠', provider: 'DeepSeek' },
+  'qwen-max':         { icon: '🌐', provider: '阿里云' },'qwen-plus':{ icon: '🌐', provider: '阿里云' },
+  'doubao-pro':       { icon: '🍀', provider: '字节跳动' },'doubao-lite':{ icon: '🍀', provider: '字节跳动' },
+  'minimax-2.7':      { icon: '🎯', provider: 'MiniMax' }
+};
+
+// Sync flow status when model changes
+window.addEventListener('ai-model-change', function(e){
+   var flowModel = document.getElementById('flowModel');
+   var mid = e.detail.model;
+   if (flowModel) {
+     var lm = localModelMeta[mid];
+     flowModel.textContent = (lm ? lm.icon + ' ' : '🤖 ') + mid;
+   }
+ });
+
+// Initial badge sync
+setTimeout(function(){
+  var badge = document.getElementById('globalModelBadge');
+  if (badge) badge.textContent = '🧠 ' + getCurrentModelId();
+}, 500);
+
+// ========== SKILL TAGS ==========
+var skills = [];
+function addSkill(e){
+  if(e.key==='Enter'){
+    e.preventDefault();
+    var v = e.target.value.trim();
+    if(v && !skills.includes(v)){ skills.push(v); renderSkills(); }
+    e.target.value = '';
+  }
+}
+function removeSkill(idx){ skills.splice(idx,1); renderSkills(); }
+function renderSkills(){
+  var html = '';
+  skills.forEach(function(s,i){ html += '<span class="form-tag">'+s+'<span class="x" onclick="removeSkill('+i+')">✕</span></span>'; });
+  document.getElementById('skillTags').innerHTML = html;
+}
+
+// ========== UPLOAD ==========
+var uz = document.getElementById('uploadZone');
+var fi = document.getElementById('fileInput');
+uz.addEventListener('click',function(){fi.click()});
+uz.addEventListener('dragover',function(e){e.preventDefault();this.classList.add('dragover')});
+uz.addEventListener('dragleave',function(){this.classList.remove('dragover')});
+uz.addEventListener('drop',function(e){e.preventDefault();this.classList.remove('dragover');handleFile(e.dataTransfer.files[0])});
+fi.addEventListener('change',function(){if(this.files[0])handleFile(this.files[0])});
+function handleFile(file){
+  uz.querySelector('.t').textContent = '✅ '+file.name;
+  uz.querySelector('.st').textContent = '文件已上传，AI 将自动解析内容';
+}
+
+// ========== MODEL SELECTOR (delegated to global switcher) ==========
+// Model selection is handled by ai-model-switcher.js (click 🧠 top-right)
+// Functions below are wrappers for backward compatibility
+function onModelChange(){
+  // No-op: selection is done via global switcher
+}
+
+// ========== RESUME GENERATION ==========
+var generating = false;
+var currentTemplate = 'dark';
+
+function startGeneration(){
+  if(generating) return;
+  generating = true;
+  var btn = document.getElementById('genBtn');
+  btn.disabled = true;
+  btn.innerHTML = '⏳ AI 正在分析生成中...<span class="shimmer"></span>';
+
+  var apiKey = getCurrentApiKey();
+  var modelName = getCurrentModelName();
+  var modelId = getCurrentModelId();
+  var endpoint = getCurrentEndpoint();
+  var statusEl = document.getElementById('flowStatus');
+  if(!apiKey){
+    statusEl.textContent = '⚠ 请配置 API Key';
+    statusEl.style.borderColor = 'rgba(239,68,68,0.06)';
+    statusEl.style.background = 'rgba(239,68,68,0.08)';
+    statusEl.style.color = '#f87171';
+    generating = false;
+    btn.disabled = false;
+    btn.innerHTML = '🤖 AI 智能生成简历<span class="shimmer"></span>';
+    return;
+  }
+  statusEl.textContent = '运行中 · ' + modelName;
+  statusEl.style.borderColor = '';
+  statusEl.style.background = '';
+  statusEl.style.color = '';
+  resetSteps();
+  resetScores();
+
+  var steps = [0,1,2,3,4,5];
+  var stepEls = document.querySelectorAll('.step');
+  var i = 0;
+
+  function runStep(){
+    if(i >= steps.length){
+      finishGeneration();
+      return;
+    }
+    var idx = steps[i];
+    var el = stepEls[idx];
+    // Mark current active
+    el.querySelector('.ind').className = 'ind active-ring';
+    el.querySelector('.st').className = 'st proc';
+    el.querySelector('.st').textContent = '进行中';
+    el.querySelector('.glow-bar').className = 'glow-bar act-bar';
+    el.classList.add('active');
+
+    // Update scores progressively
+    var delays = [500, 900, 1300, 1700, 2100, 2500];
+    setTimeout(function(){ updateIntermediateScores(idx); }, Math.min(delays[i], 2000));
+
+    setTimeout(function(){
+      el.querySelector('.ind').className = 'ind done-ring';
+      el.querySelector('.ind').textContent = '✓';
+      el.querySelector('.st').className = 'st fin';
+      el.querySelector('.st').textContent = '完成';
+      el.querySelector('.glow-bar').className = 'glow-bar done-bar';
+      el.classList.remove('active');
+      el.classList.add('done');
+      i++;
+      
+      if (i >= steps.length) {
+        // 最后一步完成后调用异步生成函数
+        generateResumeContent().then(function() {
+          generating = false;
+          var btn = document.getElementById('genBtn');
+          btn.disabled = false;
+          btn.innerHTML = '🤖 重新生成简历<span class="shimmer"></span>';
+        }).catch(function(error) {
+          generating = false;
+          var btn = document.getElementById('genBtn');
+          btn.disabled = false;
+          btn.innerHTML = '🤖 重新生成简历<span class="shimmer"></span>';
+          console.error('生成失败:', error);
+        });
+      } else {
+        runStep();
+      }
+    }, 1200);
+  }
+
+  runStep();
+}
+
+function updateIntermediateScores(stepIdx){
+  var targets = [
+    {kw:45, pj:30, qt:20, mt:35},
+    {kw:60, pj:40, qt:30, mt:45},
+    {kw:72, pj:55, qt:45, mt:58},
+    {kw:78, pj:65, qt:55, mt:68},
+    {kw:85, pj:72, qt:65, mt:76},
+    {kw:88, pj:82, qt:78, mt:85}
+  ];
+  var t = targets[Math.min(stepIdx, targets.length-1)];
+  animateBar('barKw','pctKw',t.kw);
+  animateBar('barProj','pctProj',t.pj);
+  animateBar('barQuant','pctQuant',t.qt);
+  animateBar('barMatch','pctMatch',t.mt);
+  animateAtsScore(Math.round((t.kw + t.pj + t.qt + t.mt)/4));
+}
+
+function animateBar(barId, pctId, target){
+  var bar = document.getElementById(barId);
+  var pct = document.getElementById(pctId);
+  var current = parseFloat(bar.style.width) || 0;
+  var step = Math.ceil((target - current)/20);
+  if(step < 1) step = 1;
+  var interval = setInterval(function(){
+    current += step;
+    if(current >= target){ current = target; clearInterval(interval); }
+    bar.style.width = current + '%';
+    pct.textContent = Math.round(current) + '%';
+  }, 30);
+}
+
+function animateAtsScore(target){
+  var el = document.getElementById('atsScore');
+  var current = parseInt(el.textContent) || 0;
+  if(isNaN(current)) current = 0;
+  var step = Math.ceil((target - current)/25);
+  if(step < 1) step = 1;
+  var interval = setInterval(function(){
+    current += step;
+    if(current >= target){ current = target; clearInterval(interval); }
+    el.textContent = current;
+    var pg = document.getElementById('atsPg');
+    var offset = 283 - (current/100)*283;
+    pg.style.strokeDashoffset = offset;
+  }, 25);
+}
+
+function finishGeneration() {
+  // generateResumeContent is now async, it will handle everything internally
+  // This function is kept for compatibility
+}
+
+function resetSteps(){
+  document.querySelectorAll('.step').forEach(function(el){
+    el.querySelector('.ind').className = 'ind idle';
+    el.querySelector('.ind').textContent = '0' + (parseInt(el.dataset.step)+1);
+    el.querySelector('.st').className = 'st wait';
+    el.querySelector('.st').textContent = '等待';
+    el.querySelector('.glow-bar').className = 'glow-bar idle-bar';
+    el.classList.remove('active','done');
+  });
+}
+
+function resetScores(){
+  document.getElementById('atsScore').textContent = '--';
+  document.getElementById('atsPg').style.strokeDashoffset = 283;
+  ['barKw','barProj','barQuant','barMatch'].forEach(function(id){ document.getElementById(id).style.width = '0%'; });
+  ['pctKw','pctProj','pctQuant','pctMatch'].forEach(function(id){ document.getElementById(id).textContent = '0%'; });
+}
+
+// ========== GENERATE RESUME CONTENT ==========
+async function generateResumeContent() {
+  var name = document.getElementById('fName').value || '求职者';
+  var age = document.getElementById('fAge').value || '24';
+  var email = document.getElementById('fEmail').value || 'email@example.com';
+  var school = document.getElementById('fSchool').value || '知名院校';
+  var degree = document.getElementById('fDegree').value || '本科';
+  var project = document.getElementById('fProject').value || '参与多个Web项目开发';
+  var comp = document.getElementById('fComp').value || '';
+  var intern = document.getElementById('fIntern').value || '';
+  var selfEval = document.getElementById('fSelf').value || '热爱技术，学习能力强';
+  var target = document.getElementById('fTarget').value || '前端工程师';
+  var skillList = skills.length > 0 ? skills : ['React', 'JavaScript', 'CSS'];
+  
+  var statusEl = document.getElementById('flowStatus');
+  
+  try {
+    statusEl.textContent = '🤖 调用 AI API...';
+    
+    // 构建AI提示词
+    var prompt = `请为以下信息生成一份专业的简历内容，以HTML格式返回，只返回简历内容，不要其他说明：
+
+姓名：${name}
+年龄：${age}
+邮箱：${email}
+学校：${school}
+学历：${degree}
+目标岗位：${target}
+技能：${skillList.join(', ')}
+项目经历：${project}
+${comp ? '比赛经历：' + comp : ''}
+${intern ? '实习经历：' + intern : ''}
+自我评价：${selfEval}
+
+要求：
+1. 使用HTML标签格式化简历内容
+2. 使用STAR法则优化项目描述
+3. 量化成果数据
+4. 专业、简洁、有吸引力
+5. 返回格式示例：
+<div class="p-name">姓名</div>
+<div class="p-title">岗位 · 年龄 · 学历</div>
+...`;
+
+    var systemPrompt = '你是一个专业的简历优化助手，擅长根据用户信息生成专业的简历内容。请直接返回HTML格式的简历内容，不要添加其他说明。';
+
+    // 获取当前模型配置
+    var modelId = getCurrentModelId();
+    var apiKey = getCurrentApiKey();
+    var endpoint = getCurrentEndpoint();
+    var modelName = getCurrentModelName();
+    
+    // 判断是否为自定义模型
+    var isCustom = false;
+    try {
+      var cmList = JSON.parse(localStorage.getItem('ai_custom_models') || '[]');
+      isCustom = cmList.some(function(c) { return c.id === modelId; });
+    } catch(e) {}
+    
+    // 调用AI API - 直接传递 apiKey 和 endpoint
+    var response = await AiClient.generate({
+      model: modelId,
+      prompt: prompt,
+      system: systemPrompt,
+      temperature: 0.7,
+      maxTokens: 4096,
+      apiKey: apiKey,
+      endpoint: endpoint,
+      // 只有自定义模型才传 userModelConfig
+      userModelConfig: isCustom ? (function(){ var o={}; o[modelId]={apiKey:apiKey,endpoint:endpoint}; return o; })() : {}
+    });
+
+    // 显示生成的简历
+    document.getElementById('previewInner').innerHTML = response.content || response.choices?.[0]?.message?.content || generateLocalFallback(name, age, email, school, degree, target, skillList, project, comp, intern, selfEval);
+    applyTemplate(currentTemplate);
+    switchToPreviewPanel();
+    
+    statusEl.innerHTML = '✅ AI 生成完成 · ' + modelName + ' <span style="font-size:8px;color:rgba(148,163,184,0.12)">' + (endpoint ? endpoint.substring(0, 30) : '使用内置API') + '</span>';
+    
+  } catch (error) {
+    console.error('AI API 调用失败:', error);
+    statusEl.innerHTML = '⚠️ API 调用失败: ' + error.message + ' <span style="font-size:10px;color:rgba(148,163,184,0.3)">(已使用本地生成降级)</span>';
+    
+    // 如果API调用失败，使用本地生成作为后备
+    var localContent = generateLocalFallback(name, age, email, school, degree, target, skillList, project, comp, intern, selfEval);
+    document.getElementById('previewInner').innerHTML = localContent;
+    applyTemplate(currentTemplate);
+    switchToPreviewPanel();
+  }
+}
+
+function switchToPreviewPanel() {
+  var welcomePanel = document.getElementById('welcomePanel');
+  var previewPanel = document.getElementById('previewPanel');
+  
+  if (welcomePanel && previewPanel) {
+    welcomePanel.style.display = 'none';
+    previewPanel.style.display = 'block';
+  }
+}
+
+function generateLocalFallback(name, age, email, school, degree, target, skillList, project, comp, intern, selfEval) {
+  // 本地后备生成逻辑
+  var enhancedProject = enhanceProjectDesc(project);
+  var enhancedIntern = intern ? enhanceInternDesc(intern) : '';
+  var enhancedSelf = enhanceSelfDesc(selfEval);
+
+  var html = '';
+  html += '<div class="p-name">' + name + '</div>';
+  html += '<div class="p-title">' + target + ' · ' + age + '岁 · ' + degree + '</div>';
+  html += '<div class="p-contact">' + email + ' | ' + school + ' · ' + degree + '</div>';
+  html += '<div class="p-sep"></div>';
+
+  html += '<div class="p-sec-t">技能</div>';
+  html += '<div class="p-tags">';
+  skillList.forEach(function(s) { html += '<span class="p-tag">' + s + '</span>'; });
+  var suggestTags = getSuggestedTags(target);
+  suggestTags.forEach(function(t) { if (!skillList.includes(t)) html += '<span class="p-tag" style="background:rgba(99,102,241,0.1);color:#818cf8;border-color:rgba(99,102,241,0.08)">' + t + ' <span style="font-size:8px;opacity:0.5">AI推荐</span></span>'; });
+  html += '</div>';
+  html += '<div class="p-sep"></div>';
+
+  html += '<div class="p-sec-t">项目经历</div>';
+  html += '<div class="p-item"><strong>' + target + ' 相关项目</strong><br>' + enhancedProject + '</div>';
+  html += '<div class="diff-highlight"><span class="old">优化前: ' + truncate(project, 30) + '</span><br><span class="new">优化后: ' + enhancedProject + '</span></div>';
+  
+  if (comp) {
+    html += '<div class="p-sep"></div><div class="p-sec-t">比赛经历</div>';
+    html += '<div class="p-item">' + enhanceCompDesc(comp) + '</div>';
+  }
+  if (enhancedIntern) {
+    html += '<div class="p-sep"></div><div class="p-sec-t">实习经历</div>';
+    html += '<div class="p-item">' + enhancedIntern + '</div>';
+  }
+  html += '<div class="p-sep"></div><div class="p-sec-t">自我评价</div>';
+  html += '<div class="p-item">' + enhancedSelf + '</div>';
+
+  return html;
+}
+
+function enhanceProjectDesc(text){
+  if(!text) return '主导企业级前端架构设计，优化核心模块性能，首屏加载速度提升35%';
+  var enhancements = [
+    ['参与','主导'],['开发','架构设计并实现'],['负责','主导'],
+    ['代码','高质量代码架构'],['项目','企业级项目']
+  ];
+  var result = text;
+  enhancements.forEach(function(e){ result = result.replace(new RegExp(e[0],'g'), e[1]); });
+  if(!result.match(/[0-9]+%/)) result += '，核心性能指标提升30%+';
+  if(!result.match(/[0-9]+万/)) result += '，服务10万+用户';
+  return result;
+}
+
+function enhanceInternDesc(text){
+  if(!text) return '';
+  var result = text;
+  if(!result.match(/[0-9]+%/)) result += '，获团队最高绩效评级';
+  if(!result.match(/主导|优化|搭建|设计/)) result = '主导' + result;
+  return result;
+}
+
+function enhanceSelfDesc(text){
+  if(!text) return '具备扎实的计算机专业基础和丰富的项目实战经验，善于在团队中推动技术方案落地，持续关注前沿技术发展';
+  var additions = [];
+  if(!text.includes('团队')) additions.push('善于跨团队协作');
+  if(!text.includes('学习')) additions.push('持续学习前沿技术');
+  if(!text.includes('驱动')) additions.push('结果驱动，追求卓越');
+  if(additions.length > 0) text += ' · ' + additions.join(' · ');
+  return text;
+}
+
+function enhanceCompDesc(text){
+  if(!text) return '';
+  if(!text.match(/[0-9]+%|冠军|一等奖|金奖/)) text += '（国家级奖项）';
+  return text;
+}
+
+function getSuggestedTags(target){
+  var map = {
+    '前端':['Next.js','Webpack','Jest'],
+    '后端':['Docker','Redis','MySQL'],
+    '产品':['Axure','Figma','数据分析'],
+    '设计':['Figma','Photoshop','Sketch'],
+    'AI':['Python','PyTorch','TensorFlow'],
+    '数据':['Python','SQL','Tableau']
+  };
+  for(var key in map){ if(target.includes(key)) return map[key]; }
+  return ['Git','Linux','Docker'];
+}
+
+function truncate(t, len){ return t.length > len ? t.substring(0,len)+'...' : t; }
+
+// ========== TEMPLATE SWITCHING ==========
+function switchTemplate(tmpl, btn){
+  document.querySelectorAll('.temp-btn').forEach(function(b){b.classList.remove('active')});
+  if(btn) btn.classList.add('active');
+  currentTemplate = tmpl;
+  applyTemplate(tmpl);
+}
+
+function applyTemplate(tmpl){
+  var pv = document.getElementById('preview');
+  pv.classList.remove('tmpl-dark','tmpl-minimal','tmpl-designer');
+  pv.classList.add('tmpl-'+tmpl);
+}
+
+// ========== EXPORT ==========
+function exportPDF(){
+  var name = document.getElementById('fName').value || '简历';
+  var btn = event.target;
+  btn.classList.add('loading');
+  btn.textContent = '⏳ 生成文件...';
+
+  // Build a clean HTML document from the preview content
+  var previewInner = document.getElementById('previewInner');
+  var contentHTML = previewInner.innerHTML;
+
+  // Get styles from the preview
+  var docHTML = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + name + ' 简历</title>';
+  docHTML += '<style>';
+  docHTML += 'body{font-family:"Plus Jakarta Sans",sans-serif;color:#222;padding:20mm;max-width:800px;margin:0 auto}';
+  docHTML += '.p-name{font-family:"Orbitron",sans-serif;font-size:22px;font-weight:700;color:#222;margin-bottom:2px}';
+  docHTML += '.p-title{font-size:12px;color:#555;margin-bottom:4px}';
+  docHTML += '.p-contact{font-size:10px;color:#999;margin-bottom:10px}';
+  docHTML += '.p-sep{height:1px;background:#ddd;margin:10px 0}';
+  docHTML += '.p-sec-t{font-size:10px;color:#666;font-weight:600;letter-spacing:1px;margin-bottom:6px;text-transform:uppercase}';
+  docHTML += '.p-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}';
+  docHTML += '.p-tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;background:#f0f0f0;color:#555;margin:2px}';
+  docHTML += '.p-item{font-size:12px;color:#444;line-height:1.6;margin-bottom:4px}';
+  docHTML += '.p-item strong{color:#222}';
+  docHTML += '.diff-highlight,.p-placeholder{display:none}';
+  docHTML += '@media print{body{padding:0}@page{margin:10mm}}';
+  docHTML += '</style></head><body>';
+  docHTML += contentHTML;
+  docHTML += '</body></html>';
+
+  // Clean out diff-highlight and placeholder elements
+  docHTML = docHTML.replace(/<div class="diff-highlight">[\s\S]*?<\/div>/g, '');
+  docHTML = docHTML.replace(/<div class="p-placeholder">[\s\S]*?<\/div>/g, '');
+
+  // Download as .html file
+  var blob = new Blob([docHTML], { type: 'text/html;charset=utf-8' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = name + '_简历.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  btn.classList.remove('loading');
+  btn.innerHTML = '✅ 已保存';
+  setTimeout(function(){ btn.innerHTML = '📄 导出 PDF'; }, 2500);
+}
+
+function copyText(){
+  var text = document.getElementById('previewInner').innerText || document.getElementById('previewInner').textContent;
+  var btn = event.target;
+  btn.textContent = '⏳ 复制中...';
+  // Use fallback method for better compatibility
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.left = '-9999px';
+  ta.style.top = '-9999px';
+  document.body.appendChild(ta);
+  ta.select();
+  try {
+    document.execCommand('copy');
+    btn.innerHTML = '✅ 已复制';
+    setTimeout(function(){ btn.innerHTML = '📋 复制文本'; }, 2000);
+  } catch(e) {
+    // Fallback: clipboard API
+    navigator.clipboard.writeText(text).then(function(){
+      btn.innerHTML = '✅ 已复制';
+      setTimeout(function(){ btn.innerHTML = '📋 复制文本'; }, 2000);
+    }).catch(function(){
+      alert('❌ 复制失败，请手动选择复制');
+      btn.innerHTML = '📋 复制文本';
+    });
+  }
+  document.body.removeChild(ta);
+}
+
+// ========== AUTO SAVE & HISTORY MANAGEMENT ==========
+var saveTimeout = null;
+const DRAFT_STORAGE_KEY = 'ai_resume_draft';
+const HISTORY_STORAGE_KEY = 'ai_resume_history';
+const MAX_HISTORY_COUNT = 20;
+
+// 智能推荐数据
+const JOB_SUGGESTIONS = [
+  { title: '前端工程师', desc: '使用 React/Vue 等技术栈开发 Web 应用', skills: ['React', 'Vue', 'JavaScript', 'CSS'] },
+  { title: '后端工程师', desc: '使用 Node.js/Java/Python 开发后端服务', skills: ['Node.js', 'Java', 'Python', 'MySQL'] },
+  { title: '全栈工程师', desc: '同时负责前端和后端开发工作', skills: ['React', 'Node.js', 'MySQL', 'Git'] },
+  { title: '产品经理', desc: '负责产品规划、需求分析和项目管理', skills: ['Axure', 'Figma', '数据分析', '需求分析'] },
+  { title: 'UI/UX 设计师', desc: '负责产品界面设计和用户体验优化', skills: ['Figma', 'Photoshop', 'Sketch', '原型设计'] },
+  { title: 'AI 算法工程师', desc: '负责机器学习和深度学习算法研发', skills: ['Python', 'PyTorch', 'TensorFlow', '机器学习'] },
+  { title: '数据分析师', desc: '负责数据收集、分析和可视化工作', skills: ['Python', 'SQL', 'Tableau', '数据分析'] },
+  { title: '测试工程师', desc: '负责软件质量保证和自动化测试', skills: ['测试', 'Selenium', 'Jest', 'CI/CD'] }
+];
+
+// 自动保存草稿
+function autoSaveDraft() {
+  if (saveTimeout) clearTimeout(saveTimeout);
+  updateSaveStatus('saving', '正在保存...');
+  
+  saveTimeout = setTimeout(function() {
+    try {
+      const draft = collectFormData();
+      localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft));
+      updateSaveStatus('saved', '草稿已保存');
+    } catch (e) {
+      updateSaveStatus('error', '保存失败');
+      console.error('Auto save failed:', e);
+    }
+  }, 500);
+}
+
+// 更新保存状态显示
+function updateSaveStatus(state, text) {
+  const statusEl = document.getElementById('saveStatus');
+  const textEl = document.getElementById('saveStatusText');
+  if (statusEl && textEl) {
+    statusEl.className = 'save-status ' + state;
+    textEl.textContent = text;
+  }
+}
+
+// 收集表单数据
+function collectFormData() {
+  return {
+    name: document.getElementById('fName')?.value || '',
+    age: document.getElementById('fAge')?.value || '',
+    email: document.getElementById('fEmail')?.value || '',
+    school: document.getElementById('fSchool')?.value || '',
+    degree: document.getElementById('fDegree')?.value || '',
+    skills: skills.slice(),
+    project: document.getElementById('fProject')?.value || '',
+    comp: document.getElementById('fComp')?.value || '',
+    intern: document.getElementById('fIntern')?.value || '',
+    self: document.getElementById('fSelf')?.value || '',
+    target: document.getElementById('fTarget')?.value || '',
+    timestamp: Date.now()
+  };
+}
+
+// 填充表单数据
+function fillFormData(data) {
+  if (!data) return;
+  
+  if (data.name) document.getElementById('fName').value = data.name;
+  if (data.age) document.getElementById('fAge').value = data.age;
+  if (data.email) document.getElementById('fEmail').value = data.email;
+  if (data.school) document.getElementById('fSchool').value = data.school;
+  if (data.degree) document.getElementById('fDegree').value = data.degree;
+  if (data.project) document.getElementById('fProject').value = data.project;
+  if (data.comp) document.getElementById('fComp').value = data.comp;
+  if (data.intern) document.getElementById('fIntern').value = data.intern;
+  if (data.self) document.getElementById('fSelf').value = data.self;
+  if (data.target) document.getElementById('fTarget').value = data.target;
+  
+  if (data.skills && Array.isArray(data.skills)) {
+    skills = data.skills.slice();
+    renderSkills();
+  }
+}
+
+// 加载已保存的草稿
+function loadDraft() {
+  try {
+    const saved = localStorage.getItem(DRAFT_STORAGE_KEY);
+    if (saved) {
+      const draft = JSON.parse(saved);
+      fillFormData(draft);
+      updateSaveStatus('saved', '已加载上次草稿');
+    }
+  } catch (e) {
+    console.error('Load draft failed:', e);
+  }
+}
+
+// 清除草稿
+function clearDraft() {
+  if (confirm('确定要清除当前草稿吗？此操作不可撤销。')) {
+    document.getElementById('fName').value = '';
+    document.getElementById('fAge').value = '';
+    document.getElementById('fEmail').value = '';
+    document.getElementById('fSchool').value = '';
+    document.getElementById('fDegree').value = '';
+    document.getElementById('fProject').value = '';
+    document.getElementById('fComp').value = '';
+    document.getElementById('fIntern').value = '';
+    document.getElementById('fSelf').value = '';
+    document.getElementById('fTarget').value = '';
+    skills = [];
+    renderSkills();
+    localStorage.removeItem(DRAFT_STORAGE_KEY);
+    updateSaveStatus('saved', '草稿已清除');
+  }
+}
+
+// 保存到历史版本
+function saveToHistory() {
+  try {
+    const formData = collectFormData();
+    if (!formData.name && !formData.target) return;
+    
+    let history = [];
+    const saved = localStorage.getItem(HISTORY_STORAGE_KEY);
+    if (saved) {
+      history = JSON.parse(saved);
+    }
+    
+    history.unshift(formData);
+    
+    if (history.length > MAX_HISTORY_COUNT) {
+      history = history.slice(0, MAX_HISTORY_COUNT);
+    }
+    
+    localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(history));
+    renderHistoryList();
+  } catch (e) {
+    console.error('Save to history failed:', e);
+  }
+}
+
+// 切换历史面板显示
+function toggleHistory() {
+  const panel = document.getElementById('historyPanel');
+  if (panel) {
+    panel.classList.toggle('open');
+    renderHistoryList();
+  }
+}
+
+// 渲染历史列表
+function renderHistoryList() {
+  const listEl = document.getElementById('historyList');
+  if (!listEl) return;
+  
+  let history = [];
+  try {
+    const saved = localStorage.getItem(HISTORY_STORAGE_KEY);
+    if (saved) {
+      history = JSON.parse(saved);
+    }
+  } catch (e) {
+    console.error('Load history failed:', e);
+  }
+  
+  if (history.length === 0) {
+    listEl.innerHTML = '<div style="padding:20px;text-align:center;color:rgba(148,163,184,0.4);font-size:12px;">暂无历史版本，生成简历后会自动保存</div>';
+    return;
+  }
+  
+  let html = '';
+  history.forEach(function(item, index) {
+    const date = new Date(item.timestamp);
+    const timeStr = date.toLocaleString('zh-CN', {
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    const preview = item.name || item.target || '未命名简历';
+    
+    html += '<div class="history-item">';
+    html += '<div class="time">' + timeStr + '</div>';
+    html += '<div class="preview">' + preview + '</div>';
+    html += '<div class="actions">';
+    html += '<button class="action-btn" onclick="restoreHistory(' + index + ')" title="恢复此版本">恢复</button>';
+    html += '<button class="action-btn del" onclick="deleteHistory(' + index + ')" title="删除此版本">删除</button>';
+    html += '</div></div>';
+  });
+  
+  listEl.innerHTML = html;
+}
+
+// 恢复历史版本
+function restoreHistory(index) {
+  try {
+    const saved = localStorage.getItem(HISTORY_STORAGE_KEY);
+    if (!saved) return;
+    
+    const history = JSON.parse(saved);
+    if (history[index]) {
+      fillFormData(history[index]);
+      autoSaveDraft();
+      document.getElementById('historyPanel').classList.remove('open');
+    }
+  } catch (e) {
+    console.error('Restore history failed:', e);
+  }
+}
+
+// 删除历史版本
+function deleteHistory(index) {
+  if (!confirm('确定要删除此历史版本吗？')) return;
+  
+  try {
+    const saved = localStorage.getItem(HISTORY_STORAGE_KEY);
+    if (!saved) return;
+    
+    let history = JSON.parse(saved);
+    history.splice(index, 1);
+    localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(history));
+    renderHistoryList();
+  } catch (e) {
+    console.error('Delete history failed:', e);
+  }
+}
+
+// ========== SMART SUGGESTIONS ==========
+// 处理目标岗位输入
+function handleTargetInput(e) {
+  autoSaveDraft();
+  showTargetSuggestions();
+}
+
+// 显示岗位建议
+function showTargetSuggestions() {
+  const input = document.getElementById('fTarget');
+  const suggestionsEl = document.getElementById('targetSuggestions');
+  if (!input || !suggestionsEl) return;
+  
+  const value = input.value.toLowerCase().trim();
+  
+  if (value.length === 0) {
+    suggestionsEl.classList.remove('show');
+    return;
+  }
+  
+  const filtered = JOB_SUGGESTIONS.filter(function(job) {
+    return job.title.toLowerCase().includes(value) || 
+           job.desc.toLowerCase().includes(value);
+  });
+  
+  if (filtered.length === 0) {
+    suggestionsEl.classList.remove('show');
+    return;
+  }
+  
+  let html = '';
+  filtered.forEach(function(job) {
+    html += '<div class="suggestion-item" onclick="selectSuggestion(\'' + job.title.replace(/'/g, "\\'") + '\')">';
+    html += '<div class="label">' + job.title + '</div>';
+    html += '<div style="font-size:11px;color:rgba(148,163,184,0.5);margin-top:4px;">' + job.desc + '</div>';
+    html += '</div>';
+  });
+  
+  suggestionsEl.innerHTML = html;
+  suggestionsEl.classList.add('show');
+}
+
+// 隐藏建议
+function hideTargetSuggestions() {
+  setTimeout(function() {
+    const el = document.getElementById('targetSuggestions');
+    if (el) el.classList.remove('show');
+  }, 200);
+}
+
+// 选择建议
+function selectSuggestion(title) {
+  const input = document.getElementById('fTarget');
+  if (input) {
+    input.value = title;
+    autoSaveDraft();
+  }
+  
+  const suggestionsEl = document.getElementById('targetSuggestions');
+  if (suggestionsEl) suggestionsEl.classList.remove('show');
+  
+  // 自动推荐相关技能
+  const job = JOB_SUGGESTIONS.find(function(j) { return j.title === title; });
+  if (job && job.skills && skills.length === 0) {
+    job.skills.slice(0, 3).forEach(function(skill) {
+      if (!skills.includes(skill)) {
+        skills.push(skill);
+      }
+    });
+    renderSkills();
+  }
+}
+
+// ========== OVERRIDE START GENERATION TO SAVE HISTORY ==========
+const originalStartGeneration = startGeneration;
+startGeneration = function() {
+  saveToHistory();
+  return originalStartGeneration.call(this);
+};
+
+// ========== FLOW PARTICLES ==========
+(function(){
+  var container = document.getElementById('flowBg');
+  for(var i=0;i<20;i++){
+    var p = document.createElement('div');
+    p.className = 'p';
+    p.style.left = Math.random()*100+'%';
+    p.style.animationDelay = Math.random()*8+'s';
+    p.style.animationDuration = (6+Math.random()*6)+'s';
+    p.style.width = (2+Math.random()*4)+'px';
+    p.style.height = p.style.width;
+    container.appendChild(p);
+  }
+})();
+
+// Init
+loadDraft();
+renderSkills();
+
+// ===== BOTTOM MODEL TOOLBAR + MODAL =====
+
+// 所有模型元数据（与 ai-model-switcher.js 一致）
+var MODEL_META_LOCAL = {
+  'gpt-4o':           { icon: '🤖', provider: 'OpenAI',      color: '#10a37f', defaultEndpoint: 'https://api.openai.com/v1' },
+  'gpt-4o-mini':      { icon: '🤖', provider: 'OpenAI',      color: '#10a37f', defaultEndpoint: 'https://api.openai.com/v1' },
+  'claude-3-opus':    { icon: '✨', provider: 'Anthropic',   color: '#d97706', defaultEndpoint: 'https://api.anthropic.com/v1' },
+  'claude-3-sonnet':  { icon: '✨', provider: 'Anthropic',   color: '#d97706', defaultEndpoint: 'https://api.anthropic.com/v1' },
+  'gemini-1.5-pro':   { icon: '🔮', provider: 'Google',      color: '#4285f4', defaultEndpoint: 'https://generativelanguage.googleapis.com/v1beta' },
+  'gemini-1.5-flash': { icon: '🔮', provider: 'Google',      color: '#4285f4', defaultEndpoint: 'https://generativelanguage.googleapis.com/v1beta' },
+  'deepseek-v4':      { icon: '🧠', provider: 'DeepSeek',    color: '#4f46e5', defaultEndpoint: 'https://api.deepseek.com' },
+  'deepseek-v4-flash':{ icon: '🧠', provider: 'DeepSeek',    color: '#6366f1', defaultEndpoint: 'https://api.deepseek.com' },
+  'qwen-max':         { icon: '🌐', provider: '阿里云',      color: '#ff6a00', defaultEndpoint: 'https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation' },
+  'qwen-plus':        { icon: '🌐', provider: '阿里云',      color: '#ff6a00', defaultEndpoint: 'https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation' },
+  'doubao-pro':       { icon: '🍀', provider: '字节跳动',    color: '#00c853', defaultEndpoint: 'https://ark.cn-beijing.volces.com/api/v3' },
+  'doubao-lite':      { icon: '🍀', provider: '字节跳动',    color: '#00c853', defaultEndpoint: 'https://ark.cn-beijing.volces.com/api/v3' },
+  'minimax-2.7':      { icon: '🎯', provider: 'MiniMax',     color: '#22d3ee', defaultEndpoint: 'https://api.minimax.chat/v1/text/chatcompletion_v2' },
+};
+var MODEL_GROUPS = ['OpenAI', 'Anthropic', 'Google', 'DeepSeek', '阿里云', '字节跳动', 'MiniMax'];
+
+function getModelIcon(mid) {
+  var m = MODEL_META_LOCAL[mid];
+  if (m) return m.icon;
+  var cm = getCustomModels();
+  for (var i = 0; i < cm.length; i++) { if (cm[i].id === mid) return '🔧'; }
+  return '🤖';
+}
+function getModelName(mid) {
+  var m = MODEL_META_LOCAL[mid];
+  if (m) return mid;
+  var cm = getCustomModels();
+  for (var i = 0; i < cm.length; i++) { if (cm[i].id === mid) return cm[i].name; }
+  return mid;
+}
+function getModelProvider(mid) {
+  var m = MODEL_META_LOCAL[mid];
+  if (m) return m.provider;
+  var cm = getCustomModels();
+  for (var i = 0; i < cm.length; i++) { if (cm[i].id === mid) return cm[i].provider; }
+  return '自定义';
+}
+function getModelEndpoint(mid) {
+  var cfg = getModelConfig(mid);
+  if (cfg.endpoint) return cfg.endpoint;
+  var m = MODEL_META_LOCAL[mid];
+  if (m) return m.defaultEndpoint;
+  var cm = getCustomModels();
+  for (var i = 0; i < cm.length; i++) { if (cm[i].id === mid) return cm[i].baseUrl; }
+  return '';
+}
+function getCustomModels() {
+  try { return JSON.parse(localStorage.getItem('ai_custom_models') || '[]'); } catch(e) { return []; }
+}
+function getModelConfig(mid) {
+  try {
+    var configs = JSON.parse(localStorage.getItem('ai_model_configs') || '{}');
+    return configs[mid] || { apiKey: '', endpoint: '' };
+  } catch(e) { return { apiKey: '', endpoint: '' }; }
+}
+function setModelConfig(mid, key, endpoint) {
+  try {
+    var configs = JSON.parse(localStorage.getItem('ai_model_configs') || '{}');
+    configs[mid] = { apiKey: key, endpoint: endpoint };
+    localStorage.setItem('ai_model_configs', JSON.stringify(configs));
+  } catch(e) {}
+}
+
+function initBottomToolbar() {
+  var modelId = localStorage.getItem('ai_global_model') || 'deepseek-v4-flash';
+  var icon = getModelIcon(modelId);
+  var name = getModelName(modelId);
+  var provider = getModelProvider(modelId);
+  
+  var hasApiKey = getModelConfig(modelId).apiKey ? true : false;
+  
+  var toolbarHTML =
+  '<div class="ai-model-toolbar">' +
+    '<button class="model-btn" onclick="openModelModal()">' +
+      '<span class="model-icon">' + icon + '</span>' +
+      '<div class="model-info">' +
+        '<div class="model-name">' + name + '</div>' +
+        '<div class="model-provider">' + provider + '</div>' +
+      '</div>' +
+      '<div class="model-status' + (hasApiKey ? ' configured' : '') + '"></div>' +
+    '</button>' +
+    '<div class="toolbar-divider"></div>' +
+    '<div style="font-size:10px;color:rgba(148,163,184,0.25);font-family:Orbitron,sans-serif;cursor:pointer" onclick="openModelModal()">⚙️ 配置</div>' +
+  '</div>';
+  
+  document.body.insertAdjacentHTML('beforeend', toolbarHTML);
+}
+
+function openModelModal() {
+  var modal = document.getElementById('aiModelModal');
+  if (modal) {
+    modal.classList.add('open');
+    renderModelChips();
+    populateFormFromCurrentModel();
+  }
+}
+
+function closeModelModal() {
+  var modal = document.getElementById('aiModelModal');
+  if (modal) modal.classList.remove('open');
+}
+
+function selectModelViaChip(mid) {
+  localStorage.setItem('ai_global_model', mid);
+  window.dispatchEvent(new CustomEvent('ai-model-change', { detail: { model: mid } }));
+  renderModelChips();
+  populateFormFromCurrentModel();
+  refreshBottomToolbar();
+}
+
+function refreshBottomToolbar() {
+  var oldToolbar = document.querySelector('.ai-model-toolbar');
+  if (oldToolbar) oldToolbar.remove();
+  initBottomToolbar();
+}
+
+function populateFormFromCurrentModel() {
+  var mid = localStorage.getItem('ai_global_model') || 'deepseek-v4-flash';
+  var cfg = getModelConfig(mid);
+  var epValue = cfg.endpoint || getModelEndpoint(mid);
+  var meta = MODEL_META_LOCAL[mid];
+  
+  document.getElementById('modalModelId').value = mid;
+  document.getElementById('modalApiKey').value = cfg.apiKey || '';
+  document.getElementById('modalEndpoint').value = epValue;
+  
+  // Auto-set provider dropdown
+  if (meta) {
+    var providerVal = meta.provider;
+    var sel = document.getElementById('modalProvider');
+    for (var i = 0; i < sel.options.length; i++) {
+      if (sel.options[i].value === providerVal) { sel.selectedIndex = i; break; }
+    }
+  }
+}
+
+function saveModalConfig() {
+  var modelId = document.getElementById('modalModelId')?.value?.trim();
+  var apiKey = document.getElementById('modalApiKey')?.value?.trim();
+  var endpoint = document.getElementById('modalEndpoint')?.value?.trim();
+  var provider = document.getElementById('modalProvider')?.value;
+  
+  if (!modelId) { modelId = 'deepseek-v4-flash'; }
+  
+  // Save model selection
+  localStorage.setItem('ai_global_model', modelId);
+  
+  // Save API config for this model
+  setModelConfig(modelId, apiKey, endpoint);
+  
+  renderModelChips();
+  refreshBottomToolbar();
+  window.dispatchEvent(new CustomEvent('ai-model-change', { detail: { model: modelId } }));
+  
+  document.getElementById('modalSaveBtn').textContent = '✅ 已保存';
+  setTimeout(function(){ document.getElementById('modalSaveBtn').textContent = '保存配置'; }, 1500);
+}
+
+// ===== 测试API连接 =====
+async function testApiConnection() {
+  var mid = document.getElementById('modalModelId')?.value?.trim() || 'deepseek-v4-flash';
+  var apiKey = document.getElementById('modalApiKey')?.value?.trim();
+  var endpoint = document.getElementById('modalEndpoint')?.value?.trim();
+  
+  if (!apiKey) {
+    document.getElementById('testBtn').textContent = '❌ 请先输入 API Key';
+    setTimeout(function(){ document.getElementById('testBtn').textContent = '🔌 测试连接'; }, 2000);
+    return;
+  }
+  
+  document.getElementById('testBtn').textContent = '⏳ 测试中...';
+  document.getElementById('testBtn').disabled = true;
+  
+  try {
+    var res = await fetch(window.location.origin + '/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: mid,
+        prompt: '请回复"OK"表示连接成功，不要回复其他内容',
+        system: '只回复"OK"',
+        maxTokens: 10,
+        temperature: 0,
+        apiKey: apiKey,
+        endpoint: endpoint,
+        userModelConfig: {}
+      })
+    });
+    var data = await res.json();
+    if (data.content && data.content.trim()) {
+      document.getElementById('testBtn').textContent = '✅ 连接成功 ✓';
+      document.getElementById('testBtn').style.borderColor = 'rgba(74,222,128,0.3)';
+    } else if (data.error) {
+      document.getElementById('testBtn').textContent = '❌ ' + data.error.substring(0, 25);
+    } else {
+      document.getElementById('testBtn').textContent = '⚠️ 响应异常，请检查配置';
+    }
+  } catch (err) {
+    document.getElementById('testBtn').textContent = '❌ 连接失败: ' + err.message.substring(0, 20);
+  }
+  
+  document.getElementById('testBtn').disabled = false;
+  setTimeout(function(){ 
+    document.getElementById('testBtn').textContent = '🔌 测试连接'; 
+    document.getElementById('testBtn').style.borderColor = 'rgba(99,102,241,0.1)';
+  }, 3000);
+}
+
+// ===== 渲染模型芯片行 =====
+function renderModelChips() {
+  var mid = localStorage.getItem('ai_global_model') || 'deepseek-v4-flash';
+  var row = document.getElementById('modalChipRow');
+  if (!row) return;
+  
+  var html = '';
+  // Show first model from each provider group
+  var seen = {};
+  for (var gi = 0; gi < MODEL_GROUPS.length; gi++) {
+    var group = MODEL_GROUPS[gi];
+    var ids = Object.keys(MODEL_META_LOCAL).filter(function(id) { return MODEL_META_LOCAL[id].provider === group; });
+    if (ids.length === 0) continue;
+    
+    // Show the most representative model from each group
+    var representative = ids[0];
+    var m = MODEL_META_LOCAL[representative];
+    var isSel = representative === mid || ids.indexOf(mid) >= 0;
+    // If currently selected model is in this group, highlight that one
+    var activeId = ids.indexOf(mid) >= 0 ? mid : representative;
+    var isActive = ids.indexOf(mid) >= 0 || (mid === representative);
+    
+    // Only show if this model is currently selected OR show first one of each group
+    if (ids.indexOf(mid) >= 0) {
+      // Show only the specific selected model
+      html += '<div class="model-chip active" onclick="selectModelViaChip(\'' + mid + '\')">' +
+        m.icon + ' ' + mid.substring(0, 14) + 
+        '<span class="chip-dot ' + (getModelConfig(mid).apiKey ? 'on' : '') + '"></span></div>';
+    }
+  }
+  
+  // Also add model selector: show a few common ones
+  var common = ['deepseek-v4-flash', 'deepseek-v4', 'gpt-4o-mini', 'qwen-plus', 'doubao-pro'];
+  var found = false;
+  for (var ci = 0; ci < common.length; ci++) {
+    if (common[ci] === mid) { found = true; continue; }
+    var cm = MODEL_META_LOCAL[common[ci]];
+    if (!cm) continue;
+    var isMidSelected = common[ci] === mid;
+    html += '<div class="model-chip' + (isMidSelected ? ' active' : '') + '" onclick="selectModelViaChip(\'' + common[ci] + '\')">' +
+      cm.icon + ' ' + common[ci].substring(0, 12) +
+      '<span class="chip-dot ' + (getModelConfig(common[ci]).apiKey ? 'on' : '') + '"></span></div>';
+  }
+  
+  // Add a "custom" chip if current model is custom
+  var customs = getCustomModels();
+  var isCustom = false;
+  for (var ci2 = 0; ci2 < customs.length; ci2++) {
+    if (customs[ci2].id === mid) { isCustom = true; break; }
+  }
+  if (!isCustom && common.indexOf(mid) < 0) {
+    // Current model is not in common, add it
+    var curMeta = MODEL_META_LOCAL[mid];
+    html = '<div class="model-chip active" onclick="selectModelViaChip(\'' + mid + '\')">' +
+      (curMeta ? curMeta.icon : '🔧') + ' ' + mid.substring(0, 14) +
+      '<span class="chip-dot ' + (getModelConfig(mid).apiKey ? 'on' : '') + '"></span></div>' + html;
+  }
+  
+  row.innerHTML = html;
+  
+  // Render custom models section
+  var customSection = document.getElementById('customModelSection');
+  var customList = document.getElementById('customModelList');
+  if (customSection && customList) {
+    if (customs.length > 0) {
+      customSection.style.display = 'block';
+      var ch = '';
+      for (var ci3 = 0; ci3 < customs.length; ci3++) {
+        var c = customs[ci3];
+        var isSel = c.id === mid;
+        ch += '<div class="custom-model-item' + (isSel ? ' active' : '') + '" onclick="selectModelViaChip(\'' + c.id + '\')">' +
+          '🔧 <span style="flex:1">' + c.name + '</span>' +
+          '<span style="font-size:10px;color:rgba(255,255,255,0.15)">' + c.provider + '</span>' +
+          '<span style="width:5px;height:5px;border-radius:50%;background:' + (c.apiKey ? '#4ade80' : 'rgba(255,255,255,0.08)') + '"></span></div>';
+      }
+      customList.innerHTML = ch;
+    } else {
+      customSection.style.display = 'none';
+    }
+  }
+}
+
+// Init bottom toolbar
+document.addEventListener('DOMContentLoaded', function() {
+  initBottomToolbar();
+});
+</script>
+<script src="public/ai-model-switcher.js"></script>
+
+<!-- ===== AI MODEL CONFIG MODAL (Trae风格) ===== -->
+<div class="ai-model-modal-overlay" id="aiModelModal">
+  <div class="ai-model-modal">
+    <div class="ai-modal-header">
+      <h3>⚙️ AI 模型配置</h3>
+      <button class="ai-modal-close" onclick="closeModelModal()">✕</button>
+    </div>
+    <div class="ai-modal-body">
+      <!-- Model chips row -->
+      <div class="trae-section-title">选择模型</div>
+      <div class="model-chip-row" id="modalChipRow"></div>
+
+      <!-- Custom models (if any) -->
+      <div id="customModelSection" style="display:none">
+        <div class="trae-section-title" style="margin-top:4px">自定义模型</div>
+        <div id="customModelList"></div>
+        <div style="margin-top:6px;margin-bottom:12px;text-align:center">
+          <span style="font-size:11px;color:rgba(255,255,255,0.2);cursor:pointer" onclick="closeModelModal();setTimeout(function(){if(window._aiShowAddModal)window._aiShowAddModal()},300)">➕ 添加自定义模型</span>
+        </div>
+      </div>
+
+      <!-- API Config form -->
+      <div class="trae-section-title">API 配置</div>
+
+      <div class="trae-row">
+        <div class="trae-group">
+          <label>服务商</label>
+          <select id="modalProvider">
+            <option value="OpenAI">OpenAI</option>
+            <option value="Anthropic">Anthropic (Claude)</option>
+            <option value="Google">Google (Gemini)</option>
+            <option value="DeepSeek" selected>DeepSeek</option>
+            <option value="阿里云">阿里云 (通义千问)</option>
+            <option value="字节跳动">字节跳动 (豆包)</option>
+            <option value="MiniMax">MiniMax</option>
+            <option value="其他">其他 (自定义)</option>
+          </select>
+        </div>
+        <div class="trae-group">
+          <label>模型</label>
+          <input type="text" id="modalModelId" placeholder="如: deepseek-v4-flash" value="deepseek-v4-flash">
+        </div>
+      </div>
+
+      <div class="trae-group">
+        <label>API Key</label>
+        <input type="password" id="modalApiKey" placeholder="sk-xxxxxxxxxxxxxxxx" autocomplete="off">
+        <div class="trae-hint">必填。从模型服务商平台获取你的 API Key</div>
+      </div>
+
+      <div class="trae-group">
+        <label>API 请求地址 <span style="color:rgba(255,255,255,0.15)">(可选)</span></label>
+        <input type="text" id="modalEndpoint" placeholder="https://api.deepseek.com" autocomplete="off">
+        <div class="trae-hint">留空则使用默认接口地址。支持 OpenAI 兼容格式的 API 地址</div>
+      </div>
+    </div>
+    <div class="ai-modal-footer">
+      <button class="trae-btn secondary" onclick="closeModelModal()">取消</button>
+      <button class="trae-btn test" id="testBtn" onclick="testApiConnection()">🔌 测试连接</button>
+      <button class="trae-btn primary" id="modalSaveBtn" onclick="saveModalConfig()">保存配置</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>最后一个六一 · 高三毕业纪念</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@300;400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --neon-purple: #8B5CF6;
+  --neon-blue: #00F5FF;
+  --neon-pink: #FF2D95;
+  --neon-yellow: #FFE624;
+  --dark-bg: #0D0221;
+  --dark-card: #1a0a3e;
+  --text-light: #f0e6ff;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans SC', sans-serif;
+  background: var(--dark-bg);
+  color: var(--text-light);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--dark-bg); }
+::-webkit-scrollbar-thumb { background: var(--neon-purple); border-radius: 3px; }
+
+/* ===== BOOT SCREEN ===== */
+#boot-screen {
+  position: fixed; inset: 0; z-index: 9999;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.8s;
+}
+#boot-screen.hidden { opacity: 0; pointer-events: none; }
+#boot-canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+}
+.boot-text {
+  position: relative; z-index: 2;
+  text-align: center;
+  opacity: 0;
+  animation: bootFadeIn 1s ease 2s forwards;
+}
+.boot-text h1 {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(14px, 3vw, 28px);
+  color: var(--neon-blue);
+  text-shadow: 0 0 20px var(--neon-blue), 0 0 40px var(--neon-blue);
+  margin-bottom: 16px;
+  letter-spacing: 4px;
+}
+.boot-text p {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(8px, 1.2vw, 12px);
+  color: var(--neon-pink);
+  text-shadow: 0 0 10px var(--neon-pink);
+  animation: blink 1s step-end infinite;
+}
+@keyframes bootFadeIn { to { opacity: 1; } }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ===== CANVAS BACKGROUND ===== */
+#bg-canvas {
+  position: fixed; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ===== FLOATING ELEMENTS ===== */
+.floating-elements {
+  position: fixed; inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.float-item {
+  position: absolute;
+  font-size: 28px;
+  opacity: 0.3;
+  animation: floatAround linear infinite;
+}
+@keyframes floatAround {
+  0% { transform: translateY(110vh) rotate(0deg) scale(0.5); opacity: 0; }
+  10% { opacity: 0.3; }
+  90% { opacity: 0.2; }
+  100% { transform: translateY(-10vh) rotate(720deg) scale(1.2); opacity: 0; }
+}
+
+/* ===== NAV ===== */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(180deg, rgba(13,2,33,0.9) 0%, transparent 100%);
+  transition: transform 0.3s;
+}
+.nav.hidden { transform: translateY(-100%); }
+.nav-logo {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: var(--neon-blue);
+  text-shadow: 0 0 10px var(--neon-blue);
+}
+.nav-links { display: flex; gap: 16px; flex-wrap: wrap; }
+.nav-links a {
+  font-family: 'ZCOOL KuaiLe', cursive;
+  font-size: 14px;
+  color: var(--text-light);
+  text-decoration: none;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  transition: all 0.3s;
+}
+.nav-links a:hover {
+  border-color: var(--neon-pink);
+  color: var(--neon-pink);
+  box-shadow: 0 0 15px rgba(255,45,149,0.3);
+}
+
+/* ===== HERO ===== */
+.hero {
+  position: relative; z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 100px 20px 60px;
+}
+.hero-title {
+  font-family: 'ZCOOL KuaiLe', cursive;
+  font-size: clamp(36px, 8vw, 80px);
+  background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple), var(--neon-pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.3;
+  margin-bottom: 16px;
+  animation: titleGlow 3s ease-in-out infinite;
+}
+@keyframes titleGlow {
+  0%, 100% { filter: drop-shadow(0 0 20px rgba(139,92,246,0.3)); }
+  50% { filter: drop-shadow(0 0 40px rgba(255,45,149,0.5)); }
+}
+.hero-sub {
+  font-family: 'ZCOOL KuaiLe', cursive;
+  font-size: clamp(16px, 3vw, 28px);
+  color: var(--neon-yellow);
+  text-shadow: 0 0 20px rgba(255,230,36,0.3);
+  margin-bottom: 24px;
+}
+.hero-desc {
+  font-size: clamp(14px, 1.8vw, 18px);
+  color: rgba(240,230,255,0.7);
+  max-width: 600px;
+  margin-bottom: 40px;
+  line-height: 1.8;
+}
+.hero-btn {
+  font-family: 'ZCOOL KuaiLe', cursive;
+  font-size: clamp(18px, 2.5vw, 24px);
+  padding: 16px 48px;
+  border: none;
+  border-radius: 50px;
+  background: linear-gradient(135deg, var(--neon-purple), var(--neon-pink));
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 0 30px rgba(139,92,246,0.4);
+  position: relative;
+  overflow: hidden;
+}
+.hero-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 50px rgba(255,45,149,0.6);
+}
+.hero-btn::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, transparent 30%, rgba(255,255,255,0.2) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.6s;
+}
+.hero-btn:hover::after { transform: translateX(100%); }
+
+/* ===== SECTION COMMON ===== */
+.section {
+  position: relative; z-index: 1;
+  min-height: 100vh;
+  padding: 80px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.section-title {
+  font-family: 'ZCOOL KuaiLe', cursive;
+  font-size: clamp(28px, 5vw, 48px);
+  margin-bottom: 12px;
+  text-align: center;
+}
+.section-title .highlight-neon { color: var(--neon-pink); text-shadow: 0 0 20px var(--neon-pink); }
+.section-title .highlight-blue { color: var(--neon-blue); text-shadow: 0 0 20px var(--neon-blue); }
+.section-title .highlight-purple { color: var(--neon-purple); text-shadow: 0 0 20px var(--neon-purple); }
+
+/* ===== TIMELINE ===== */
+.timeline-section {
+  background: linear-gradient(180deg, var(--dark-bg) 0%, #150a30 50%, var(--dark-bg) 100%);
+}
+.timeline-container {
+  position: relative;
+  max-width: 800px;
+  width: 100%;
+  padding: 40px 0;
+}
+.timeline-line {
+  position: absolute;
+  left: 50%; top: 0; bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, var(--neon-blue), var(--neon-purple), var(--neon-pink));
+  transform: translateX(-50%);
+  box-shadow: 0 0 20px var(--neon-purple);
+}
+.timeline-item {
+  position: relative;
+  width: 50%;
+  padding: 20px 30px;
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: all 0.8s ease;
+}
+.timeline-item:nth-child(even) {
+  margin-left: auto;
+  transform: translateX(50px);
+}
+.timeline-item.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+.timeline-dot {
+  position: absolute;
+  top: 50%;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--neon-pink);
+  box-shadow: 0 0 20px var(--neon-pink);
+  transform: translateY(-50%);
+}
+.timeline-item:nth-child(odd) .timeline-dot { right: -42px; }
+.timeline-item:nth-child(even) .timeline-dot { left: -42px; }
+.timeline-card {
+  background: rgba(26,10,62,0.8);
+  border: 1px solid rgba(139,92,246,0.3);
+  border-radius: 16px;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s;
+}
+.timeline-card:hover {
+  border-color: var(--neon-pink);
+  box-shadow: 0 0 30px rgba(255,45,149,0.2);
+  transform: translateY(-4px);
+}
+.timeline-year {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(16px, 2vw, 24px);
+  color: var(--neon-yellow);
+  text-shadow: 0 0 10px var(--neon-yellow);
+  margin-bottom: 8px;
+}
+.timeline-year .score-ani {
+  display: inline-block;
+  transition: all 0.1s;
+}
+.timeline-label {
+  font-family: 'ZCOOL KuaiLe', cursive;
+  font-size: clamp(16px, 2.5vw, 22px);
+  background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.timeline-desc {
+  font-size: 14px;
+  color: rgba(240,230,255,0.7);
+  margin-top: 8px;
+  line-height: 1.6;
+}
+.timeline-emoji {
+  font-size: 36px;
+  margin-bottom: 8px;
+}
+
+/* ===== MEMORY EXPLOSION ===== */
+.memory-section {
+  background: linear-gradient(180deg, var(--dark-bg) 0%, #0a0a2e 50%, var(--dark-bg) 100%);
+}
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 16px;
+  max-width: 600px;
+  width: 100%;
+  margin: 30px 0;
+}
+.memory-btn {
+  font-size: clamp(32px, 5vw, 48px);
+  padding: 20px;
+  border: 2px solid rgba(139,92,246,0.3);
+  border-radius: 16px;
+  background: rgba(26,10,62,0.6);
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.memory-btn:hover {
+  border-color: var(--neon-pink);
+  transform: scale(1.1);
+  box-shadow: 0 0 30px rgba(255,45,149,0.3);
+}
+.memory-btn .label {
+  display: block;
+  font-family: 'ZCOOL KuaiLe', cursive;
+  font-size: 12px;
+  color: var(--text-light);
+  margin-top: 8px;
+}
+#memory-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+.memory-result {
+  font-family: 'ZCOOL KuaiLe', cursive;
+  font-size: clamp(36px, 8vw, 72px);
+  text-align: center;
+  margin-top: 20px;
+  min-height: 80px;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+.memory-result.show { opacity: 1; }
+.memory-result .char {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--neon-blue), var(--neon-pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: charPop 0.5s ease forwards;
+  opacity: 0;
+  transform: scale(0);
+}
+@keyframes charPop {
+  0% { opacity: 0; transform: scale(0) rotate(-180deg); }
+  60% { transform: scale(1.3) rotate(10deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+/* ===== MESSAGE WALL ===== */
+.message-section {
+  background: linear-gradient(180deg, var(--dark-bg) 0%, #1a0a3e 50%, var(--dark-bg) 100%);
+  position: relative;
+  overflow: hidden;
+}
+.message-form {
+  max-width: 500px;
+  width: 100%;
+  margin-bottom: 30px;
+  position: relative; z-index: 2;
+}
+.message-form textarea {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid rgba(139,92,246,0.3);
+  border-radius: 12px;
+  background: rgba(26,10,62,0.8);
+  color: var(--text-light);
+  font-size: 16px;
+  font-family: 'Noto Sans SC', sans-serif;
+  resize: vertical;
+  min-height: 80px;
+  transition: border-color 0.3s;
+}
+.message-form textarea:focus {
+  outline: none;
+  border-color: var(--neon-purple);
+  box-shadow: 0 0 20px rgba(139,92,246,0.2);
+}
+.message-form textarea::placeholder { color: rgba(240,230,255,0.3); }
+.message-form button {
+  width: 100%;
+  margin-top: 12px;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--neon-purple), var(--neon-pink));
+  color: #fff;
+  font-family: 'ZCOOL KuaiLe', cursive;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.message-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(139,92,246,0.4);
+}
+.message-sky {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: radial-gradient(ellipse at center, #1a0a3e 0%, #0D0221 100%);
+}
+.message-balloon {
+  position: absolute;
+  padding: 10px 18px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-family: 'ZCOOL KuaiLe', cursive;
+  cursor: pointer;
+  animation: balloonFloat linear forwards;
+  white-space: nowrap;
+  border: 1px solid;
+  z-index: 2;
+  transition: transform 0.3s;
+}
+.message-balloon:hover { transform: scale(1.1); }
+@keyframes balloonFloat {
+  0% { transform: translateY(0) scale(0.5); opacity: 0; }
+  5% { opacity: 1; transform: translateY(0) scale(1); }
+  95% { opacity: 1; }
+  100% { transform: translateY(-600px) scale(0.8); opacity: 0; }
+}
+.message-balloon::after {
+  content: '🎈';
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
+}
+
+/* ===== FINAL SECTION ===== */
+.final-section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+.final-btn {
+  font-family: 'ZCOOL KuaiLe', cursive;
+  font-size: clamp(24px, 4vw, 40px);
+  padding: 24px 64px;
+  border: none;
+  border-radius: 60px;
+  background: linear-gradient(135deg, var(--neon-purple), var(--neon-pink));
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.4s;
+  box-shadow: 0 0 40px rgba(139,92,246,0.5);
+  position: relative;
+  z-index: 5;
+}
+.final-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 80px rgba(255,45,149,0.7);
+}
+.final-btn:active { transform: scale(0.95); }
+
+/* Collapse overlay */
+#collapse-overlay {
+  position: fixed; inset: 0;
+  z-index: 9998;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+#collapse-overlay.active { display: flex; }
+.collapse-point {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 60px var(--neon-blue), 0 0 120px var(--neon-purple);
+  animation: collapseExpand 1.5s ease forwards;
+}
+@keyframes collapseExpand {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(0.1); opacity: 0.5; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ===== DIPLOMA ===== */
+.diploma {
+  display: none;
+  position: fixed; inset: 0;
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.85);
+  padding: 20px;
+  backdrop-filter: blur(10px);
+}
+.diploma.active { display: flex; }
+.diploma-card {
+  max-width: 700px;
+  width: 100%;
+  background: linear-gradient(135deg, #1a0a3e, #2d1b69);
+  border: 2px solid var(--neon-yellow);
+  border-radius: 24px;
+  padding: clamp(24px, 4vw, 48px);
+  position: relative;
+  overflow: hidden;
+  animation: diplomaReveal 1s ease forwards;
+  opacity: 0;
+  transform: scale(0.5) rotateY(90deg);
+}
+@keyframes diplomaReveal {
+  0% { opacity: 0; transform: scale(0.5) rotateY(90deg); }
+  60% { transform: scale(1.05) rotateY(-5deg); }
+  100% { opacity: 1; transform: scale(1) rotateY(0deg); }
+}
+.diploma-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 30% 40%, rgba(0,245,255,0.05) 0%, transparent 50%),
+              radial-gradient(circle at 70% 60%, rgba(255,45,149,0.05) 0%, transparent 50%);
+}
+.diploma-seal {
+  position: absolute;
+  top: 30px; right: 30px;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  border: 3px solid var(--neon-yellow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'ZCOOL KuaiLe', cursive;
+  font-size: 12px;
+  color: var(--neon-yellow);
+  text-align: center;
+  transform: rotate(15deg);
+  box-shadow: 0 0 20px rgba(255,230,36,0.3);
+}
+.diploma-title {
+  font-family: 'ZCOOL KuaiLe', cursive;
+  font-size: clamp(28px, 5vw, 48px);
+  background: linear-gradient(135deg, var(--neon-yellow), var(--neon-pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+.diploma-sub {
+  font-size: clamp(14px, 2vw, 20px);
+  color: rgba(240,230,255,0.6);
+  margin-bottom: 24px;
+}
+.diploma-body {
+  font-size: clamp(14px, 1.8vw, 18px);
+  line-height: 2;
+  color: var(--text-light);
+  position: relative; z-index: 1;
+}
+.diploma-body .highlight {
+  color: var(--neon-blue);
+  text-shadow: 0 0 10px var(--neon-blue);
+}
+.diploma-body .highlight-pink {
+  color: var(--neon-pink);
+  text-shadow: 0 0 10px var(--neon-pink);
+}
+.diploma-name {
+  font-family: 'ZCOOL KuaiLe', cursive;
+  font-size: clamp(20px, 3vw, 32px);
+  color: var(--neon-yellow);
+  text-shadow: 0 0 15px rgba(255,230,36,0.3);
+}
+.diploma-footer {
+  margin-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  color: rgba(240,230,255,0.5);
+}
+.diploma-close {
+  margin-top: 20px;
+  padding: 12px 32px;
+  border: 2px solid var(--neon-purple);
+  border-radius: 30px;
+  background: transparent;
+  color: var(--neon-purple);
+  font-family: 'ZCOOL KuaiLe', cursive;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.diploma-close:hover {
+  background: var(--neon-purple);
+  color: #fff;
+  box-shadow: 0 0 30px rgba(139,92,246,0.4);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+  .timeline-item { width: 80%; padding: 15px 20px; }
+  .timeline-item:nth-child(even) { margin-left: 20%; }
+  .timeline-item:nth-child(odd) .timeline-dot { right: -32px; }
+  .timeline-item:nth-child(even) .timeline-dot { left: -32px; }
+  .memory-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .memory-btn { padding: 14px; }
+  .nav-links a { font-size: 12px; padding: 3px 8px; }
+}
+
+/* ===== PARTICLE CANVAS OVERLAY ===== */
+.particle-overlay {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+</style>
+</head>
+<body>
+
+<!-- ===== BOOT SCREEN ===== -->
+<div id="boot-screen">
+  <canvas id="boot-canvas"></canvas>
+  <div class="boot-text">
+    <h1>📺 童年信号接入中...</h1>
+    <p>▍按任意键跳过</p>
+  </div>
+</div>
+
+<!-- ===== NAV ===== -->
+<nav class="nav hidden" id="navbar">
+  <span class="nav-logo">🎮 6·1</span>
+  <div class="nav-links">
+    <a href="#timeline">⏳ 时光轴</a>
+    <a href="#memory">💥 回忆杀</a>
+    <a href="#messages">💌 留言墙</a>
+    <a href="#final">🎓 签收成长</a>
+  </div>
+</nav>
+
+<!-- ===== FLOATING ELEMENTS ===== -->
+<div class="floating-elements" id="float-container"></div>
+
+<!-- ===== BG CANVAS ===== -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+  <h1 class="hero-title">最后一个六一</h1>
+  <p class="hero-sub">✨ 高三毕业限定版 · 笑着告别童年 ✨</p>
+  <p class="hero-desc">
+    这不是普通的儿童节，<br>
+    是我们用最酷的方式，和十八年的童年说再见。<br>
+    准备好踏上这趟时光列车了吗？
+  </p>
+  <button class="hero-btn" onclick="document.getElementById('timeline').scrollIntoView({behavior:'smooth'})">
+    🚀 启动时光机
+  </button>
+</section>
+
+<!-- ===== TIMELINE ===== -->
+<section class="section timeline-section" id="timeline">
+  <h2 class="section-title">
+    <span class="highlight-blue">⏳</span> 我们的 <span class="highlight-neon">时光轴</span>
+  </h2>
+  <p style="color:rgba(240,230,255,0.5);margin-bottom:20px;text-align:center;font-size:14px;">↓ 滚动看看，数字像游戏得分一样跳动哦 ↓</p>
+  <div class="timeline-container" id="timeline-container">
+    <div class="timeline-line"></div>
+
+    <div class="timeline-item" data-year="2011">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <div class="timeline-emoji">👶</div>
+        <div class="timeline-year">YEAR <span class="score-ani" data-target="2011">2011</span></div>
+        <div class="timeline-label">🎒 幼儿园小班</div>
+        <div class="timeline-desc">人生第一个六一儿童节！<br>穿着新衣服上台表演《小星星》</div>
+      </div>
+    </div>
+
+    <div class="timeline-item" data-year="2014">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <div class="timeline-emoji">🧸</div>
+        <div class="timeline-year">YEAR <span class="score-ani" data-target="2014">2014</span></div>
+        <div class="timeline-label">🏫 小学一年级</div>
+        <div class="timeline-desc">戴上了红领巾！<br>六一游园会上套圈圈赢了一支自动铅笔</div>
+      </div>
+    </div>
+
+    <div class="timeline-item" data-year="2017">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <div class="timeline-emoji">🎮</div>
+        <div class="timeline-year">YEAR <span class="score-ani" data-target="2017">2017</span></div>
+        <div class="timeline-label">🎪 小学四年级</div>
+        <div class="timeline-desc">和同桌偷偷在课桌下玩GameBoy<br>被老师没收了，至今没还</div>
+      </div>
+    </div>
+
+    <div class="timeline-item" data-year="2020">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <div class="timeline-emoji">📚</div>
+        <div class="timeline-year">YEAR <span class="score-ani" data-target="2020">2020</span></div>
+        <div class="timeline-label">🏀 初一</div>
+        <div class="timeline-desc">个子猛长，终于能投进三分球了<br>六一和兄弟们在操场疯了一下午</div>
+      </div>
+    </div>
+
+    <div class="timeline-item" data-year="2023">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <div class="timeline-emoji">🎧</div>
+        <div class="timeline-year">YEAR <span class="score-ani" data-target="2023">2023</span></div>
+        <div class="timeline-label">🚴 高一</div>
+        <div class="timeline-desc">终于有手机了！<br>六一在朋友圈发"我还是个宝宝"<br>被全班点赞</div>
+      </div>
+    </div>
+
+    <div class="timeline-item" data-year="2026">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <div class="timeline-emoji">📝</div>
+        <div class="timeline-year">YEAR <span class="score-ani" data-target="2026">2026</span></div>
+        <div class="timeline-label">✈️ 高三 · 现在</div>
+        <div class="timeline-desc">最后一个六一儿童节。<br>愿我们跃入人海，各自灿烂。<br>📜 试卷折成的纸飞机，飞向未来。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MEMORY EXPLOSION ===== -->
+<section class="section memory-section" id="memory">
+  <h2 class="section-title">
+    <span class="highlight-neon">💥</span> 点击回忆 <span class="highlight-purple">炸开童年</span>
+  </h2>
+  <p style="color:rgba(240,230,255,0.5);margin-bottom:10px;text-align:center;font-size:14px;">点击任意一个童年记忆，看它炸成星河！</p>
+  <div class="memory-grid" id="memory-grid">
+    <button class="memory-btn" data-memory="0">
+      🍭<span class="label">棒棒糖</span>
+    </button>
+    <button class="memory-btn" data-memory="1">
+      🪁<span class="label">放风筝</span>
+    </button>
+    <button class="memory-btn" data-memory="2">
+      🎪<span class="label">游乐园</span>
+    </button>
+    <button class="memory-btn" data-memory="3">
+      🎮<span class="label">小霸王</span>
+    </button>
+    <button class="memory-btn" data-memory="4">
+      🧊<span class="label">冰棍</span>
+    </button>
+    <button class="memory-btn" data-memory="5">
+      📺<span class="label">动画城</span>
+    </button>
+  </div>
+  <canvas id="memory-canvas"></canvas>
+  <div class="memory-result" id="memory-result"></div>
+</section>
+
+<!-- ===== MESSAGE WALL ===== -->
+<section class="section message-section" id="messages">
+  <h2 class="section-title">
+    <span class="highlight-pink">💌</span> 把祝福 <span class="highlight-blue">放飞星空</span>
+  </h2>
+  <p style="color:rgba(240,230,255,0.5);margin-bottom:20px;text-align:center;font-size:14px;">写下你想对同学说的话，它会变成气球飘向夜空 ✨</p>
+  <div class="message-form">
+    <textarea id="msg-input" placeholder="写下你的毕业留言…（不超过30字）" maxlength="30"></textarea>
+    <button onclick="sendMessage()">🎈 放飞祝福</button>
+  </div>
+  <div class="message-sky" id="message-sky"></div>
+</section>
+
+<!-- ===== FINAL SECTION ===== -->
+<section class="final-section" id="final">
+  <h2 class="section-title" style="margin-bottom:20px;">
+    <span class="highlight-blue">🎓</span> 准备好了吗？
+  </h2>
+  <p style="color:rgba(240,230,255,0.5);text-align:center;font-size:clamp(14px,2vw,18px);margin-bottom:40px;max-width:500px;">
+    按下按钮，和童年说再见<br>
+    所有的回忆会坍缩成一颗光点<br>
+    然后 —— 展开成属于你的 <span class="highlight-neon">毕业证书</span>
+  </p>
+  <button class="final-btn" onclick="collapseToDiploma()">📬 签收成长</button>
+</section>
+
+<!-- ===== COLLAPSE OVERLAY ===== -->
+<div id="collapse-overlay">
+  <div class="collapse-point"></div>
+</div>
+
+<!-- ===== DIPLOMA ===== -->
+<div class="diploma" id="diploma">
+  <div class="diploma-card">
+    <div class="diploma-seal">已盖章<br>✓ 成年</div>
+    <div class="diploma-title">🎓 童年毕业证书</div>
+    <div class="diploma-sub">—— 致我们终将逝去的儿童节 ——</div>
+    <div class="diploma-body">
+      <p>兹证明 <span class="diploma-name" id="diploma-name">同学</span>：</p>
+      <p style="margin-top:16px;">
+        你已完成从 <span class="highlight">👶 幼儿园</span> 到
+        <span class="highlight-pink">🎓 高三</span> 的全部童年课程，
+      </p>
+      <p>
+        累计获得 <span class="highlight">18年</span> 快乐值，
+        <span class="highlight-pink">∞</span> 份珍贵回忆。
+      </p>
+      <p style="margin-top:16px;">
+        经审核，你已具备 <span class="highlight">"笑着告别童年"</span> 的资格，
+        准予 <span class="highlight-pink">毕业</span>。
+      </p>
+      <p style="margin-top:16px;font-size:clamp(13px,1.5vw,16px);color:rgba(240,230,255,0.6);">
+        "小时候盼着长大，长大后怀念小时候。<br>
+        但没关系，<span class="highlight">最好的童年</span> 永远在心里。"
+      </p>
+    </div>
+    <div class="diploma-footer">
+      <span>🎮 最后一个六一儿童节</span>
+      <span>📅 2026年 · 高三毕业</span>
+    </div>
+    <button class="diploma-close" onclick="closeDiploma()">📖 保存这份回忆</button>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// 1. BOOT SCREEN - TV STATIC EFFECT
+// ============================================================
+const bootCanvas = document.getElementById('boot-canvas');
+const bootCtx = bootCanvas.getContext('2d');
+let bootW, bootH;
+
+function resizeBoot() {
+  bootW = bootCanvas.width = window.innerWidth;
+  bootH = bootCanvas.height = window.innerHeight;
+}
+resizeBoot();
+window.addEventListener('resize', resizeBoot);
+
+let bootFrame = 0;
+const bootDuration = 180; // ~3s at 60fps
+function renderBoot() {
+  const imageData = bootCtx.createImageData(bootW, bootH);
+  const data = imageData.data;
+  for (let i = 0; i < data.length; i += 4) {
+    const val = Math.random() * 255;
+    data[i] = val;
+    data[i+1] = val;
+    data[i+2] = val;
+    data[i+3] = 255;
+  }
+  bootCtx.putImageData(imageData, 0, 0);
+
+  bootFrame++;
+  if (bootFrame < bootDuration) {
+    requestAnimationFrame(renderBoot);
+  } else {
+    // Static clear
+    bootCtx.fillStyle = '#000';
+    bootCtx.fillRect(0, 0, bootW, bootH);
+    // Scan lines
+    for (let y = 0; y < bootH; y += 3) {
+      bootCtx.fillStyle = `rgba(255,255,255,${Math.random() * 0.03})`;
+      bootCtx.fillRect(0, y, bootW, 1);
+    }
+    setTimeout(() => {
+      document.getElementById('boot-screen').classList.add('hidden');
+      document.getElementById('navbar').classList.remove('hidden');
+      initBgCanvas();
+      initFloatElements();
+      initTimelineObserver();
+    }, 500);
+  }
+}
+renderBoot();
+
+// Skip boot on keypress / click
+document.addEventListener('keydown', skipBoot);
+document.addEventListener('click', skipBoot, { once: true });
+let bootSkipped = false;
+function skipBoot() {
+  if (bootSkipped) return;
+  bootSkipped = true;
+  document.getElementById('boot-screen').classList.add('hidden');
+  document.getElementById('navbar').classList.remove('hidden');
+  initBgCanvas();
+  initFloatElements();
+  initTimelineObserver();
+}
+
+// ============================================================
+// 2. BG CANVAS - STARFIELD + PARTICLE NETWORK
+// ============================================================
+const bgCanvas = document.getElementById('bg-canvas');
+const bgCtx = bgCanvas.getContext('2d');
+let bgW, bgH, stars = [], connections = [];
+
+function resizeBg() {
+  bgW = bgCanvas.width = window.innerWidth;
+  bgH = bgCanvas.height = window.innerHeight;
+  initStars();
+}
+function initStars() {
+  stars = [];
+  const count = Math.min(Math.floor(bgW * bgH / 4000), 200);
+  for (let i = 0; i < count; i++) {
+    stars.push({
+      x: Math.random() * bgW,
+      y: Math.random() * bgH,
+      r: Math.random() * 2 + 0.5,
+      dx: (Math.random() - 0.5) * 0.3,
+      dy: (Math.random() - 0.5) * 0.3,
+      alpha: Math.random() * 0.8 + 0.2
+    });
+  }
+}
+function drawBg() {
+  bgCtx.clearRect(0, 0, bgW, bgH);
+  // Draw stars
+  for (const s of stars) {
+    s.x += s.dx;
+    s.y += s.dy;
+    if (s.x < 0 || s.x > bgW) s.dx *= -1;
+    if (s.y < 0 || s.y > bgH) s.dy *= -1;
+    bgCtx.beginPath();
+    bgCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    const gradient = bgCtx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r * 3);
+    const hue = Math.random() > 0.7 ? 280 : 180; // purple or blue
+    gradient.addColorStop(0, `hsla(${hue}, 100%, 80%, ${s.alpha})`);
+    gradient.addColorStop(1, `hsla(${hue}, 100%, 60%, 0)`);
+    bgCtx.fillStyle = gradient;
+    bgCtx.fill();
+  }
+  // Connections
+  for (let i = 0; i < stars.length; i++) {
+    for (let j = i + 1; j < stars.length; j++) {
+      const dx = stars[i].x - stars[j].x;
+      const dy = stars[i].y - stars[j].y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 120) {
+        bgCtx.strokeStyle = `rgba(139, 92, 246, ${0.12 * (1 - dist / 120)})`;
+        bgCtx.lineWidth = 0.5;
+        bgCtx.beginPath();
+        bgCtx.moveTo(stars[i].x, stars[i].y);
+        bgCtx.lineTo(stars[j].x, stars[j].y);
+        bgCtx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(drawBg);
+}
+function initBgCanvas() {
+  resizeBg();
+  window.addEventListener('resize', resizeBg);
+  drawBg();
+}
+
+// ============================================================
+// 3. FLOATING ELEMENTS
+// ============================================================
+function initFloatElements() {
+  const container = document.getElementById('float-container');
+  const emojis = ['✈️', '🪁', '🫧', '🎮', '📄', '🪀', '🧸', '🎈', '🍭', '🎪', '📺', '⭐'];
+  for (let i = 0; i < 15; i++) {
+    const el = document.createElement('div');
+    el.className = 'float-item';
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    el.style.left = Math.random() * 95 + '%';
+    el.style.fontSize = (Math.random() * 16 + 18) + 'px';
+    el.style.animationDuration = (Math.random() * 25 + 20) + 's';
+    el.style.animationDelay = (Math.random() * 20) + 's';
+    container.appendChild(el);
+  }
+}
+
+// ============================================================
+// 4. TIMELINE - SCROLL OBSERVER + SCORE ANIMATION
+// ============================================================
+function initTimelineObserver() {
+  const items = document.querySelectorAll('.timeline-item');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        animateScore(entry.target.querySelector('.score-ani'));
+      }
+    });
+  }, { threshold: 0.3 });
+
+  items.forEach(item => observer.observe(item));
+
+  // Also animate on scroll
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        items.forEach(item => {
+          const rect = item.getBoundingClientRect();
+          if (rect.top < window.innerHeight * 0.8 && rect.bottom > 0) {
+            item.classList.add('visible');
+            animateScore(item.querySelector('.score-ani'));
+          }
+        });
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+}
+
+function animateScore(el) {
+  if (!el || el.dataset.animated === 'true') return;
+  el.dataset.animated = 'true';
+  const target = parseInt(el.dataset.target);
+  const duration = 1500;
+  const startTime = performance.now();
+
+  function update(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    // Ease out
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = Math.floor(eased * (target - 1900) + 1900);
+    // Game-score style: random flips
+    const display = progress < 1
+      ? Math.floor(current + Math.random() * 200 - 100)
+      : target;
+    el.textContent = display;
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    } else {
+      el.textContent = target;
+      el.style.color = '#FFE624';
+      el.style.textShadow = '0 0 20px #FFE624';
+    }
+  }
+  requestAnimationFrame(update);
+}
+
+// ============================================================
+// 5. MEMORY EXPLOSION -> "毕业快乐"
+// ============================================================
+const memCanvas = document.getElementById('memory-canvas');
+const memCtx = memCanvas.getContext('2d');
+let memW, memH, memParticles = [], memAnimating = false;
+
+function resizeMem() {
+  const rect = memCanvas.parentElement.getBoundingClientRect();
+  memW = memCanvas.width = rect.width;
+  memH = memCanvas.height = rect.height;
+}
+resizeMem();
+window.addEventListener('resize', resizeMem);
+
+document.querySelectorAll('.memory-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const rect = this.getBoundingClientRect();
+    const parentRect = memCanvas.parentElement.getBoundingClientRect();
+    const cx = rect.left - parentRect.left + rect.width / 2;
+    const cy = rect.top - parentRect.top + rect.height / 2;
+    triggerMemoryExplosion(cx, cy);
+  });
+});
+
+function triggerMemoryExplosion(cx, cy) {
+  if (memAnimating) return;
+  memAnimating = true;
+  memParticles = [];
+
+  const colors = ['#8B5CF6', '#00F5FF', '#FF2D95', '#FFE624', '#FF6B6B', '#48D9A9'];
+  // Emoji particles
+  const emojis = ['🍭', '🪁', '🎮', '🧸', '🎈', '⚽', '📺', '🎪', '🍦', '🚲', '📚', '✈️'];
+
+  for (let i = 0; i < 100; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = Math.random() * 8 + 3;
+    memParticles.push({
+      x: cx, y: cy,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - 2,
+      r: Math.random() * 6 + 3,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      life: 1,
+      decay: Math.random() * 0.015 + 0.008,
+      emoji: emojis[Math.floor(Math.random() * emojis.length)],
+      isEmoji: Math.random() > 0.6,
+      gravity: 0.05
+    });
+  }
+  animateMemoryExplosion();
+}
+
+function animateMemoryExplosion() {
+  memCtx.clearRect(0, 0, memW, memH);
+  let alive = false;
+  for (const p of memParticles) {
+    if (p.life <= 0) continue;
+    alive = true;
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += p.gravity;
+    p.vx *= 0.99;
+    p.life -= p.decay;
+
+    memCtx.globalAlpha = p.life;
+    if (p.isEmoji) {
+      memCtx.font = `${p.r * 3}px sans-serif`;
+      memCtx.textAlign = 'center';
+      memCtx.textBaseline = 'middle';
+      memCtx.fillText(p.emoji, p.x, p.y);
+    } else {
+      memCtx.shadowColor = p.color;
+      memCtx.shadowBlur = 15;
+      memCtx.beginPath();
+      memCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      memCtx.fillStyle = p.color;
+      memCtx.fill();
+      memCtx.shadowBlur = 0;
+    }
+    memCtx.globalAlpha = 1;
+  }
+
+  if (alive) {
+    requestAnimationFrame(animateMemoryExplosion);
+  } else {
+    showMemoryResult();
+  }
+}
+
+function showMemoryResult() {
+  const result = document.getElementById('memory-result');
+  result.innerHTML = '';
+  result.classList.add('show');
+  const text = '毕业快乐 🎉';
+  for (let i = 0; i < text.length; i++) {
+    const span = document.createElement('span');
+    span.className = 'char';
+    span.textContent = text[i];
+    span.style.animationDelay = `${i * 0.12}s`;
+    result.appendChild(span);
+  }
+  // Trigger mini confetti
+  triggerConfetti();
+}
+
+function triggerConfetti() {
+  const rect = memCanvas.parentElement.getBoundingClientRect();
+  const cx = rect.width / 2;
+  const cy = rect.height / 2;
+  const colors = ['#8B5CF6', '#00F5FF', '#FF2D95', '#FFE624'];
+  for (let i = 0; i < 40; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = Math.random() * 6 + 2;
+    memParticles.push({
+      x: cx, y: cy,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - 3,
+      r: Math.random() * 4 + 2,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      life: 1,
+      decay: Math.random() * 0.02 + 0.01,
+      isEmoji: false,
+      gravity: 0.08
+    });
+  }
+  // Animate confetti
+  function confettiAni() {
+    memCtx.clearRect(0, 0, memW, memH);
+    let alive = false;
+    for (const p of memParticles) {
+      if (p.life <= 0) continue;
+      alive = true;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += p.gravity;
+      p.vx *= 0.98;
+      p.life -= p.decay;
+      memCtx.globalAlpha = p.life;
+      memCtx.shadowColor = p.color;
+      memCtx.shadowBlur = 10;
+      memCtx.beginPath();
+      memCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      memCtx.fillStyle = p.color;
+      memCtx.fill();
+      memCtx.shadowBlur = 0;
+      memCtx.globalAlpha = 1;
+    }
+    if (alive) requestAnimationFrame(confettiAni);
+    else memAnimating = false;
+  }
+  if (memParticles.length > 0) confettiAni();
+  else memAnimating = false;
+}
+
+// ============================================================
+// 6. MESSAGE WALL - BALLOON FLOATING
+// ============================================================
+function sendMessage() {
+  const input = document.getElementById('msg-input');
+  const text = input.value.trim();
+  if (!text) return;
+  if (text.length > 30) { alert('字数不能超过30哦~'); return; }
+  input.value = '';
+
+  const sky = document.getElementById('message-sky');
+  const balloon = document.createElement('div');
+  balloon.className = 'message-balloon';
+
+  // Random color
+  const colors = ['#8B5CF6', '#00F5FF', '#FF2D95', '#FFE624', '#FF6B6B', '#48D9A9'];
+  const color = colors[Math.floor(Math.random() * colors.length)];
+  balloon.style.background = color + '20';
+  balloon.style.borderColor = color;
+  balloon.style.color = color;
+  balloon.style.left = (Math.random() * 70 + 5) + '%';
+  balloon.style.animationDuration = (Math.random() * 8 + 8) + 's';
+  balloon.textContent = text;
+
+  sky.appendChild(balloon);
+
+  // Remove after animation
+  setTimeout(() => balloon.remove(), 16000);
+
+  // Add a star sparkle
+  const sparkle = document.createElement('div');
+  sparkle.style.cssText = `
+    position: absolute; left: ${balloon.style.left}; bottom: 0;
+    font-size: 10px; animation: balloonFloat ${Math.random() * 8 + 8}s linear forwards;
+    pointer-events: none; opacity: 0.6;
+  `;
+  sparkle.textContent = '⭐';
+  sky.appendChild(sparkle);
+  setTimeout(() => sparkle.remove(), 16000);
+}
+
+// Allow Enter to send
+document.getElementById('msg-input').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+// ============================================================
+// 7. FINAL - COLLAPSE TO DIPLOMA
+// ============================================================
+function collapseToDiploma() {
+  const overlay = document.getElementById('collapse-overlay');
+  overlay.classList.add('active');
+  overlay.style.display = 'flex';
+
+  // Hide scroll
+  document.body.style.overflow = 'hidden';
+
+  setTimeout(() => {
+    overlay.classList.remove('active');
+    overlay.style.display = 'none';
+    document.getElementById('diploma').classList.add('active');
+  }, 1800);
+}
+
+function closeDiploma() {
+  document.getElementById('diploma').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// ============================================================
+// 8. PARALLAX + NAV VISIBILITY
+// ============================================================
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('navbar');
+  const current = window.scrollY;
+  if (current > lastScroll && current > 100) {
+    nav.classList.add('hidden');
+  } else {
+    nav.classList.remove('hidden');
+  }
+  lastScroll = current;
+});
+
+// ============================================================
+// 9. SET DIPLOMA NAME
+// ============================================================
+// Try to auto-detect name from URL or show prompt
+const params = new URLSearchParams(window.location.search);
+const nameParam = params.get('name');
+if (nameParam) {
+  document.getElementById('diploma-name').textContent = decodeURIComponent(nameParam);
+} else {
+  // Ask on first visit to final section
+  const finalObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !nameParam) {
+        const name = prompt('请输入你的名字，用于毕业证书：', '同学');
+        if (name) {
+          document.getElementById('diploma-name').textContent = name;
+        }
+        finalObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.5 });
+  finalObserver.observe(document.getElementById('final'));
+}
+
+// Add name support via URL: ?name=张三
+</script>
+</body>
+</html>

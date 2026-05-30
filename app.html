@@ -1,0 +1,2063 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>智职AI · 下一代求职助手</title>
+<script src="https://cdn.tailwindcss.com">
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --glow-indigo: rgba(99,102,241,0.6);
+  --glow-purple: rgba(139,92,246,0.6);
+  --glow-cyan: rgba(6,182,212,0.6);
+  --glow-pink: rgba(236,72,153,0.6);
+  --glow-gold: rgba(250,204,21,0.4);
+  --core-size: 720px;
+}
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}body{font-family:'Plus Jakarta Sans',sans-serif;background:#050510;color:#fff;overflow-x:hidden;-webkit-font-smoothing:antialiased;min-height:100vh}
+h1,h2,h3,h4{font-family:'Orbitron',sans-serif}
+
+/* ===== BACKGROUND LAYERS ===== */
+.space-bg{position:fixed;inset:0;z-index:0;background:
+  radial-gradient(ellipse at 15% 40%,rgba(30,20,100,0.5) 0%,transparent 55%),
+  radial-gradient(ellipse at 85% 25%,rgba(80,10,120,0.35) 0%,transparent 50%),
+  radial-gradient(ellipse at 45% 75%,rgba(10,50,100,0.4) 0%,transparent 50%),
+  radial-gradient(ellipse at 55% 45%,rgba(40,10,80,0.5) 0%,transparent 60%),
+  radial-gradient(ellipse at 50% 50%,rgba(15,5,50,0.9) 0%,transparent 70%),
+  #050510}
+
+.nebula-orb{position:fixed;border-radius:50%;pointer-events:none;z-index:1;filter:blur(100px);mix-blend-mode:screen}
+.n1{width:750px;height:750px;top:-15%;left:8%;background:radial-gradient(circle,rgba(99,102,241,0.22) 0%,rgba(139,92,246,0.08) 40%,transparent 70%);animation:nebulaDrift1 25s ease-in-out infinite}
+.n2{width:600px;height:600px;bottom:-10%;right:5%;background:radial-gradient(circle,rgba(139,92,246,0.2) 0%,rgba(168,85,247,0.06) 35%,transparent 70%);animation:nebulaDrift2 22s ease-in-out infinite}
+.n3{width:500px;height:500px;top:30%;left:55%;background:radial-gradient(circle,rgba(6,182,212,0.12) 0%,rgba(99,102,241,0.05) 40%,transparent 70%);animation:nebulaDrift3 28s ease-in-out infinite}
+.n4{width:400px;height:400px;top:50%;right:65%;background:radial-gradient(circle,rgba(168,85,247,0.14) 0%,rgba(236,72,153,0.05) 40%,transparent 70%);animation:nebulaDrift4 18s ease-in-out infinite}
+.n5{width:300px;height:300px;top:65%;left:25%;background:radial-gradient(circle,rgba(236,72,153,0.1) 0%,rgba(139,92,246,0.04) 40%,transparent 70%);animation:nebulaDrift1 30s ease-in-out infinite reverse}
+.n6{width:200px;height:200px;top:20%;right:20%;background:radial-gradient(circle,rgba(250,204,21,0.06) 0%,transparent 70%);animation:nebulaDrift2 35s ease-in-out infinite 5s}
+
+@keyframes nebulaDrift1{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(70px,-60px) scale(1.08)}50%{transform:translate(-60px,-120px) scale(0.92)}75%{transform:translate(-80px,-40px) scale(1.06)}}
+@keyframes nebulaDrift2{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(-80px,50px) scale(1.06)}50%{transform:translate(70px,90px) scale(0.92)}75%{transform:translate(50px,-60px) scale(1.04)}}
+@keyframes nebulaDrift3{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(100px,40px) scale(1.05)}66%{transform:translate(-40px,-80px) scale(0.94)}}
+@keyframes nebulaDrift4{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(-60px,-50px) scale(1.06)}66%{transform:translate(50px,60px) scale(0.93)}}
+
+.light-rays{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.light-ray{position:absolute;height:200%;top:-50%;background:linear-gradient(180deg,transparent,rgba(99,102,241,0.06),transparent);animation:raySweep 25s linear infinite}
+.lr1{left:8%;width:2.5px;transform:rotate(12deg);opacity:0.05}
+.lr2{left:22%;width:1.5px;transform:rotate(35deg);animation-delay:-6s;opacity:0.04}
+.lr3{left:38%;width:3px;transform:rotate(58deg);animation-delay:-12s;opacity:0.035;background:linear-gradient(180deg,transparent,rgba(139,92,246,0.08),transparent)}
+.lr4{left:52%;width:1.5px;transform:rotate(80deg);animation-delay:-4s;opacity:0.045;background:linear-gradient(180deg,transparent,rgba(6,182,212,0.08),transparent)}
+.lr5{left:68%;width:2px;transform:rotate(105deg);animation-delay:-18s;opacity:0.04}
+.lr6{left:82%;width:2.5px;transform:rotate(130deg);animation-delay:-9s;opacity:0.035;background:linear-gradient(180deg,transparent,rgba(168,85,247,0.08),transparent)}
+.lr7{left:48%;width:1px;transform:rotate(160deg);animation-delay:-14s;opacity:0.03}
+.lr8{left:30%;width:2px;transform:rotate(72deg);animation-delay:-21s;opacity:0.03}
+@keyframes raySweep{0%{transform:translateY(-50%) rotate(var(--r,0deg))}100%{transform:translateY(50%) rotate(var(--r,0deg))}}
+
+.grd-overlay{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(99,102,241,0.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(99,102,241,0.03) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse at center,black 20%,transparent 70%);
+  -webkit-mask-image:radial-gradient(ellipse at center,black 20%,transparent 70%);
+  animation:gridPulse 8s ease-in-out infinite}
+@keyframes gridPulse{0%,100%{opacity:0.8}50%{opacity:1.2}}
+
+/* ===== VOLUMETRIC GLOW ===== */
+.volumetric-glow{position:fixed;pointer-events:none;z-index:1}
+.volumetric-glow::before,.volumetric-glow::after{content:'';position:absolute;inset:0}
+.vg-beam-1{top:0;left:0;width:100%;height:100%}
+.vg-beam-1::before{background:linear-gradient(135deg,transparent 30%,rgba(99,102,241,0.03) 45%,transparent 55%,rgba(139,92,246,0.02) 70%,transparent 85%);clip-path:polygon(0 0,100% 0,85% 100%,15% 100%);animation:cinematicBeam 8s ease-in-out infinite}
+.vg-beam-1::after{background:linear-gradient(225deg,transparent 35%,rgba(6,182,212,0.02) 50%,transparent 65%);clip-path:polygon(20% 0,80% 0,60% 100%,40% 100%);animation:cinematicBeam 10s ease-in-out infinite 2s}
+
+/* ===== CINEMATIC BEAMS ===== */
+.cinematic-beam{position:fixed;pointer-events:none;z-index:1;mix-blend-mode:screen;opacity:0}
+.cb-1{top:-10%;left:10%;width:300px;height:130%;background:linear-gradient(180deg,transparent,rgba(99,102,241,0.04),rgba(139,92,246,0.03),transparent);transform:rotate(25deg);filter:blur(60px);animation:cinematicBeam 12s ease-in-out infinite}
+.cb-2{top:-15%;left:40%;width:200px;height:140%;background:linear-gradient(180deg,transparent,rgba(6,182,212,0.03),rgba(99,102,241,0.02),transparent);transform:rotate(55deg);filter:blur(80px);animation:cinematicBeam 15s ease-in-out infinite 3s}
+.cb-3{top:-5%;left:70%;width:250px;height:120%;background:linear-gradient(180deg,transparent,rgba(168,85,247,0.03),rgba(236,72,153,0.02),transparent);transform:rotate(-15deg);filter:blur(70px);animation:cinematicBeam 10s ease-in-out infinite 6s}
+
+/* ===== ENERGY FOG ===== */
+.energy-fog{position:fixed;bottom:0;left:0;right:0;height:60vh;z-index:1;pointer-events:none;mix-blend-mode:screen;opacity:0.3}
+.energy-fog-1{background:linear-gradient(0deg,transparent 0%,rgba(99,102,241,0.04) 30%,rgba(139,92,246,0.02) 60%,transparent 100%);animation:fogDrift 20s ease-in-out infinite}
+.energy-fog-2{background:linear-gradient(0deg,transparent 0%,rgba(6,182,212,0.03) 25%,rgba(99,102,241,0.02) 55%,transparent 100%);animation:fogDrift 25s ease-in-out infinite 5s;opacity:0.2}
+@keyframes fogDrift{0%,100%{transform:translateX(-2%) scaleX(1)}25%{transform:translateX(1%) scaleX(1.02)}50%{transform:translateX(2%) scaleX(0.98)}75%{transform:translateX(-1%) scaleX(1.01)}}
+
+/* ===== VIGNETTE OVERLAY ===== */
+.vignette-overlay{position:fixed;inset:0;z-index:2;pointer-events:none;
+  background:radial-gradient(ellipse at center,transparent 50%,rgba(2,0,15,0.4) 75%,rgba(0,0,0,0.6) 100%);
+  animation:vignettePulse 6s ease-in-out infinite}
+@keyframes vignettePulse{0%,100%{opacity:0.9}50%{opacity:1}}
+
+/* ===== CINEMATIC BEAM KEYFRAMES ===== */
+@keyframes cinematicBeam{0%,100%{opacity:0;transform:var(--cb-transform,rotate(25deg)) translateX(-10%) scaleY(0.95)}10%{opacity:0.15}20%{opacity:0.08}30%{opacity:0.12}50%{opacity:0.05}70%{opacity:0.1}85%{opacity:0.06}100%{opacity:0;transform:var(--cb-transform,rotate(25deg)) translateX(10%) scaleY(1.05)}}
+
+.atmospheric-fog{position:fixed;bottom:0;left:0;right:0;height:40vh;z-index:2;pointer-events:none;
+  background:linear-gradient(0deg,rgba(5,5,16,0.95) 0%,rgba(5,5,16,0.4) 40%,transparent 100%)}
+
+#starCanvas{position:fixed;inset:0;z-index:2;pointer-events:none}
+
+.mouse-glow{position:fixed;width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(139,92,246,0.05) 0%,rgba(99,102,241,0.03) 30%,transparent 70%);
+  pointer-events:none;z-index:3;transform:translate(-50%,-50%);transition:opacity 0.5s ease;opacity:0}
+
+/* ===== NAVIGATION ===== */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(5,5,16,0.5);backdrop-filter:blur(28px) saturate(1.6);
+  -webkit-backdrop-filter:blur(28px) saturate(1.6);
+  border-bottom:1px solid rgba(255,255,255,0.04);transition:all 0.5s cubic-bezier(0.4,0,0.2,1)}
+nav.scrolled{background:rgba(5,5,16,0.88);border-bottom-color:rgba(99,102,241,0.1)}
+.nav-logo{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:800;
+  background:linear-gradient(135deg,#fff 0%,#a5b4fc 50%,#818cf8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  letter-spacing:1px}
+.nav-logo-glow{text-shadow:0 0 30px rgba(99,102,241,0.3)}
+.nav-link{position:relative;font-size:13px;font-weight:500;color:rgba(255,255,255,0.45);
+  transition:color 0.3s ease;text-decoration:none;padding:4px 0;letter-spacing:0.3px}
+.nav-link:hover{color:rgba(255,255,255,0.85)}
+.nav-link::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1.5px;
+  background:linear-gradient(90deg,var(--glow-indigo),var(--glow-purple));
+  transition:width 0.3s cubic-bezier(0.4,0,0.2,1);border-radius:1px}
+.nav-link:hover::after{width:100%}
+.nav-btn{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:600;
+  padding:8px 22px;border-radius:8px;border:1px solid rgba(139,92,246,0.3);
+  background:linear-gradient(135deg,rgba(139,92,246,0.12),rgba(99,102,241,0.08));
+  color:#c4b5fd;cursor:pointer;transition:all 0.3s ease;letter-spacing:0.5px}
+.nav-btn:hover{background:linear-gradient(135deg,rgba(139,92,246,0.25),rgba(99,102,241,0.18));
+  border-color:rgba(139,92,246,0.5);box-shadow:0 0 25px rgba(139,92,246,0.15);transform:translateY(-1px)}
+
+/* ===== HERO ===== */
+.hero{position:relative;z-index:10;min-height:100vh;display:flex;align-items:center;padding:120px 0 80px;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:0.9fr 1.4fr 0.7fr;gap:30px;align-items:center;width:100%;max-width:1440px;margin:0 auto;padding:0 50px;position:relative;z-index:5}
+.hero-left{position:relative;z-index:10}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px 6px 8px;
+  border-radius:100px;border:1px solid rgba(99,102,241,0.15);
+  background:rgba(99,102,241,0.06);font-size:12px;font-weight:500;color:rgba(255,255,255,0.6);
+  margin-bottom:18px;white-space:nowrap}
+.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;animation:dotPulse 2s ease-in-out infinite;box-shadow:0 0 8px rgba(34,197,94,0.5)}
+@keyframes dotPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(1.3)}}
+.hero-title{font-size:clamp(36px,4vw,58px);font-weight:900;line-height:1.08;letter-spacing:-1px;margin-bottom:20px}
+.hero-title-grad{background:linear-gradient(135deg,#fff 0%,#e0e7ff 30%,#c4b5fd 60%,#818cf8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  text-shadow:none;filter:drop-shadow(0 0 40px rgba(99,102,241,0.15))}
+.hero-title-accent{background:linear-gradient(135deg,#a78bfa 0%,#60a5fa 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:16px;font-weight:400;color:rgba(255,255,255,0.5);line-height:1.8;max-width:420px;margin-bottom:28px}
+.hero-sub strong{color:rgba(255,255,255,0.8);font-weight:500}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap}
+.btn-primary{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;
+  padding:14px 34px;border-radius:12px;border:none;
+  background:linear-gradient(135deg,#7c3aed,#4f46e5,#6366f1);
+  color:#fff;cursor:pointer;transition:all 0.3s ease;letter-spacing:0.5px;
+  box-shadow:0 4px 20px rgba(99,102,241,0.25);position:relative;overflow:hidden}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 35px rgba(99,102,241,0.35)}
+.btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 0%,rgba(255,255,255,0.08) 50%,transparent 100%);
+  transform:translateX(-100%);transition:transform 0.6s ease}
+.btn-primary:hover::before{transform:translateX(100%)}
+.btn-secondary{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:600;
+  padding:14px 34px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.03);color:rgba(255,255,255,0.7);cursor:pointer;
+  transition:all 0.3s ease;letter-spacing:0.5px;backdrop-filter:blur(4px)}
+.btn-secondary:hover{background:rgba(255,255,255,0.06);border-color:rgba(139,92,246,0.25);transform:translateY(-2px);color:#fff}
+
+/* ===== AI ORB ===== */
+.ai-orb-wrapper{position:relative;width:100%;height:620px;display:flex;align-items:center;justify-content:center}
+.ai-orb{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:var(--core-size);height:var(--core-size);pointer-events:none}
+
+/* Core text */
+.ai-core-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;
+  font-family:'Orbitron',sans-serif;font-size:56px;font-weight:900;
+  background:linear-gradient(135deg,#fff 0%,#e0e7ff 20%,#c4b5fd 45%,#818cf8 65%,#a78bfa 85%,#67e8f9 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  letter-spacing:8px;animation:textPulse 2s ease-in-out infinite alternate;
+  filter:drop-shadow(0 0 60px rgba(139,92,246,0.5)) drop-shadow(0 0 120px rgba(99,102,241,0.3)) drop-shadow(0 0 200px rgba(6,182,212,0.1))}
+@keyframes textPulse{0%{filter:drop-shadow(0 0 50px rgba(139,92,246,0.4)) drop-shadow(0 0 100px rgba(99,102,241,0.25)) drop-shadow(0 0 180px rgba(6,182,212,0.08));transform:translate(-50%,-50%) scale(1)}100%{filter:drop-shadow(0 0 80px rgba(139,92,246,0.6)) drop-shadow(0 0 150px rgba(99,102,241,0.35)) drop-shadow(0 0 250px rgba(6,182,212,0.15));transform:translate(-50%,-50%) scale(1.03)}}
+
+/* Core glow layers */
+.core-glow-1{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:420px;height:420px;border-radius:50%;
+  background:radial-gradient(circle,rgba(139,92,246,0.25) 0%,rgba(99,102,241,0.12) 25%,rgba(6,182,212,0.05) 50%,transparent 70%);
+  filter:blur(80px);mix-blend-mode:screen;animation:coreBreathe 3.5s ease-in-out infinite;z-index:4;opacity:0.7}
+.core-glow-2{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:320px;height:320px;border-radius:50%;
+  background:radial-gradient(circle,rgba(168,85,247,0.2) 0%,rgba(139,92,246,0.1) 30%,rgba(236,72,153,0.05) 55%,transparent 70%);
+  filter:blur(55px);mix-blend-mode:screen;animation:coreBreathe 4s ease-in-out infinite reverse;z-index:5;opacity:0.6}
+.core-glow-3{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:250px;height:250px;border-radius:50%;
+  background:radial-gradient(circle,rgba(192,132,252,0.3) 0%,rgba(139,92,246,0.15) 25%,rgba(99,102,241,0.08) 50%,transparent 70%);
+  filter:blur(40px);mix-blend-mode:screen;animation:coreBreathe 2.8s ease-in-out infinite 0.5s;z-index:5;opacity:0.8}
+.core-glow-4{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,0.35) 0%,rgba(200,180,255,0.18) 15%,rgba(139,92,246,0.1) 35%,rgba(99,102,241,0.05) 55%,transparent 70%);
+  box-shadow:0 0 80px 30px rgba(139,92,246,0.2),0 0 160px 60px rgba(99,102,241,0.12),0 0 250px 80px rgba(139,92,246,0.06),0 0 400px 120px rgba(6,182,212,0.03);
+  mix-blend-mode:screen;animation:coreBreathe 2.5s ease-in-out infinite 0.3s;z-index:6;opacity:0.9}
+.core-glow-5{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(6,182,212,0.06) 0%,rgba(99,102,241,0.03) 30%,transparent 70%);
+  filter:blur(100px);mix-blend-mode:screen;animation:coreBreathe 5s ease-in-out infinite 1s;z-index:3;opacity:0.4}
+@keyframes coreBreathe{0%,100%{transform:translate(-50%,-50%) scale(0.95);opacity:0.6}50%{transform:translate(-50%,-50%) scale(1.1);opacity:1}}
+
+/* Core ball */
+.core-ball{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:120px;height:120px;border-radius:50%;z-index:7;
+  background:radial-gradient(circle at 30% 25%,rgba(255,255,255,1) 0%,rgba(230,210,255,0.6) 10%,rgba(167,139,250,0.35) 28%,rgba(99,102,241,0.25) 45%,rgba(139,92,246,0.2) 60%,rgba(88,28,135,0.3) 78%,transparent 100%);
+  box-shadow:
+    0 0 40px rgba(139,92,246,0.35),0 0 80px rgba(99,102,241,0.2),0 0 140px rgba(139,92,246,0.1),0 0 220px rgba(6,182,212,0.05),
+    inset 0 -10px 30px rgba(88,28,135,0.2),inset 0 10px 30px rgba(255,255,255,0.1);
+  animation:corePulse 2.5s ease-in-out infinite}
+@keyframes corePulse{0%,100%{box-shadow:0 0 40px rgba(139,92,246,0.35),0 0 80px rgba(99,102,241,0.2),0 0 140px rgba(139,92,246,0.1),0 0 220px rgba(6,182,212,0.05),inset 0 -10px 30px rgba(88,28,135,0.2),inset 0 10px 30px rgba(255,255,255,0.1);transform:translate(-50%,-50%) scale(1)}50%{box-shadow:0 0 60px rgba(139,92,246,0.45),0 0 120px rgba(99,102,241,0.25),0 0 180px rgba(139,92,246,0.15),0 0 280px rgba(6,182,212,0.08),inset 0 -10px 30px rgba(88,28,135,0.25),inset 0 10px 30px rgba(255,255,255,0.15);transform:translate(-50%,-50%) scale(1.05)}}
+
+/* Bloom effect */
+.core-bloom{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:160px;height:160px;border-radius:50%;z-index:3;
+  box-shadow:
+    0 0 30px 6px rgba(139,92,246,0.12),
+    0 0 70px 18px rgba(99,102,241,0.08),
+    0 0 140px 40px rgba(139,92,246,0.05),
+    0 0 240px 80px rgba(99,102,241,0.025),
+    0 0 380px 130px rgba(139,92,246,0.012),
+    0 0 500px 180px rgba(6,182,212,0.006);
+  animation:bloomPulse 2.5s ease-in-out infinite;
+  mix-blend-mode:screen}
+@keyframes bloomPulse{0%,100%{opacity:0.85}50%{opacity:1.3}}
+
+/* ===== ORBITAL RINGS ===== */
+.orbit-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;border:1px solid;z-index:4;opacity:0.6}
+.ring-1{width:480px;height:480px;border-color:rgba(99,102,241,0.12);
+  animation:orbitSpin1 18s linear infinite;transform-origin:center}
+.ring-2{width:520px;height:520px;border-color:rgba(139,92,246,0.08);
+  animation:orbitSpin2 25s linear infinite;transform-origin:center;border-style:dashed}
+.ring-3{width:400px;height:400px;border-color:rgba(6,182,212,0.1);
+  animation:orbitSpin3 14s linear infinite;transform-origin:center;
+  transform:translate(-50%,-50%) rotateX(60deg)}
+.ring-4{width:560px;height:560px;border-color:rgba(236,72,153,0.07);
+  animation:orbitSpin4 30s linear infinite reverse;transform-origin:center;
+  transform:translate(-50%,-50%) rotateX(45deg) rotateY(15deg);border-style:dotted;border-width:2px}
+.ring-5{width:350px;height:350px;border-color:rgba(250,204,21,0.06);
+  animation:orbitSpin5 12s linear infinite;transform-origin:center;
+  transform:translate(-50%,-50%) rotateY(55deg);border-width:1.5px}
+
+@keyframes orbitSpin1{0%{transform:translate(-50%,-50%) rotate(0deg)}100%{transform:translate(-50%,-50%) rotate(360deg)}}
+@keyframes orbitSpin2{0%{transform:translate(-50%,-50%) rotate(0deg)}100%{transform:translate(-50%,-50%) rotate(-360deg)}}
+@keyframes orbitSpin3{0%{transform:translate(-50%,-50%) rotateX(60deg) rotate(0deg)}100%{transform:translate(-50%,-50%) rotateX(60deg) rotate(360deg)}}
+@keyframes orbitSpin4{0%{transform:translate(-50%,-50%) rotateX(45deg) rotateY(15deg) rotate(0deg)}100%{transform:translate(-50%,-50%) rotateX(45deg) rotateY(15deg) rotate(360deg)}}
+@keyframes orbitSpin5{0%{transform:translate(-50%,-50%) rotateY(55deg) rotate(0deg)}100%{transform:translate(-50%,-50%) rotateY(55deg) rotate(360deg)}}
+
+/* Ring particles */
+.ring-particle{position:absolute;width:4px;height:4px;border-radius:50%;z-index:5}
+.rp-1{width:5px;height:5px;background:var(--glow-indigo);box-shadow:0 0 8px rgba(99,102,241,0.6);top:0;left:50%;transform:translateX(-50%)}
+.rp-2{width:3px;height:3px;background:var(--glow-cyan);box-shadow:0 0 6px rgba(6,182,212,0.5);top:50%;right:0;transform:translateY(-50%)}
+.rp-3{width:4px;height:4px;background:var(--glow-purple);box-shadow:0 0 8px rgba(139,92,246,0.6);bottom:0;left:50%;transform:translateX(-50%)}
+.rp-4{width:3px;height:3px;background:var(--glow-pink);box-shadow:0 0 6px rgba(236,72,153,0.5);top:50%;left:0;transform:translateY(-50%)}
+.rp-5{width:4px;height:4px;background:var(--glow-gold);box-shadow:0 0 8px rgba(250,204,21,0.4);top:20%;left:85%;transform:translate(-50%,-50%)}
+.rp-6{width:3px;height:3px;background:var(--glow-cyan);box-shadow:0 0 6px rgba(6,182,212,0.5);top:75%;left:90%;transform:translate(-50%,-50%)}
+.rp-7{width:5px;height:5px;background:var(--glow-indigo);box-shadow:0 0 10px rgba(99,102,241,0.6);top:15%;left:15%;transform:translate(-50%,-50%)}
+.rp-8{width:3px;height:3px;background:var(--glow-purple);box-shadow:0 0 6px rgba(139,92,246,0.5);top:80%;left:10%;transform:translate(-50%,-50%)}
+
+/* Energy waves */
+.energy-wave{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;z-index:3;
+  border:1.5px solid;pointer-events:none}
+.ew-1{width:180px;height:180px;border-color:rgba(139,92,246,0.15);
+  animation:waveExpand 3.5s ease-out infinite}
+.ew-2{width:180px;height:180px;border-color:rgba(99,102,241,0.1);
+  animation:waveExpand 3.5s ease-out infinite 1.1s}
+.ew-3{width:180px;height:180px;border-color:rgba(168,85,247,0.08);
+  animation:waveExpand 3.5s ease-out infinite 2.2s}
+.ew-4{width:180px;height:180px;border-color:rgba(6,182,212,0.12);
+  animation:waveExpand 4.2s ease-out infinite 0.5s}
+.ew-5{width:180px;height:180px;border-color:rgba(236,72,153,0.1);
+  animation:waveExpand 3.8s ease-out infinite 1.8s}
+@keyframes waveExpand{0%{transform:translate(-50%,-50%) scale(0.6);opacity:0.8;border-width:2px}60%{opacity:0.3}100%{transform:translate(-50%,-50%) scale(2.2);opacity:0;border-width:0.5px}}
+
+/* Additional energy arcs */
+.energy-arc{position:absolute;border-radius:50%;z-index:4;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(139,92,246,0.06),transparent);opacity:0}
+.ea-1{width:240px;height:240px;top:50%;left:50%;transform:translate(-50%,-50%) rotate(0deg);
+  animation:arcFlash 4s ease-in-out infinite;clip-path:inset(45% 0 45% 0 round 50%)}
+.ea-2{width:290px;height:290px;top:50%;left:50%;transform:translate(-50%,-50%) rotate(180deg);
+  animation:arcFlash 4s ease-in-out infinite 2s;clip-path:inset(45% 0 45% 0 round 50%)}
+@keyframes arcFlash{0%,100%{opacity:0;transform:translate(-50%,-50%) rotate(0deg) scale(1)}10%{opacity:1}20%{opacity:0.6}40%{opacity:0;transform:translate(-50%,-50%) rotate(30deg) scale(1.1)}}
+
+/* ===== INNER CORE ROTATING LAYERS ===== */
+.inner-core-layer{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;z-index:4;pointer-events:none;mix-blend-mode:screen}
+.il-1{width:260px;height:260px;background:conic-gradient(from 0deg,transparent,rgba(139,92,246,0.15),rgba(99,102,241,0.1),rgba(6,182,212,0.08),transparent);animation:innerCoreSpin 6s linear infinite;mask-image:radial-gradient(circle at 50% 50%,black 30%,transparent 70%);-webkit-mask-image:radial-gradient(circle at 50% 50%,black 30%,transparent 70%)}
+.il-2{width:200px;height:200px;background:conic-gradient(from 180deg,transparent,rgba(168,85,247,0.12),rgba(236,72,153,0.08),rgba(99,102,241,0.06),transparent);animation:innerCoreSpin 8s linear infinite reverse;mask-image:radial-gradient(circle at 50% 50%,black 25%,transparent 75%);-webkit-mask-image:radial-gradient(circle at 50% 50%,black 25%,transparent 75%)}
+.il-3{width:150px;height:150px;background:conic-gradient(from 90deg,transparent,rgba(99,102,241,0.2),rgba(139,92,246,0.15),rgba(6,182,212,0.1),rgba(255,255,255,0.05),transparent);animation:innerCoreSpin 4s linear infinite;border-radius:50%;filter:blur(2px)}
+@keyframes innerCoreSpin{0%{transform:translate(-50%,-50%) rotate(0deg)}100%{transform:translate(-50%,-50%) rotate(360deg)}}
+
+/* ===== VOLUMETRIC LIGHT STRIPS ===== */
+.vol-strip{position:absolute;top:50%;left:50%;z-index:5;pointer-events:none;border-radius:50%;mix-blend-mode:screen}
+.vs-h{width:350px;height:60px;transform:translate(-50%,-50%);background:linear-gradient(90deg,transparent,rgba(139,92,246,0.06),rgba(99,102,241,0.1),rgba(6,182,212,0.06),transparent);filter:blur(20px);animation:energyPulse 3s ease-in-out infinite}
+.vs-v{width:60px;height:350px;transform:translate(-50%,-50%);background:linear-gradient(180deg,transparent,rgba(139,92,246,0.06),rgba(99,102,241,0.1),rgba(6,182,212,0.06),transparent);filter:blur(20px);animation:energyPulse 3s ease-in-out infinite 0.5s}
+.vs-h2{width:280px;height:40px;transform:translate(-50%,-50%) rotate(45deg);background:linear-gradient(90deg,transparent,rgba(168,85,247,0.04),rgba(236,72,153,0.08),rgba(168,85,247,0.04),transparent);filter:blur(15px);animation:energyPulse 3.5s ease-in-out infinite 1s}
+.vs-v2{width:40px;height:280px;transform:translate(-50%,-50%) rotate(45deg);background:linear-gradient(180deg,transparent,rgba(168,85,247,0.04),rgba(236,72,153,0.08),rgba(168,85,247,0.04),transparent);filter:blur(15px);animation:energyPulse 3.5s ease-in-out infinite 1.5s}
+
+/* ===== ENERGY REFRACTION RINGS ===== */
+.refraction-ring{position:absolute;top:50%;left:50%;border-radius:50%;z-index:4;pointer-events:none;mix-blend-mode:screen;border:1px solid}
+.rr-1{width:300px;height:300px;transform:translate(-50%,-50%);border-color:rgba(99,102,241,0.08);animation:innerCoreSpin 12s linear infinite;background:radial-gradient(circle,transparent 45%,rgba(99,102,241,0.03) 50%,transparent 55%)}
+.rr-2{width:340px;height:340px;transform:translate(-50%,-50%);border-color:rgba(139,92,246,0.06);animation:innerCoreSpin 15s linear infinite reverse;border-style:dashed;background:radial-gradient(circle,transparent 48%,rgba(139,92,246,0.02) 50%,transparent 52%)}
+.rr-3{width:220px;height:220px;transform:translate(-50%,-50%);border-color:rgba(6,182,212,0.07);animation:innerCoreSpin 9s linear infinite;border-width:2px;background:radial-gradient(circle,transparent 40%,rgba(6,182,212,0.03) 50%,transparent 60%)}
+
+/* ===== SHOCKWAVE RING ===== */
+.shockwave-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:100px;height:100px;border-radius:50%;z-index:3;pointer-events:none;border:2px solid rgba(139,92,246,0.3);box-shadow:0 0 20px rgba(139,92,246,0.1),inset 0 0 20px rgba(139,92,246,0.05);opacity:0;animation:shockWave 4s ease-out infinite}
+@keyframes shockWave{0%{transform:translate(-50%,-50%) scale(0.5);opacity:0.8;border-width:3px;box-shadow:0 0 40px rgba(139,92,246,0.2),inset 0 0 40px rgba(139,92,246,0.1)}30%{opacity:0.6}70%{opacity:0.2}100%{transform:translate(-50%,-50%) scale(3);opacity:0;border-width:0.5px;box-shadow:0 0 80px rgba(139,92,246,0),inset 0 0 80px rgba(139,92,246,0)}}
+
+/* ===== INNER ORBITAL PARTICLES ===== */
+.orbital-particle{position:absolute;border-radius:50%;z-index:6;pointer-events:none;mix-blend-mode:screen}
+.op-1{width:6px;height:6px;background:rgba(139,92,246,0.8);box-shadow:0 0 12px rgba(139,92,246,0.6),0 0 25px rgba(139,92,246,0.3);top:50%;left:50%;animation:orbitParticle1 4s linear infinite}
+.op-2{width:4px;height:4px;background:rgba(6,182,212,0.9);box-shadow:0 0 10px rgba(6,182,212,0.5),0 0 20px rgba(6,182,212,0.2);top:50%;left:50%;animation:orbitParticle2 5s linear infinite}
+.op-3{width:5px;height:5px;background:rgba(168,85,247,0.7);box-shadow:0 0 12px rgba(168,85,247,0.5),0 0 24px rgba(168,85,247,0.2);top:50%;left:50%;animation:orbitParticle3 3.5s linear infinite}
+.op-4{width:3px;height:3px;background:rgba(255,255,255,0.9);box-shadow:0 0 8px rgba(255,255,255,0.6),0 0 16px rgba(255,255,255,0.3);top:50%;left:50%;animation:orbitParticle4 6s linear infinite}
+.op-5{width:5px;height:5px;background:rgba(236,72,153,0.7);box-shadow:0 0 10px rgba(236,72,153,0.5),0 0 20px rgba(236,72,153,0.2);top:50%;left:50%;animation:orbitParticle5 4.5s linear infinite reverse}
+.op-6{width:4px;height:4px;background:rgba(250,204,21,0.6);box-shadow:0 0 10px rgba(250,204,21,0.4),0 0 20px rgba(250,204,21,0.15);top:50%;left:50%;animation:orbitParticle6 5.5s linear infinite reverse}
+
+@keyframes orbitParticle1{0%{transform:translate(-50%,-50%) rotate(0deg) translateX(100px) rotate(0deg)}100%{transform:translate(-50%,-50%) rotate(360deg) translateX(100px) rotate(-360deg)}}
+@keyframes orbitParticle2{0%{transform:translate(-50%,-50%) rotate(0deg) translateX(130px) rotate(0deg)}100%{transform:translate(-50%,-50%) rotate(360deg) translateX(130px) rotate(-360deg)}}
+@keyframes orbitParticle3{0%{transform:translate(-50%,-50%) rotate(0deg) translateX(80px) rotate(0deg)}100%{transform:translate(-50%,-50%) rotate(360deg) translateX(80px) rotate(-360deg)}}
+@keyframes orbitParticle4{0%{transform:translate(-50%,-50%) rotate(0deg) translateX(115px) rotate(0deg)}100%{transform:translate(-50%,-50%) rotate(360deg) translateX(115px) rotate(-360deg)}}
+@keyframes orbitParticle5{0%{transform:translate(-50%,-50%) rotate(0deg) translateX(90px) rotate(0deg)}100%{transform:translate(-50%,-50%) rotate(-360deg) translateX(90px) rotate(360deg)}}
+@keyframes orbitParticle6{0%{transform:translate(-50%,-50%) rotate(0deg) translateX(140px) rotate(0deg)}100%{transform:translate(-50%,-50%) rotate(-360deg) translateX(140px) rotate(360deg)}}
+
+/* ===== ENERGY PULSE ===== */
+@keyframes energyPulse{0%,100%{opacity:0.3}50%{opacity:0.9}}
+
+/* ===== CHAT CARD ===== */
+.chat-card{position:relative;z-index:10;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);
+  border-radius:24px;padding:28px;backdrop-filter:blur(48px) saturate(1.5);-webkit-backdrop-filter:blur(48px) saturate(1.5);
+  box-shadow:0 8px 40px rgba(0,0,0,0.3),0 0 0 1px rgba(139,92,246,0.03),0 0 80px rgba(99,102,241,0.02);
+  transition:all 0.4s cubic-bezier(0.4,0,0.2,1)}
+.chat-card:hover{border-color:rgba(139,92,246,0.15);box-shadow:0 12px 60px rgba(99,102,241,0.12),0 0 0 1px rgba(139,92,246,0.08),0 0 100px rgba(99,102,241,0.04);transform:translateY(-2px)}
+.chat-card-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;
+  border-bottom:1px solid rgba(255,255,255,0.04)}
+.chat-card-avatar{width:36px;height:36px;border-radius:10px;
+  background:linear-gradient(135deg,#7c3aed,#4f46e5);display:flex;align-items:center;justify-content:center;
+  font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:#fff}
+.chat-card-title{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:600;color:rgba(255,255,255,0.9);letter-spacing:0.3px}
+.chat-card-status{font-size:11px;color:rgba(255,255,255,0.3);display:flex;align-items:center;gap:5px}
+.chat-card-status-dot{width:5px;height:5px;border-radius:50%;background:#22c55e;animation:dotPulse 2s ease-in-out infinite}
+.chat-msg{display:flex;gap:10px;margin-bottom:14px;animation:msgSlide 0.5s ease-out}
+.chat-msg-bot{align-items:flex-start}
+.chat-msg-user{flex-direction:row-reverse}
+.chat-msg-avatar{width:28px;height:28px;border-radius:8px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;font-family:'Orbitron',sans-serif}
+.chat-msg-avatar.bot{background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(99,102,241,0.15));color:#a78bfa}
+.chat-msg-avatar.user{background:linear-gradient(135deg,rgba(99,102,241,0.2),rgba(6,182,212,0.15));color:#67e8f9}
+.chat-msg-bubble{padding:14px 20px;border-radius:14px;font-size:13px;line-height:1.7;max-width:88%;backdrop-filter:blur(4px)}
+.chat-msg-bot .chat-msg-bubble{background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.1);
+  border-bottom-left-radius:4px;color:rgba(255,255,255,0.82)}
+.chat-msg-user .chat-msg-bubble{background:rgba(99,102,241,0.06);border:1px solid rgba(99,102,241,0.08);
+  border-bottom-right-radius:4px;color:rgba(255,255,255,0.7)}
+.chat-msg .highlight{color:#a78bfa;font-weight:500}
+.chat-card-input{display:flex;gap:10px;margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,0.04)}
+.chat-card-input input{flex:1;padding:12px 18px;border-radius:12px;border:1px solid rgba(255,255,255,0.06);
+  background:rgba(255,255,255,0.02);color:rgba(255,255,255,0.85);font-size:13px;outline:none;transition:all 0.3s ease;font-family:'Plus Jakarta Sans',sans-serif}
+.chat-card-input input::placeholder{color:rgba(255,255,255,0.2)}
+.chat-card-input input:focus{border-color:rgba(139,92,246,0.2);background:rgba(255,255,255,0.05)}
+.chat-card-input button{width:40px;height:40px;border-radius:10px;border:none;
+  background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all 0.3s ease;flex-shrink:0}
+.chat-card-input button:hover{transform:scale(1.05);box-shadow:0 0 20px rgba(99,102,241,0.25)}
+@keyframes msgSlide{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:translateY(0)}}
+
+/* ===== SECTION COMMON ===== */
+.section{padding:100px 0;position:relative;z-index:10}
+.section-header{text-align:center;max-width:680px;margin:0 auto 60px;padding:0 20px}
+.section-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 16px;
+  border-radius:100px;border:1px solid rgba(99,102,241,0.12);
+  background:rgba(99,102,241,0.04);font-size:11px;font-weight:600;color:rgba(167,139,250,0.8);
+  font-family:'Orbitron',sans-serif;letter-spacing:1px;margin-bottom:16px;text-transform:uppercase}
+.section-title{font-size:clamp(30px,3.5vw,48px);font-weight:800;line-height:1.15;letter-spacing:-0.5px;margin-bottom:16px}
+.section-title-grad{background:linear-gradient(135deg,#fff 0%,#c4b5fd 50%,#818cf8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.section-sub{font-size:15px;font-weight:400;color:rgba(255,255,255,0.45);line-height:1.75}
+
+/* ===== PRODUCT SHOWCASE ===== */
+.showcase-tabs{display:flex;justify-content:center;gap:4px;margin-bottom:50px;
+  background:rgba(255,255,255,0.02);padding:4px;border-radius:14px;border:1px solid rgba(255,255,255,0.04);
+  max-width:500px;margin-left:auto;margin-right:auto}
+.showcase-tab{padding:10px 28px;border-radius:10px;border:none;
+  font-family:'Orbitron',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.5px;
+  background:transparent;color:rgba(255,255,255,0.35);cursor:pointer;transition:all 0.3s ease}
+.showcase-tab.active{background:rgba(139,92,246,0.12);color:#c4b5fd;box-shadow:0 0 20px rgba(99,102,241,0.08)}
+.showcase-tab:hover{color:rgba(255,255,255,0.6)}
+.showcase-panel{display:none;grid-template-columns:1fr 1fr;gap:40px;align-items:center;max-width:1200px;margin:0 auto;padding:0 50px;background:rgba(255,255,255,0.008);border-radius:24px;border:1px solid rgba(255,255,255,0.02);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 8px 50px rgba(0,0,0,0.15),inset 0 1px 0 rgba(255,255,255,0.02)}
+.showcase-panel.active{display:grid}
+.showcase-visual{aspect-ratio:16/10;border-radius:16px;border:1px solid rgba(255,255,255,0.04);
+  background:linear-gradient(135deg,rgba(99,102,241,0.04),rgba(139,92,246,0.03));
+  display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.showcase-visual-inner{text-align:center;padding:18px;background:rgba(255,255,255,0.015);border-radius:16px;border:1px solid rgba(255,255,255,0.03);backdrop-filter:blur(12px) saturate(1.2);-webkit-backdrop-filter:blur(12px) saturate(1.2);box-shadow:0 4px 30px rgba(0,0,0,0.15),inset 0 1px 0 rgba(255,255,255,0.03)}
+.showcase-visual-icon{width:64px;height:64px;border-radius:16px;margin:0 auto 16px;
+  display:flex;align-items:center;justify-content:center;font-size:28px}
+.showcase-visual-title{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;color:rgba(255,255,255,0.8);margin-bottom:8px}
+.showcase-visual-desc{font-size:13px;color:rgba(255,255,255,0.35);line-height:1.6;max-width:280px;margin:0 auto}
+.showcase-info{padding:24px;background:rgba(255,255,255,0.008);border-radius:20px;border:1px solid rgba(255,255,255,0.02);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 4px 30px rgba(0,0,0,0.1)}
+.showcase-info h3{font-size:24px;font-weight:700;margin-bottom:16px;letter-spacing:-0.3px}
+.showcase-info p{font-size:14px;color:rgba(255,255,255,0.5);line-height:1.8;margin-bottom:24px}
+.showcase-features{list-style:none;padding:0;margin:0 0 28px}
+.showcase-features li{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:14px;color:rgba(255,255,255,0.6);border-bottom:1px solid rgba(255,255,255,0.03)}
+.showcase-features li:last-child{border-bottom:none}
+.showcase-features li::before{content:'\u2728';font-size:12px}
+
+/* ===== FEATURE CARDS ===== */
+.features-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;max-width:1200px;margin:0 auto;padding:0 50px}
+.feature-card{position:relative;padding:36px 28px;border-radius:20px;
+  border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.015);
+  overflow:hidden;transition:all 0.5s cubic-bezier(0.23,1,0.32,1);
+  cursor:default;z-index:1}
+.feature-card::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;
+  background:linear-gradient(135deg,transparent 0%,rgba(139,92,246,0.08) 50%,transparent 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;opacity:0;transition:opacity 0.5s ease}
+.feature-card:hover::before{opacity:1}
+.feature-card:hover{transform:scale(1.02);border-color:rgba(139,92,246,0.12);
+  box-shadow:0 0 30px rgba(99,102,241,0.04),0 20px 60px rgba(0,0,0,0.2)}
+.feature-card-scan{position:absolute;top:0;left:-100%;width:70%;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(139,92,246,0.4),rgba(99,102,241,0.3),rgba(6,182,212,0.2),transparent);
+  transition:left 0.6s cubic-bezier(0.23,1,0.32,1);pointer-events:none;z-index:2;
+  box-shadow:0 0 15px rgba(139,92,246,0.2)}
+.feature-card:hover .feature-card-scan{left:150%}
+.feature-card-glow{position:absolute;inset:0;border-radius:20px;z-index:-1;pointer-events:none;opacity:0;
+  transition:opacity 0.5s ease;background:radial-gradient(ellipse at var(--mx,50%) var(--my,50%),rgba(139,92,246,0.12),rgba(99,102,241,0.06),transparent 60%)}
+.feature-card:hover .feature-card-glow{opacity:1}
+.feature-card::after{content:'';position:absolute;inset:-1px;border-radius:21px;z-index:-1;pointer-events:none;opacity:0;transition:opacity 0.6s ease;background:linear-gradient(135deg,var(--glow-purple),var(--glow-indigo),var(--glow-cyan),var(--glow-purple));background-size:300% 300%;animation:cardGlowCycle 4s ease infinite;mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;padding:2px}
+.feature-card:hover::after{opacity:1}
+.feature-card:hover{transform:scale(1.02);border-color:rgba(139,92,246,0.12);box-shadow:0 0 30px rgba(99,102,241,0.04),0 20px 60px rgba(0,0,0,0.2);animation:cardHoverBreathe 3s ease-in-out infinite}
+@keyframes cardHoverBreathe{0%,100%{transform:scale(1.02)}50%{transform:scale(1.04)}}
+@keyframes cardGlowCycle{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.feature-card-icon{width:52px;height:52px;border-radius:14px;margin-bottom:20px;
+  display:flex;align-items:center;justify-content:center;font-size:22px;transition:all 0.4s ease}
+.feature-card:nth-child(1) .feature-card-icon{background:rgba(99,102,241,0.1);box-shadow:0 0 20px rgba(99,102,241,0.05)}
+.feature-card:nth-child(2) .feature-card-icon{background:rgba(139,92,246,0.1);box-shadow:0 0 20px rgba(139,92,246,0.05)}
+.feature-card:nth-child(3) .feature-card-icon{background:rgba(6,182,212,0.1);box-shadow:0 0 20px rgba(6,182,212,0.05)}
+.feature-card:nth-child(4) .feature-card-icon{background:rgba(236,72,153,0.1);box-shadow:0 0 20px rgba(236,72,153,0.05)}
+.feature-card:hover .feature-card-icon{transform:scale(1.08) translateY(-2px)}
+.feature-card-title{font-family:'Orbitron',sans-serif;font-size:15px;font-weight:700;color:rgba(255,255,255,0.9);margin-bottom:12px;letter-spacing:0.3px}
+.feature-card-desc{font-size:13px;color:rgba(255,255,255,0.4);line-height:1.7}
+.feature-card-number{position:absolute;top:16px;right:20px;font-family:'Orbitron',sans-serif;
+  font-size:48px;font-weight:900;color:rgba(255,255,255,0.02);line-height:1;pointer-events:none}
+
+/* ===== STATS SECTION ===== */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;max-width:1200px;margin:0 auto;padding:0 50px}
+.stat-card{text-align:center;padding:40px 20px;border-radius:20px;
+  border:1px solid rgba(255,255,255,0.03);background:rgba(255,255,255,0.01);
+  transition:all 0.4s ease;position:relative;overflow:hidden}
+.stat-card:hover{background:rgba(255,255,255,0.02);border-color:rgba(139,92,246,0.06);transform:translateY(-4px)}
+.stat-number{font-family:'Orbitron',sans-serif;font-size:clamp(32px,3vw,48px);font-weight:800;
+  background:linear-gradient(135deg,#fff 0%,#c4b5fd 50%,#818cf8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:8px;letter-spacing:-1px}
+.stat-label{font-size:13px;font-weight:500;color:rgba(255,255,255,0.35);letter-spacing:0.5px}
+.stat-plus{background:linear-gradient(135deg,#a78bfa,#60a5fa);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  font-size:0.6em;vertical-align:super}
+
+/* ===== FOOTER ===== */
+footer{position:relative;z-index:10;border-top:1px solid rgba(255,255,255,0.03);overflow:hidden;margin-top:40px}
+.footer-top-line{position:absolute;top:0;left:10%;right:10%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(139,92,246,0.2),rgba(99,102,241,0.15),transparent);z-index:1}
+.footer-orbital-ring{position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:600px;height:600px;
+  border-radius:50%;border:2px solid rgba(139,92,246,0.08);pointer-events:none;z-index:0;
+  box-shadow:0 0 30px rgba(139,92,246,0.05),inset 0 0 30px rgba(139,92,246,0.02)}
+.footer-orbital-ring-2{position:absolute;top:-150px;left:50%;transform:translateX(-50%) rotateX(70deg);width:700px;height:300px;
+  border-radius:50%;border:1px solid rgba(99,102,241,0.025);pointer-events:none;z-index:0}
+.footer-grid{position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(99,102,241,0.015) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(99,102,241,0.015) 1px,transparent 1px);
+  background-size:40px 40px;
+  mask-image:radial-gradient(ellipse at center bottom,black 20%,transparent 70%);
+  -webkit-mask-image:radial-gradient(ellipse at center bottom,black 20%,transparent 70%)}
+.footer-inner{max-width:1200px;margin:0 auto;padding:70px 50px 50px;position:relative;z-index:2}
+.footer-main{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:50px}
+.footer-brand{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:800;
+  background:linear-gradient(135deg,#fff 0%,#c4b5fd 50%,#818cf8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:14px;letter-spacing:1px}
+.footer-brand-glow{text-shadow:0 0 30px rgba(99,102,241,0.2)}
+.footer-desc{font-size:13px;color:rgba(255,255,255,0.35);line-height:1.8;max-width:320px}
+.footer-social{display:flex;gap:12px;margin-top:20px}
+.footer-social a{width:38px;height:38px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);
+  background:rgba(255,255,255,0.02);display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,0.3);text-decoration:none;transition:all 0.3s ease;font-size:14px}
+.footer-social a:hover{background:rgba(139,92,246,0.08);border-color:rgba(139,92,246,0.15);color:#c4b5fd;transform:translateY(-2px)}
+.footer-col-title{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:18px;letter-spacing:0.5px}
+.footer-links{list-style:none;padding:0;margin:0}
+.footer-links li{margin-bottom:10px}
+.footer-links a{font-size:13px;color:rgba(255,255,255,0.3);text-decoration:none;transition:all 0.3s ease}
+.footer-links a:hover{color:rgba(167,139,250,0.7);padding-left:4px}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:30px;
+  border-top:1px solid rgba(255,255,255,0.03);font-size:12px;color:rgba(255,255,255,0.2)}
+.footer-bottom-links{display:flex;gap:20px}
+.footer-bottom-links a{color:rgba(255,255,255,0.2);text-decoration:none;transition:color 0.3s ease}
+.footer-bottom-links a:hover{color:rgba(167,139,250,0.5)}
+
+/* ===== FOOTER ENHANCEMENTS ===== */
+footer{background:rgba(2,2,10,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.footer-brand{animation:footerGlow 3s ease-in-out infinite}
+@keyframes footerGlow{0%,100%{filter:drop-shadow(0 0 20px rgba(99,102,241,0.15))}50%{filter:drop-shadow(0 0 40px rgba(139,92,246,0.3)) drop-shadow(0 0 60px rgba(99,102,241,0.15))}}
+.footer-orbital-ring{border-color:rgba(139,92,246,0.08)!important;animation:orbitSpin1 20s linear infinite}
+.footer-orbital-ring-2{border-color:rgba(99,102,241,0.05)!important;animation:orbitSpin2 25s linear infinite reverse}
+
+.footer-energy-line{position:absolute;top:0;left:0;right:0;height:2px;z-index:2;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(99,102,241,0.3),rgba(139,92,246,0.4),rgba(6,182,212,0.3),rgba(99,102,241,0.2),transparent);
+  background-size:200% 100%;animation:energyLineSweep 4s linear infinite;filter:blur(1px);box-shadow:0 0 15px rgba(99,102,241,0.1)}
+@keyframes energyLineSweep{0%{background-position:-200% 0}100%{background-position:200% 0}}
+
+.footer-star-field{position:absolute;top:-80px;left:0;right:0;height:80px;z-index:1;pointer-events:none;
+  background:linear-gradient(0deg,transparent 0%,rgba(255,255,255,0.008) 50%,transparent 100%);
+  mask-image:radial-gradient(ellipse at 50% 0,black 30%,transparent 70%);
+  -webkit-mask-image:radial-gradient(ellipse at 50% 0,black 30%,transparent 70%);
+  animation:footerStarFade 4s ease-in-out infinite}
+@keyframes footerStarFade{0%,100%{opacity:0.5}50%{opacity:1}}
+
+/* ===== FOREGROUND PARTICLES ===== */
+#fgCanvas{position:fixed;inset:0;z-index:9999;pointer-events:none}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1200px){
+  .hero-grid{grid-template-columns:1.2fr 1.3fr 1.1fr;gap:24px;padding:0 30px}
+  .features-grid{grid-template-columns:repeat(2,1fr);gap:20px;padding:0 30px}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:20px;padding:0 30px}
+  .footer-main{grid-template-columns:2fr 1fr 1fr;gap:30px}
+}
+@media(max-width:1024px){
+  .hero-grid{grid-template-columns:1fr 1fr;gap:30px}
+  .hero-grid .ai-orb-wrapper{grid-column:1/3;grid-row:1;height:480px}
+  .hero-grid .hero-left{grid-column:1;grid-row:2}
+  .hero-grid .chat-card-wrap{grid-column:2;grid-row:2}
+  :root{--core-size:480px}
+  .showcase-panel{grid-template-columns:1fr;padding:0 30px}
+  .showcase-panel .showcase-visual{order:-1}
+}
+@media(max-width:768px){
+  .hero-grid{grid-template-columns:1fr;gap:20px;padding:0 20px}
+  .hero-grid .ai-orb-wrapper{grid-column:1;grid-row:1;height:380px}
+  .hero-grid .hero-left{grid-column:1;grid-row:2}
+  .hero-grid .chat-card-wrap{grid-column:1;grid-row:3}
+  :root{--core-size:360px}
+  .ai-core-text{font-size:36px!important;letter-spacing:4px!important}
+  .features-grid{grid-template-columns:1fr;padding:0 20px}
+  .stats-grid{grid-template-columns:1fr 1fr;padding:0 20px;gap:16px}
+  .section{padding:60px 0}
+  .footer-main{grid-template-columns:1fr 1fr;gap:24px}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center}
+  .showcase-tabs{max-width:100%;flex-wrap:wrap;justify-content:center}
+  .showcase-tab{padding:8px 16px;font-size:11px}
+  nav .nav-links{display:none}
+  .hero-title{font-size:clamp(32px,8vw,48px)}
+}
+@media(max-width:480px){
+  :root{--core-size:280px}
+  .ai-core-text{font-size:28px!important;letter-spacing:3px!important}
+  .stats-grid{grid-template-columns:1fr 1fr;gap:12px;padding:0 16px}
+  .stat-card{padding:24px 12px}
+  .hero-btns{flex-direction:column}
+  .hero-btns button{width:100%}
+}
+
+/* ===== UTILITY ===== */
+.gradient-text{background:linear-gradient(135deg,#c4b5fd,#818cf8,#a78bfa);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.glow-text{text-shadow:0 0 20px rgba(139,92,246,0.3),0 0 40px rgba(99,102,241,0.15)}
+
+/* ===== INJECTED: INTERACTIVE FEATURES ===== */
+.ats-demo{text-align:center;padding:20px;width:100%}
+.ats-score-ring{position:relative;width:140px;height:140px;margin:0 auto 16px}
+.ats-score-ring svg{transform:rotate(-90deg);width:140px;height:140px}
+.ats-score-ring .bg{fill:none;stroke:rgba(255,255,255,0.06);stroke-width:6}
+.ats-score-ring .progress{fill:none;stroke:url(#scoreGrad);stroke-width:6;stroke-linecap:round;stroke-dasharray:377;stroke-dashoffset:377;transition:stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1)}
+.ats-score-ring .score-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Orbitron',sans-serif;font-size:32px;font-weight:800;background:linear-gradient(135deg,#a78bfa,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.ats-score-ring .score-label{position:absolute;top:calc(50% + 22px);left:50%;transform:translateX(-50%);font-size:11px;color:rgba(255,255,255,0.35);font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:0.5px}
+.ats-score-animate .progress{stroke-dashoffset:42!important}
+.ats-btn{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:600;padding:10px 28px;border-radius:10px;border:1px solid rgba(139,92,246,0.25);background:linear-gradient(135deg,rgba(139,92,246,0.15),rgba(99,102,241,0.1));color:#c4b5fd;cursor:pointer;transition:all 0.3s ease;letter-spacing:0.5px;margin-top:8px}
+.ats-btn:hover{background:linear-gradient(135deg,rgba(139,92,246,0.25),rgba(99,102,241,0.18));border-color:rgba(139,92,246,0.4);box-shadow:0 0 25px rgba(139,92,246,0.12);transform:translateY(-1px)}
+.ats-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none!important}
+
+.keyword-bars{text-align:left;padding:0 8px;margin-top:12px;width:100%}
+.keyword-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.keyword-bar-label{font-size:12px;color:rgba(255,255,255,0.55);width:80px;flex-shrink:0;text-align:right}
+.keyword-bar-track{flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,0.04);overflow:hidden;position:relative}
+.keyword-bar-fill{height:100%;border-radius:3px;width:0%;transition:width 1.5s cubic-bezier(0.4,0,0.2,1);background:linear-gradient(90deg,#6366f1,#a78bfa)}
+.keyword-bar-fill.high{background:linear-gradient(90deg,#6366f1,#22c55e)}
+.keyword-bar-fill.medium{background:linear-gradient(90deg,#6366f1,#f59e0b)}
+.keyword-bar-fill.low{background:linear-gradient(90deg,#6366f1,#ef4444)}
+.keyword-bar-pct{font-size:11px;font-family:'Orbitron',sans-serif;color:rgba(255,255,255,0.4);width:36px;flex-shrink:0;text-align:right}
+
+.suggestion-list{text-align:left;padding:0;margin:12px 0 0;list-style:none;width:100%}
+.suggestion-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;margin-bottom:6px;border-radius:10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03);transition:all 0.3s ease;opacity:0;transform:translateX(-10px)}
+.suggestion-item.show{opacity:1;transform:translateX(0)}
+.suggestion-item:hover{background:rgba(139,92,246,0.04);border-color:rgba(139,92,246,0.08)}
+.suggestion-icon{width:20px;height:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-top:1px}
+.suggestion-icon.high{background:rgba(239,68,68,0.15);color:#ef4444}
+.suggestion-icon.medium{background:rgba(245,158,11,0.15);color:#f59e0b}
+.suggestion-icon.low{background:rgba(34,197,94,0.15);color:#22c55e}
+.suggestion-text{font-size:12px;color:rgba(255,255,255,0.6);line-height:1.5}
+.suggestion-text strong{color:rgba(255,255,255,0.8)}
+
+.job-list{display:flex;flex-direction:column;gap:10px;width:100%;padding:0 4px}
+.job-card{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:14px;border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.015);cursor:pointer;transition:all 0.4s cubic-bezier(0.23,1,0.32,1);position:relative;overflow:hidden;text-align:left;width:100%}
+.job-card::before{content:'';position:absolute;inset:0;border-radius:14px;padding:1px;background:linear-gradient(135deg,transparent,rgba(139,92,246,0.06),transparent);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;opacity:0;transition:opacity 0.4s ease}
+.job-card:hover::before{opacity:1}
+.job-card:hover{border-color:rgba(139,92,246,0.1);background:rgba(139,92,246,0.03);transform:translateX(4px)}
+.job-card.active{border-color:rgba(139,92,246,0.2);background:rgba(139,92,246,0.05)}
+.job-card-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;background:rgba(99,102,241,0.08)}
+.job-card-info{flex:1;min-width:0}
+.job-card-title{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:600;color:rgba(255,255,255,0.85);margin-bottom:3px;letter-spacing:0.2px}
+.job-card-company{font-size:11px;color:rgba(255,255,255,0.35)}
+.job-card-match{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;flex-shrink:0;transition:all 0.5s ease}
+.job-card-detail{display:none;padding:16px 18px;margin-top:-4px;border-radius:0 0 14px 14px;background:rgba(255,255,255,0.01);border:1px solid rgba(255,255,255,0.03);border-top:none;font-size:12px;color:rgba(255,255,255,0.5);line-height:1.7;width:100%}
+.job-card-detail.open{display:block}
+.job-card-detail .detail-tag{display:inline-block;padding:2px 10px;border-radius:6px;font-size:10px;font-weight:500;margin:2px 3px;background:rgba(99,102,241,0.08);color:rgba(167,139,250,0.8);border:1px solid rgba(99,102,241,0.06)}
+.job-match-bar{height:3px;border-radius:2px;background:rgba(255,255,255,0.04);margin-top:6px;overflow:hidden;position:relative}
+.job-match-bar-fill{height:100%;border-radius:2px;width:0%;transition:width 1.2s cubic-bezier(0.4,0,0.2,1);background:linear-gradient(90deg,#6366f1,#a78bfa)}
+
+.mini-chat{display:flex;flex-direction:column;height:320px;width:100%;border-radius:16px;border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.01);overflow:hidden}
+.mini-chat-header{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.02);flex-shrink:0}
+.mini-chat-header-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;animation:dotPulse 2s ease-in-out infinite}
+.mini-chat-header-text{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:600;color:rgba(255,255,255,0.5);letter-spacing:0.3px}
+.mini-chat-messages{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth}
+.mini-chat-messages::-webkit-scrollbar{width:3px}
+.mini-chat-messages::-webkit-scrollbar-track{background:transparent}
+.mini-chat-messages::-webkit-scrollbar-thumb{background:rgba(139,92,246,0.15);border-radius:2px}
+.mini-chat-msg{max-width:88%;padding:10px 14px;border-radius:14px;font-size:12px;line-height:1.6;animation:msgSlide 0.4s ease-out}
+.mini-chat-msg.bot{align-self:flex-start;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.06);border-bottom-left-radius:4px;color:rgba(255,255,255,0.8)}
+.mini-chat-msg.user{align-self:flex-end;background:rgba(99,102,241,0.06);border:1px solid rgba(99,102,241,0.06);border-bottom-right-radius:4px;color:rgba(255,255,255,0.7)}
+.mini-chat-msg.system{align-self:center;background:rgba(250,204,21,0.06);border:1px solid rgba(250,204,21,0.08);color:rgba(250,204,21,0.7);font-size:11px;text-align:center;max-width:75%}
+.mini-chat-input{display:flex;gap:8px;padding:10px 14px;border-top:1px solid rgba(255,255,255,0.04);flex-shrink:0}
+.mini-chat-input input{flex:1;padding:8px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.03);color:rgba(255,255,255,0.8);font-size:12px;outline:none;transition:all 0.3s ease;font-family:'Plus Jakarta Sans',sans-serif}
+.mini-chat-input input::placeholder{color:rgba(255,255,255,0.2)}
+.mini-chat-input input:focus{border-color:rgba(139,92,246,0.15);background:rgba(255,255,255,0.05)}
+.mini-chat-input button{width:34px;height:34px;border-radius:10px;border:none;background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s ease;flex-shrink:0;font-size:14px}
+.mini-chat-input button:hover{transform:scale(1.05);box-shadow:0 0 20px rgba(99,102,241,0.2)}
+.ats-score-ring .score-change{position:absolute;top:calc(50% - 28px);left:calc(50% + 28px);font-size:14px;font-weight:700;opacity:0;transition:all 0.6s ease;font-family:'Orbitron',sans-serif}
+.ats-score-ring .score-change.show{opacity:1;transform:translateY(-8px)}
+
+
+/* ===== RESUME ANALYSIS SYSTEM ===== */
+.resume-demo{display:flex;flex-direction:column;gap:16px;width:100%}
+.resume-btn{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;
+  padding:12px 28px;border-radius:10px;border:none;
+  background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;cursor:pointer;
+  transition:all 0.3s ease;letter-spacing:0.3px;width:100%;
+  box-shadow:0 4px 20px rgba(99,102,241,0.25)}
+.resume-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(99,102,241,0.35)}
+.resume-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.resume-badge{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;
+  background:rgba(99,102,241,0.06);border:1px solid rgba(99,102,241,0.1);font-size:12px}
+.resume-badge .num{font-family:'Orbitron',sans-serif;font-size:36px;font-weight:700;background:linear-gradient(135deg,#fff,#a5b4fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.resume-badge .lbl{color:rgba(148,163,184,0.6)}
+.resume-gap{display:flex;flex-direction:column;gap:8px;padding:12px;border-radius:10px;background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.08)}
+.resume-gap .t{font-size:11px;color:#f87171;font-weight:600;letter-spacing:1px;text-transform:uppercase}
+.resume-gap-item{display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(203,213,225,0.7);padding:4px 0}
+.resume-gap-item .dot{width:5px;height:5px;border-radius:50%;background:#f87171;flex-shrink:0}
+.resume-compare{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0}
+.resume-compare-box{border-radius:10px;padding:12px;font-size:11px;line-height:1.6}
+.resume-compare-box.before{background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.08);color:rgba(203,213,225,0.5)}
+.resume-compare-box.after{background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.08);color:rgba(203,213,225,0.8)}
+.resume-compare-box .label{font-size:10px;font-weight:600;letter-spacing:1px;margin-bottom:6px;display:block}
+.resume-compare-box.before .label{color:#f87171}
+.resume-compare-box.after .label{color:#4ade80}
+.resume-tags{display:flex;flex-wrap:wrap;gap:6px}
+.resume-tag{padding:3px 10px;border-radius:20px;font-size:10px;font-weight:500}
+.resume-tag.miss{background:rgba(239,68,68,0.1);color:#f87171;border:1px solid rgba(239,68,68,0.15)}
+.resume-tag.have{background:rgba(34,197,94,0.1);color:#4ade80;border:1px solid rgba(34,197,94,0.15)}
+.resume-score-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.resume-score-item{text-align:center;padding:8px;border-radius:8px;background:rgba(255,255,255,0.02)}
+.resume-score-item .v{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;background:linear-gradient(135deg,#818cf8,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.2}
+.resume-score-item .l{font-size:9px;color:rgba(148,163,184,0.4);margin-top:4px}
+
+/* ===== INTERVIEW REPORT ===== */
+.report-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:8px 0}
+.report-item{text-align:center;padding:10px 6px;border-radius:10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03)}
+.report-item .v{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:700;line-height:1.2}
+.report-item .l{font-size:10px;color:rgba(148,163,184,0.5);margin-top:4px}
+.report-item.green .v{color:#4ade80}.report-item.blue .v{color:#60a5fa}.report-item.purple .v{color:#a78bfa}.report-item.gold .v{color:#fbbf24}
+.report-issue{padding:8px 12px;border-radius:8px;background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.08);margin:6px 0}
+.report-issue .t{font-size:10px;color:#f87171;font-weight:600;margin-bottom:4px}
+.report-issue li{font-size:11px;color:rgba(203,213,225,0.6);padding:2px 0;list-style:none;padding-left:12px;position:relative}
+.report-issue li::before{content:'\2022';position:absolute;left:0;color:#f87171}
+.report-suggest{padding:8px 12px;border-radius:8px;background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.08);margin:6px 0}
+.report-suggest .t{font-size:10px;color:#4ade80;font-weight:600;margin-bottom:4px}
+.report-suggest li{font-size:11px;color:rgba(203,213,225,0.6);padding:2px 0;list-style:none;padding-left:12px;position:relative}
+.report-suggest li::before{content:'\2192';position:absolute;left:0;color:#4ade80}
+
+/* ===== JOB MATCH DETAIL ===== */
+.match-card{padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);margin:6px 0;background:rgba(255,255,255,0.015)}
+.match-card h5{font-size:12px;font-weight:600;color:rgba(255,255,255,0.7);margin-bottom:4px}
+.match-card p{font-size:11px;color:rgba(148,163,184,0.5);line-height:1.5}
+.match-pct{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:700}
+.match-pct.high{color:#4ade80}.match-pct.med{color:#fbbf24}.match-pct.low{color:#f87171}
+.match-why{padding:8px;border-radius:6px;background:rgba(99,102,241,0.04);font-size:10px;color:rgba(148,163,184,0.5);margin:4px 0}
+.match-why strong{color:rgba(203,213,225,0.7)}
+
+/* ===== GROWTH SYSTEM ===== */
+.growth-section{padding:60px 0;position:relative;z-index:10}
+.growth-grid{display:grid;grid-template-columns:1.2fr 0.8fr;gap:24px;max-width:1200px;margin:0 auto;padding:0 50px}
+.growth-card{background:rgba(255,255,255,0.015);backdrop-filter:blur(20px) saturate(1.3);-webkit-backdrop-filter:blur(20px) saturate(1.3);
+  border:1px solid rgba(255,255,255,0.04);border-radius:20px;padding:28px;box-shadow:0 8px 40px rgba(0,0,0,0.15),0 0 0 1px rgba(139,92,246,0.02)}
+.growth-card h3{font-family:'Orbitron',sans-serif;font-size:15px;font-weight:600;color:rgba(255,255,255,0.7);margin-bottom:16px;letter-spacing:0.5px}
+.growth-task{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;
+  background:rgba(255,255,255,0.02);margin-bottom:8px;border:1px solid rgba(255,255,255,0.03)}
+.growth-task .chk{width:20px;height:20px;border-radius:50%;border:2px solid rgba(148,163,184,0.2);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;transition:all 0.3s ease}
+.growth-task.done .chk{border-color:#4ade80;background:rgba(34,197,94,0.15);color:#4ade80}
+.growth-task.done .chk::after{content:'\2713'}
+.growth-task .info{flex:1}.growth-task .info .ttl{font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:2px}
+.growth-task .info .sub{font-size:11px;color:rgba(148,163,184,0.4)}
+.growth-task .tag{font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(99,102,241,0.1);color:#818cf8;flex-shrink:0}
+.growth-task.done .info .ttl{color:rgba(255,255,255,0.8)}
+.growth-task.done .tag{background:rgba(34,197,94,0.1);color:#4ade80}
+.growth-level{text-align:center;padding:20px}
+.growth-level .lv{font-family:'Orbitron',sans-serif;font-size:48px;font-weight:900;
+  background:linear-gradient(135deg,#fff,#c4b5fd,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:4px}
+.growth-level .lv-label{font-size:12px;color:rgba(148,163,184,0.5);margin-bottom:16px}
+.xp-bar{height:6px;background:rgba(51,65,85,0.5);border-radius:3px;overflow:hidden;margin-bottom:8px}
+.xp-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#6366f1,#a78bfa);transition:width 1s cubic-bezier(0.4,0,0.2,1);width:0%}
+.xp-text{font-size:11px;color:rgba(148,163,184,0.4)}
+.growth-offer{margin-top:16px;padding:16px;border-radius:12px;background:rgba(99,102,241,0.04);border:1px solid rgba(99,102,241,0.06);text-align:center}
+.growth-offer .pct{font-family:'Orbitron',sans-serif;font-size:32px;font-weight:700;color:#4ade80;line-height:1}
+.growth-offer .lbl{font-size:11px;color:rgba(148,163,184,0.5);margin-top:4px}
+.growth-chain{max-width:1200px;margin:32px auto 0;padding:0 50px}
+.growth-chain-steps{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.growth-step{padding:12px 8px;border-radius:12px;text-align:center;background:rgba(255,255,255,0.015);
+  border:1px solid rgba(255,255,255,0.03);position:relative;transition:all 0.3s ease;cursor:pointer}
+.growth-step:hover{background:rgba(99,102,241,0.06);border-color:rgba(99,102,241,0.12);transform:translateY(-3px)}
+.growth-step .icon{font-size:20px;margin-bottom:6px}
+.growth-step .label{font-size:10px;color:rgba(148,163,184,0.5);font-weight:500}
+.growth-step.active{border-color:rgba(99,102,241,0.2);background:rgba(99,102,241,0.06)}
+.growth-step.active .label{color:#c4b5fd}
+.growth-step.done{border-color:rgba(34,197,94,0.15);background:rgba(34,197,94,0.04)}
+.growth-step.done .label{color:#4ade80}
+.growth-step .connector{position:absolute;top:50%;right:-6px;width:12px;height:2px;background:rgba(148,163,184,0.1);transform:translateY(-50%)}
+.growth-step:last-child .connector{display:none}
+
+@media(max-width:768px){
+  .growth-grid{grid-template-columns:1fr;padding:0 20px}
+  .growth-chain-steps{grid-template-columns:repeat(3,1fr);gap:6px}
+  .resume-compare{grid-template-columns:1fr}
+  .resume-score-grid{grid-template-columns:repeat(2,1fr)}
+  .report-grid{grid-template-columns:1fr}
+}
+
+
+/* ===== API CHAT INTERFACES ===== */
+.api-chat{display:flex;flex-direction:column;height:400px;width:100%;border-radius:20px;overflow:hidden;background:rgba(12,8,35,0.75);backdrop-filter:blur(32px) saturate(1.5);-webkit-backdrop-filter:blur(32px) saturate(1.5);border:1px solid rgba(139,92,246,0.1);box-shadow:0 8px 48px rgba(0,0,0,0.45),0 0 0 1px rgba(139,92,246,0.05),0 0 100px rgba(99,102,241,0.04);transition:all 0.5s cubic-bezier(0.4,0,0.2,1)}
+.api-chat:hover{border-color:rgba(139,92,246,0.2);box-shadow:0 16px 70px rgba(0,0,0,0.5),0 0 0 1px rgba(139,92,246,0.1),0 0 120px rgba(99,102,241,0.06);transform:translateY(-2px)}
+.api-chat-header{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid rgba(139,92,246,0.08);background:linear-gradient(135deg,rgba(25,15,55,0.8),rgba(12,8,35,0.6));backdrop-filter:blur(20px) saturate(1.3);-webkit-backdrop-filter:blur(20px) saturate(1.3);flex-shrink:0;position:relative}
+.api-chat-header .name{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#a78bfa;text-shadow:0 0 30px rgba(139,92,246,0.3);letter-spacing:0.5px}
+.api-chat-header .status{margin-left:auto;font-size:9px;color:rgba(148,163,184,0.25);font-family:'Orbitron',sans-serif;letter-spacing:0.3px}
+.api-chat-header .api-badge{padding:3px 10px;border-radius:10px;font-size:9px;background:rgba(99,102,241,0.12);color:#c4b5fd;border:1px solid rgba(99,102,241,0.1);letter-spacing:0.5px}
+.api-chat-msgs{flex:1;overflow-y:auto;padding:20px 22px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}
+.api-chat-msgs::-webkit-scrollbar{width:3px}
+.api-chat-msgs::-webkit-scrollbar-track{background:transparent}
+.api-chat-msgs::-webkit-scrollbar-thumb{background:rgba(139,92,246,0.15);border-radius:2px}
+.api-msg{max-width:92%;padding:14px 20px;border-radius:16px;font-size:13px;line-height:1.75;animation:apiMsgIn 0.35s ease-out}
+@keyframes apiMsgIn{from{opacity:0;transform:translateY(8px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.api-msg.bot{align-self:flex-start;background:rgba(139,92,246,0.07);border:1px solid rgba(139,92,246,0.06);border-bottom-left-radius:4px;color:rgba(255,255,255,0.88);backdrop-filter:blur(8px)}
+.api-msg.user{align-self:flex-end;background:rgba(99,102,241,0.05);border:1px solid rgba(99,102,241,0.06);border-bottom-right-radius:4px;color:rgba(255,255,255,0.88);backdrop-filter:blur(8px)}
+.api-msg.system{align-self:center;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.08);border-radius:20px;font-size:11px;color:#4ade80;text-align:center;max-width:80%}
+.api-msg .hl{color:#a78bfa;font-weight:600}
+.api-msg .sc{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:700;background:linear-gradient(135deg,#fff,#a5b4fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.api-msg .tag{display:inline-block;padding:1px 8px;border-radius:10px;font-size:10px;margin:1px 2px}
+.api-msg .tag.miss{background:rgba(239,68,68,0.1);color:#f87171}
+.api-msg .tag.have{background:rgba(34,197,94,0.1);color:#4ade80}
+.api-chat-input{display:flex;align-items:center;gap:12px;padding:14px 20px 16px;border-top:2px solid rgba(139,92,246,0.08);flex-shrink:0;position:relative;background:linear-gradient(180deg,rgba(15,10,40,0.7),rgba(8,4,25,0.9));backdrop-filter:blur(24px) saturate(1.3);-webkit-backdrop-filter:blur(24px) saturate(1.3)}
+.api-chat-input::before{content:'';position:absolute;top:-2px;left:5%;right:5%;height:2px;background:linear-gradient(90deg,transparent,rgba(139,92,246,0.25),rgba(99,102,241,0.2),rgba(6,182,212,0.15),transparent);pointer-events:none;filter:blur(3px)}
+
+
+
+@keyframes inputBreath{0%,100%{border-color:rgba(139,92,246,0.2);box-shadow:0 0 0 4px rgba(139,92,246,0.04),inset 0 4px 20px rgba(0,0,0,0.25)}50%{border-color:rgba(139,92,246,0.3);box-shadow:0 0 0 6px rgba(139,92,246,0.08),0 0 40px rgba(99,102,241,0.04),inset 0 4px 20px rgba(0,0,0,0.25)}}
+.api-chat-input .input-wrap{flex:1;position:relative}
+.api-chat-input .input-wrap textarea{width:100%;background:rgba(0,0,0,0.2);border:1px solid rgba(139,92,246,0.06);border-radius:16px;padding:14px 18px;font-size:14px;color:rgba(255,255,255,0.9);outline:none;font-family:'Plus Jakarta Sans',sans-serif;transition:all 0.4s cubic-bezier(0.4,0,0.2,1);box-shadow:inset 0 4px 20px rgba(0,0,0,0.25),inset 0 1px 1px rgba(139,92,246,0.04);resize:none;min-height:48px;max-height:130px;line-height:1.65}
+.api-chat-input .input-wrap textarea:focus{border-color:rgba(139,92,246,0.25);background:rgba(99,102,241,0.03);box-shadow:0 0 0 4px rgba(139,92,246,0.06),0 0 30px rgba(99,102,241,0.03),inset 0 4px 20px rgba(0,0,0,0.25);animation:inputBreath 3s ease-in-out infinite}
+.api-chat-input .input-wrap textarea::placeholder{color:rgba(148,163,184,0.15);font-weight:300;font-style:italic}
+.api-chat-input .count{font-size:11px;color:rgba(148,163,184,0.15);font-family:'Orbitron',sans-serif;letter-spacing:0.8px;transition:all 0.3s ease;white-space:nowrap;padding:2px 8px;background:rgba(0,0,0,0.12);border-radius:8px;border:1px solid rgba(148,163,184,0.03)}
+.api-chat-input .count.active{color:#c4b5fd;border-color:rgba(139,92,246,0.08);background:rgba(99,102,241,0.04);box-shadow:0 0 20px rgba(99,102,241,0.02)}
+.api-chat-input .btn-send{width:48px;height:48px;border-radius:16px;border:none;background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;transition:all 0.35s cubic-bezier(0.4,0,0.2,1);flex-shrink:0;box-shadow:0 4px 24px rgba(99,102,241,0.3),inset 0 1px 0 rgba(255,255,255,0.15);position:relative;overflow:hidden}
+.api-chat-input .btn-send::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 0%,rgba(255,255,255,0.1) 50%,transparent 100%);transform:translateX(-100%);transition:transform 0.5s ease}
+.api-chat-input .btn-send:hover::before{transform:translateX(100%)}
+.api-chat-input .btn-send:hover{transform:translateY(-3px) scale(1.06);background:linear-gradient(135deg,#8b5cf6,#6366f1);box-shadow:0 12px 40px rgba(99,102,241,0.45),0 0 60px rgba(99,102,241,0.08)}
+.api-chat-input .btn-send:active{transform:translateY(0) scale(0.97)}
+.api-chat-input .btn-send:disabled{opacity:0.3;cursor:not-allowed;transform:none;box-shadow:none}
+.api-chat-input .btn-send .icon{position:relative;z-index:1;filter:drop-shadow(0 0 6px rgba(255,255,255,0.2))}
+.api-loading{display:flex;gap:5px;align-items:center;padding:12px 18px;align-self:flex-start;border-radius:16px;background:rgba(139,92,246,0.07);border:1px solid rgba(139,92,246,0.05);border-bottom-left-radius:4px}
+.api-loading .d{width:5px;height:5px;border-radius:50%;background:rgba(129,140,248,0.4);animation:apiDot 1.4s ease-in-out infinite}
+.api-loading .d:nth-child(2){animation-delay:0.2s}
+.api-loading .d:nth-child(3){animation-delay:0.4s}
+@keyframes apiDot{0%,80%,100%{transform:scale(0.6);opacity:0.3}40%{transform:scale(1);opacity:0.8}}
+
+</style>
+</head>
+<body>
+
+<!-- ===== BACKGROUND ===== -->
+<div class="space-bg"></div>
+<div class="nebula-orb n1"></div>
+<div class="nebula-orb n2"></div>
+<div class="nebula-orb n3"></div>
+<div class="nebula-orb n4"></div>
+<div class="nebula-orb n5"></div>
+<div class="nebula-orb n6"></div>
+<div class="light-rays">
+  <div class="light-ray lr1" style="--r:12deg"></div>
+  <div class="light-ray lr2" style="--r:35deg"></div>
+  <div class="light-ray lr3" style="--r:58deg"></div>
+  <div class="light-ray lr4" style="--r:80deg"></div>
+  <div class="light-ray lr5" style="--r:105deg"></div>
+  <div class="light-ray lr6" style="--r:130deg"></div>
+  <div class="light-ray lr7" style="--r:160deg"></div>
+  <div class="light-ray lr8" style="--r:72deg"></div>
+</div>
+<div class="grd-overlay"></div>
+<div class="atmospheric-fog"></div>
+<div class="volumetric-glow vg-beam-1"></div>
+<div class="cinematic-beam cb-1"></div>
+<div class="cinematic-beam cb-2"></div>
+<div class="cinematic-beam cb-3"></div>
+<div class="energy-fog energy-fog-1"></div>
+<div class="energy-fog energy-fog-2"></div>
+<div class="vignette-overlay"></div>
+<canvas id="starCanvas"></canvas>
+<div class="mouse-glow" id="mouseGlow"></div>
+
+<!-- ===== NAVIGATION ===== -->
+<nav id="navbar">
+  <div style="max-width:1400px;margin:0 auto;padding:0 50px;display:flex;align-items:center;justify-content:space-between;height:64px">
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#4f46e5);box-shadow:0 0 10px rgba(99,102,241,0.3)"></div>
+      <span class="nav-logo">智职AI</span>
+    </div>
+    <div class="nav-links" style="display:flex;align-items:center;gap:32px">
+      <a href="#product" class="nav-link">产品</a>
+      <a href="feature-resume-builder.html" class="nav-link">制作简历</a>
+      <a href="feature-ai-resume.html" class="nav-link">AI 生成</a>
+      <a href="feature-resume.html" class="nav-link">简历分析</a>
+      <a href="feature-job.html" class="nav-link">岗位匹配</a>
+      <a href="feature-interview.html" class="nav-link">面试模拟</a>
+      <a href="#features" class="nav-link">功能</a>
+      <a href="#growth" class="nav-link">成长</a>
+      <a href="#stats" class="nav-link">数据</a>
+      <a href="#footer" class="nav-link">关于</a>
+    </div>
+    <button class="nav-btn" onclick="showModules()">开始使用</button>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-grid">
+    <!-- Left: Text -->
+    <div class="hero-left">
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        <span>AI 驱动 · 实时智能匹配</span>
+      </div>
+      <h1 class="hero-title">
+        <span class="hero-title-grad">重新定义</span><br>
+        <span class="hero-title-accent">智能求职体验</span>
+      </h1>
+      <p class="hero-sub">
+        <strong>智职AI</strong> 深度融合大语言模型与你的职业画像，实现<strong>简历智能优化</strong>、<strong>岗位精准匹配</strong>、<strong>面试模拟训练</strong>，让你的求职效率提升 <strong>10 倍</strong>。
+      </p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="showModules()">免费开始</button>
+        <button class="btn-secondary" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">了解更多</button>
+      </div>
+    </div>
+
+    <!-- Center: AI Orb -->
+    <div class="ai-orb-wrapper">
+      <div class="ai-orb">
+        <!-- Energy waves -->
+        <div class="energy-wave ew-1"></div>
+        <div class="energy-wave ew-2"></div>
+        <div class="energy-wave ew-3"></div>
+        <div class="energy-wave ew-4"></div>
+        <div class="energy-wave ew-5"></div>
+        <!-- Inner rotating energy core layers -->
+        <div class="inner-core-layer il-1"></div>
+        <div class="inner-core-layer il-2"></div>
+        <div class="inner-core-layer il-3"></div>
+        <!-- Volumetric light strips -->
+        <div class="vol-strip vs-h"></div>
+        <div class="vol-strip vs-v"></div>
+        <div class="vol-strip vs-h2"></div>
+        <div class="vol-strip vs-v2"></div>
+        <!-- Energy refraction rings -->
+        <div class="refraction-ring rr-1"></div>
+        <div class="refraction-ring rr-2"></div>
+        <div class="refraction-ring rr-3"></div>
+        <!-- Shockwave ring -->
+        <div class="shockwave-ring"></div>
+        <!-- Inner particle glow dots -->
+        <div class="orbital-particle op-1"></div>
+        <div class="orbital-particle op-2"></div>
+        <div class="orbital-particle op-3"></div>
+        <div class="orbital-particle op-4"></div>
+        <div class="orbital-particle op-5"></div>
+        <div class="orbital-particle op-6"></div>
+        <!-- Energy arcs -->
+        <div class="energy-arc ea-1"></div>
+        <div class="energy-arc ea-2"></div>
+        <!-- Core glow layers -->
+        <div class="core-glow-1"></div>
+        <div class="core-glow-2"></div>
+        <div class="core-glow-3"></div>
+        <div class="core-glow-4"></div>
+        <!-- Bloom -->
+        <div class="core-bloom"></div>
+        <!-- Core ball -->
+        <div class="core-ball"></div>
+        <!-- Core text -->
+        <div class="ai-core-text">AI</div>
+        <!-- Orbital rings -->
+        <div class="orbit-ring ring-1">
+          <span class="ring-particle rp-1"></span>
+          <span class="ring-particle rp-2"></span>
+        </div>
+        <div class="orbit-ring ring-2">
+          <span class="ring-particle rp-3"></span>
+          <span class="ring-particle rp-4"></span>
+        </div>
+        <div class="orbit-ring ring-3">
+          <span class="ring-particle rp-5"></span>
+          <span class="ring-particle rp-6"></span>
+        </div>
+        <div class="orbit-ring ring-4">
+          <span class="ring-particle rp-7"></span>
+          <span class="ring-particle rp-8"></span>
+        </div>
+        <div class="orbit-ring ring-5"></div>
+        <div class="orbit-ring ring-6"><span class="ring-particle rp-9"></span><span class="ring-particle rp-10"></span></div>
+      </div>
+    </div>
+
+    <!-- Right: Chat card -->
+    <div class="chat-card-wrap">
+      <div class="chat-card">
+        <div class="chat-card-header">
+          <div class="chat-card-avatar">Z</div>
+          <div>
+            <div class="chat-card-title">智职AI 助手</div>
+            <div class="chat-card-status">
+              <span class="chat-card-status-dot"></span>
+              在线 · 即刻响应
+            </div>
+          </div>
+        </div>
+        <div class="chat-msg chat-msg-bot">
+          <div class="chat-msg-avatar bot">AI</div>
+          <div class="chat-msg-bubble">
+            你好！我是<span class="highlight">智职AI</span>，已分析你的简历。建议优化 <span class="highlight">项目经历</span> 和 <span class="highlight">技能关键词</span>，匹配率可提升 35% 👋
+          </div>
+        </div>
+        <div class="chat-msg chat-msg-user">
+          <div class="chat-msg-avatar user">你</div>
+          <div class="chat-msg-bubble">好的，请帮我生成优化建议</div>
+        </div>
+        <div class="chat-msg chat-msg-bot">
+          <div class="chat-msg-avatar bot">AI</div>
+          <div class="chat-msg-bubble">已生成 <span class="highlight">5 条优化建议</span>，涵盖项目描述、技术栈排版、量化成果等方面。即刻查看？</div>
+        </div>
+        <div class="chat-card-input">
+          <input type="text" id="chatInputField" placeholder="输入消息，开始智能对话...">
+          <button id="chatSendBtn">→</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRODUCT SHOWCASE ===== -->
+<section class="section" id="product">
+  <div class="section-header">
+    <div class="section-tag">✦ 产品矩阵</div>
+    <h2 class="section-title"><span class="section-title-grad">全能求职工具链</span></h2>
+    <p class="section-sub">从简历优化到谈薪策略，智职AI 提供一站式智能求职解决方案，覆盖求职全流程</p>
+  </div>
+  <div class="showcase-tabs" id="showcaseTabs">
+    <button class="showcase-tab active" data-panel="0">简历优化</button>
+    <button class="showcase-tab" data-panel="1">岗位匹配</button>
+    <button class="showcase-tab" data-panel="2">面试模拟</button>
+  </div>
+  <!-- Panel 0: AI Resume Analysis - Chat + API -->
+  <div class="showcase-panel active" data-panel="0">
+    <div class="showcase-visual">
+      <div class="showcase-visual-inner" style="padding:6px;width:100%">
+        <div class="api-chat" id="resumeChat">
+          <div class="api-chat-header">
+            <span style="font-size:16px">📄</span>
+            <span class="name">AI 简历分析</span>
+            <span class="api-badge">API v1</span>
+            <span class="status">POST /api/resume/analyze</span>
+          </div>
+          <div class="api-chat-msgs" id="resumeChatMsgs">
+            <div class="api-msg bot">👋 你好！请粘贴你的简历内容或描述你的工作经历，AI 将为你分析 ATS 匹配度、技能缺口并生成优化建议。</div>
+          </div>
+          <div class="api-chat-input">
+            <div class="input-wrap">
+              <textarea id="resumeChatInput" placeholder="粘贴简历内容或描述工作经历..." rows="1" autocomplete="off"></textarea>
+            </div>
+            <span class="count" id="resumeCount">0</span>
+            <button class="btn-send" id="resumeChatSend"><span class="icon">➤</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="showcase-info">
+      <h3><span class="gradient-text">AI 简历分析 · API</span></h3>
+      <p>输入你的简历内容，AI 自动分析 ATS 评分、技能缺口，并直接改写项目经历。配备 <code style="color:#a78bfa">POST /api/resume/analyze</code> 接口，可对接后端服务。</p>
+      <div style="background:rgba(15,15,40,0.3);border-radius:8px;padding:10px;margin-top:10px;font-size:10px;color:rgba(148,163,184,0.4)">
+        <strong style="color:rgba(148,163,184,0.6)">API 请求格式:</strong><br>
+        { "resume_text": "string" } → { "ats_score": 82, "job_match": 82, "skill_gaps": [...], "rewrite": {...} }
+      </div>
+    </div>
+  </div>  <!-- Panel 1: AI Job Matching - Chat + API -->
+  <div class="showcase-panel" data-panel="1">
+    <div class="showcase-visual">
+      <div class="showcase-visual-inner" style="padding:6px;width:100%">
+        <div class="api-chat" id="jobChat">
+          <div class="api-chat-header">
+            <span style="font-size:16px">🎯</span>
+            <span class="name">AI 岗位匹配</span>
+            <span class="api-badge">API v1</span>
+            <span class="status">POST /api/job/match</span>
+          </div>
+          <div class="api-chat-msgs" id="jobChatMsgs">
+            <div class="api-msg bot">🎯 告诉我你的技能栈和工作经验，AI 将为你匹配最适合的岗位方向，并分析<strong style="color:#a78bfa">为什么匹配</strong>以及<strong style="color:#a78bfa">缺什么</strong>。</div>
+          </div>
+          <div class="api-chat-input">
+            <div class="input-wrap">
+              <textarea id="jobChatInput" placeholder="例: 5年 React + Node.js 开发经验..." rows="1" autocomplete="off"></textarea>
+            </div>
+            <span class="count" id="jobCount">0</span>
+            <button class="btn-send" id="jobChatSend"><span class="icon">➤</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="showcase-info">
+      <h3><span class="gradient-text">AI 岗位匹配 · API</span></h3>
+      <p>输入你的技能背景，AI 自动匹配最佳岗位方向并分析匹配原因。配备 <code style="color:#a78bfa">POST /api/job/match</code> 接口，可对接后端服务。</p>
+      <div style="background:rgba(15,15,40,0.3);border-radius:8px;padding:10px;margin-top:10px;font-size:10px;color:rgba(148,163,184,0.4)">
+        <strong style="color:rgba(148,163,184,0.6)">API 请求格式:</strong><br>
+        { "skills": "string", "experience": "string" } → { "matches": [{ "title": "...", "match_pct": 92, "reason": "..." }] }
+      </div>
+    </div>
+  </div>  <!-- Panel 2: AI Mock Interview - Chat + API -->
+  <div class="showcase-panel" data-panel="2">
+    <div class="showcase-visual">
+      <div class="showcase-visual-inner" style="padding:6px;width:100%">
+        <div id="interviewContainer">
+          <!-- Interview Chat Phase -->
+          <div id="iPhase">
+            <div class="api-chat" id="interviewChat">
+              <div class="api-chat-header">
+                <span style="font-size:16px">🎤</span>
+                <span class="name">AI 面试官 · 技术面</span>
+                <span class="api-badge">API v1</span>
+                <span class="status" id="iScore">第 1/5 题</span>
+              </div>
+              <div class="api-chat-msgs" id="iMsgs">
+                <div class="api-msg bot">👋 欢迎来到 AI 模拟面试！我是你的面试官。请先做一下自我介绍，重点介绍你的技术栈和项目经验。</div>
+              </div>
+              <div class="api-chat-input">
+                <div class="input-wrap">
+                  <textarea id="iInput" placeholder="输入你的回答..." rows="1" autocomplete="off"></textarea>
+                </div>
+                <span class="count" id="iCount">0</span>
+                <button class="btn-send" id="iSend"><span class="icon">➤</span></button>
+              </div>
+            </div>
+          </div>
+          <!-- Report Phase -->
+          <div id="rPhase" style="display:none">
+            <div class="api-chat" style="height:auto;min-height:380px">
+              <div class="api-chat-header">
+                <span style="font-size:16px">📊</span>
+                <span class="name">AI 面试报告</span>
+                <span class="api-badge">REPORT</span>
+                <span class="status">面试已结束</span>
+              </div>
+              <div class="api-chat-msgs" style="padding:16px">
+                <div style="text-align:center;margin-bottom:12px">
+                  <span style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;background:linear-gradient(135deg,#fff,#a5b4fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent">🎯 AI 面试报告</span>
+                </div>
+                <div class="report-grid">
+                  <div class="report-item green"><div class="v" id="rExpr">78</div><div class="l">表达能力</div></div>
+                  <div class="report-item blue"><div class="v" id="rLogic">82</div><div class="l">逻辑能力</div></div>
+                  <div class="report-item purple"><div class="v" id="rTech">65</div><div class="l">技术深度</div></div>
+                  <div class="report-item gold"><div class="v" id="rComm">80</div><div class="l">沟通能力</div></div>
+                </div>
+                <div class="report-issue">
+                  <span class="t">AI 指出的问题</span>
+                  <ul>
+                    <li>回答太泛，缺少具体案例支撑</li>
+                    <li>STAR 法则运用不完整</li>
+                    <li>技术方案对比论证不足</li>
+                  </ul>
+                </div>
+                <div class="report-suggest">
+                  <span class="t">AI 改进建议</span>
+                  <ul>
+                    <li>先说结果，再说过程，最后量化成果</li>
+                    <li>每个技术点搭配一个实际项目案例</li>
+                    <li>多用"我主导/我优化/我搭建"等主动语态</li>
+                  </ul>
+                </div>
+                <button class="resume-btn" id="rRestartBtn" style="margin-top:8px;font-size:11px;padding:10px 20px">🔄 重新面试</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="showcase-info">
+      <h3><span class="gradient-text">AI 模拟面试 · API</span></h3>
+      <p>5 轮技术面试模拟，输入回答后 AI 智能评分。面试结束后自动生成四维能力报告。配备 <code style="color:#a78bfa">POST /api/interview/evaluate</code> 接口。</p>
+      <div style="background:rgba(15,15,40,0.3);border-radius:8px;padding:10px;margin-top:10px;font-size:10px;color:rgba(148,163,184,0.4)">
+        <strong style="color:rgba(148,163,184,0.6)">API 请求格式:</strong><br>
+        { "answer": "string", "question_index": 0 } → { "score": 16, "feedback": "...", "next_question": "..." }
+      </div>
+    </div>
+  </div></section>
+
+<!-- ===== FEATURE CARDS ===== -->
+<section class="section" id="features">
+  <div class="section-header">
+    <div class="section-tag">✦ 核心功能</div>
+    <h2 class="section-title"><span class="section-title-grad">四大核心引擎</span></h2>
+    <p class="section-sub">以 AI 大模型为核心，打造求职全链路智能工具链，每个环节都为你创造优势</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card" onclick="window.location='feature-resume.html'">
+      <div class="feature-card-scan"></div>
+      <div class="feature-card-glow"></div>
+      <div class="feature-card-number">01</div>
+      <div class="feature-card-icon">🧠</div>
+      <div class="feature-card-title">智能诊断引擎</div>
+      <div class="feature-card-desc">深度解析你的简历、技能树与职业背景，生成全方位能力画像，精准定位薄弱环节与提升方向</div>
+    </div>
+    <div class="feature-card" onclick="window.location='feature-job.html'">
+      <div class="feature-card-scan"></div>
+      <div class="feature-card-number">02</div>
+      <div class="feature-card-icon">🎯</div>
+      <div class="feature-card-title">精准匹配算法</div>
+      <div class="feature-card-desc">基于多维语义匹配模型，从数百万岗位中筛选最适合你的机会，匹配精度达到行业领先水平</div>
+    </div>
+    <div class="feature-card" onclick="window.location='feature-interview.html'">
+      <div class="feature-card-scan"></div>
+      <div class="feature-card-glow"></div>
+      <div class="feature-card-number">03</div>
+      <div class="feature-card-icon">📊</div>
+      <div class="feature-card-title">数据看板</div>
+      <div class="feature-card-desc">实时追踪求职进度，可视化呈现投递数据、面试转化率、薪资趋势，用数据驱动求职决策</div>
+    </div>
+    <div class="feature-card" onclick="window.location='feature-interview.html'">
+      <div class="feature-card-scan"></div>
+      <div class="feature-card-number">04</div>
+      <div class="feature-card-icon">🤖</div>
+      <div class="feature-card-title">AI 求职教练</div>
+      <div class="feature-card-desc">7x24 小时智能陪练，从简历优化到谈薪策略，全程 AI 指导，让你在求职路上不再孤军奋战</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== GROWTH SYSTEM ===== -->
+<section class="growth-section" id="growth">
+  <div class="section-header">
+    <div class="section-tag">✦ 求职成长系统</div>
+    <h2 class="section-title"><span class="section-title-grad">AI 陪跑你的每一天</span></h2>
+    <p class="section-sub">每天刷一点成长感——模拟面试、简历优化、面试题学习，AI 全程追踪你的进步</p>
+  </div>
+  
+  <div class="growth-grid">
+    <!-- Today's Progress -->
+    <div class="growth-card" id="growthCard">
+      <h3>📋 今日成长</h3>
+      <div class="growth-task done">
+        <div class="chk"></div>
+        <div class="info"><div class="ttl">模拟面试训练</div><div class="sub">前端开发 · 得分 76</div></div>
+        <span class="tag">已完成</span>
+      </div>
+      <div class="growth-task done">
+        <div class="chk"></div>
+        <div class="info"><div class="ttl">简历优化</div><div class="sub">ATS 评分提升 15 分</div></div>
+        <span class="tag">已完成</span>
+      </div>
+      <div class="growth-task">
+        <div class="chk"></div>
+        <div class="info"><div class="ttl">学习 React 高频面试题</div><div class="sub">5 道核心题 · 预计 20 分钟</div></div>
+        <span class="tag">进行中</span>
+      </div>
+      <div class="growth-task">
+        <div class="chk"></div>
+        <div class="info"><div class="ttl">阅读系统设计方法论</div><div class="sub">前端架构设计模式</div></div>
+        <span class="tag">未开始</span>
+      </div>
+    </div>
+    
+    <!-- Level & Progress -->
+    <div class="growth-card">
+      <div class="growth-level">
+        <div class="lv" id="aiLevel">Lv.1</div>
+        <div class="lv-label">AI 求职等级</div>
+        <div class="xp-bar"><div class="xp-bar-fill" id="xpFill" style="width:12%"></div></div>
+        <div class="xp-text">经验值 120 / 1000 · 距 Lv.2 还需 880 XP</div>
+      </div>
+      <div class="growth-offer">
+        <div class="pct" id="offerPct">+5<span style="font-size:16px;color:#4ade80">%</span></div>
+        <div class="lbl">预计 offer 概率提升</div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Feature Chain -->
+  <div class="growth-chain">
+    <div class="growth-chain-steps">
+      <div class="growth-step done"><div class="icon">📄</div><div class="label">上传简历</div><span class="connector"></span></div>
+      <div class="growth-step done"><div class="icon">🔍</div><div class="label">AI 分析</div><span class="connector"></span></div>
+      <div class="growth-step active"><div class="icon">✨</div><div class="label">优化简历</div><span class="connector"></span></div>
+      <div class="growth-step"><div class="icon">🎯</div><div class="label">匹配岗位</div><span class="connector"></span></div>
+      <div class="growth-step"><div class="icon">🎤</div><div class="label">模拟面试</div><span class="connector"></span></div>
+      <div class="growth-step"><div class="icon">📊</div><div class="label">AI 报告</div><span class="connector"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== STATS ===== -->
+<section class="section" id="stats">
+  <div class="section-header">
+    <div class="section-tag">✦ 平台数据</div>
+    <h2 class="section-title"><span class="section-title-grad">用数据说话</span></h2>
+    <p class="section-sub">智职AI 已帮助上万求职者获得心仪 Offer，以下是我们的平台数据</p>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-number">5<span class="stat-plus">+</span></div>
+      <div class="stat-label">服务用户（万）</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">92<span class="stat-plus">%</span></div>
+      <div class="stat-label">匹配准确率</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">3.8<span class="stat-plus">x</span></div>
+      <div class="stat-label">面试邀约提升</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">15<span class="stat-plus">万+</span></div>
+      <div class="stat-label">成功 Offer</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer id="footer">
+  <div class="footer-energy-line"></div>
+  <div class="footer-star-field"></div>
+  <div class="footer-top-line"></div>
+  <div class="footer-orbital-ring"></div>
+  <div class="footer-orbital-ring-2"></div>
+  <div class="footer-grid"></div>
+  <div class="footer-inner">
+    <div class="footer-main">
+      <div>
+        <div class="footer-brand">智职AI</div>
+        <div class="footer-desc">下一代 AI 驱动的智能求职平台，让每个人都能找到最适合自己的工作。</div>
+        <div class="footer-social">
+          <a href="#" title="微信">💬</a>
+          <a href="#" title="微博">📢</a>
+          <a href="#" title="知乎">🌐</a>
+          <a href="#" title="GitHub">⌨</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">产品</div>
+        <ul class="footer-links">
+          <li><a href="#">简历优化</a></li>
+          <li><a href="#">岗位匹配</a></li>
+          <li><a href="#">面试模拟</a></li>
+          <li><a href="#">薪资分析</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">公司</div>
+        <ul class="footer-links">
+          <li><a href="#">关于我们</a></li>
+          <li><a href="#">加入团队</a></li>
+          <li><a href="#">联系我们</a></li>
+          <li><a href="#">隐私政策</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">资源</div>
+        <ul class="footer-links">
+          <li><a href="#">帮助中心</a></li>
+          <li><a href="#">博客</a></li>
+          <li><a href="#">社区</a></li>
+          <li><a href="#">更新日志</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 智职AI. All rights reserved.</span>
+      <div class="footer-bottom-links">
+        <a href="#">服务条款</a>
+        <a href="#">隐私声明</a>
+        <a href="#">Cookie 设置</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== FOREGROUND PARTICLES ===== -->
+<canvas id="fgCanvas"></canvas>
+
+<script>
+
+// === GLOBAL: switchToPanel (defined early for reliability) ===
+function switchToPanel(idx){
+  var target = document.getElementById('product');
+  if(target) target.scrollIntoView({behavior:'smooth',block:'start'});
+  var tabs = document.querySelectorAll('.showcase-tab');
+  var panels = document.querySelectorAll('.showcase-panel');
+  tabs.forEach(function(t,i){t.classList.toggle('active',i===Number(idx))});
+  panels.forEach(function(p,i){p.classList.toggle('active',i===Number(idx))});
+}
+function showModules(){switchToPanel(0)}
+
+// === FEATURE CARD CLICK HANDLER ===
+(function(){
+  var cards = document.querySelectorAll('.feature-card');
+  cards.forEach(function(card){
+    card.addEventListener('click', function(){
+      var idx = this.getAttribute('data-panel');
+      if(idx !== null) switchToPanel(parseInt(idx));
+    });
+    card.style.cursor = 'pointer';
+  });
+})();
+
+
+// ============================================================
+// BACKGROUND STAR FIELD
+// ============================================================
+(function(){
+  const canvas = document.getElementById('starCanvas');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  let w, h;
+
+  function resize(){
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+
+  function getStarCount(){
+    if(w < 480) return 120;
+    if(w < 768) return 200;
+    return 350;
+  }
+
+  function initStars(){
+    resize();
+    const count = getStarCount();
+    stars = [];
+    for(let i = 0; i < count; i++){
+      stars.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 1.6 + 0.3,
+        dx: (Math.random() - 0.5) * 0.25,
+        dy: (Math.random() - 0.5) * 0.25,
+        alpha: Math.random() * 0.6 + 0.2,
+        phase: Math.random() * Math.PI * 2
+      });
+    }
+  }
+
+  function drawStars(time){
+    ctx.clearRect(0, 0, w, h);
+    for(const s of stars){
+      s.x += s.dx;
+      s.y += s.dy;
+      if(s.x < 0) s.x = w;
+      if(s.x > w) s.x = 0;
+      if(s.y < 0) s.y = h;
+      if(s.y > h) s.y = 0;
+      const twinkle = 0.6 + 0.4 * Math.sin(time * 0.001 + s.phase);
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${s.alpha * twinkle})`;
+      ctx.fill();
+    }
+    requestAnimationFrame(drawStars);
+  }
+
+  let resizeTimer;
+  window.addEventListener('resize', function(){
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function(){
+      initStars();
+    }, 200);
+  });
+
+  initStars();
+  requestAnimationFrame(drawStars);
+})();
+
+// ============================================================
+// FOREGROUND PARTICLES (cinematic depth layer)
+// ============================================================
+(function(){
+  const canvas = document.getElementById('fgCanvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let trails = [];
+  let w, h;
+  let mouseX = -1000, mouseY = -1000;
+  let mouseActive = false;
+
+  function resize(){
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+
+  function getParticleCount(){
+    if(w < 480) return 120;
+    if(w < 768) return 200;
+    return 350;
+  }
+
+  const colors = [
+    '99,102,241',  // indigo
+    '139,92,246',  // purple
+    '6,182,212',   // cyan
+    '255,255,255', // white
+    '168,85,247',  // purple light
+    '56,189,248',  // sky blue
+    '129,140,248', // indigo light
+    '34,211,238'   // cyan light
+  ];
+
+  function initParticles(){
+    resize();
+    const count = getParticleCount();
+    particles = [];
+    trails = [];
+    for(let i = 0; i < count; i++){
+      const isGlow = Math.random() < 0.25;
+      const isStar = Math.random() < 0.08;
+      particles.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: isStar ? (Math.random() * 2 + 3) : isGlow ? (Math.random() * 2 + 2) : (Math.random() * 1.5 + 0.3),
+        dx: (Math.random() - 0.5) * 0.2,
+        dy: -(Math.random() * 0.25 + 0.03),
+        color: colors[Math.floor(Math.random() * colors.length)],
+        alpha: Math.random() * 0.5 + 0.2,
+        phase: Math.random() * Math.PI * 2,
+        twinkleSpeed: Math.random() * 0.003 + 0.001,
+        isGlow: isGlow,
+        isStar: isStar,
+        drift: Math.random() * 0.4 + 0.1,
+        baseX: Math.random() * w,
+        orbitAngle: Math.random() * Math.PI * 2,
+        orbitSpeed: (Math.random() - 0.5) * 0.002,
+        orbitRadius: Math.random() * 50 + 20
+      });
+    }
+  }
+
+  function drawParticles(time){
+    ctx.clearRect(0, 0, w, h);
+    
+    // Draw mouse trails
+    if(mouseActive && trails.length > 0){
+      for(const t of trails){
+        ctx.beginPath();
+        ctx.arc(t.x, t.y, t.r * 0.5, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(139,92,246,${t.alpha * 0.3})`;
+        ctx.fill();
+      }
+    }
+    if(trails.length > 40) trails.splice(0, 10);
+
+    for(const p of particles){
+      p.orbitAngle += p.orbitSpeed;
+      const orbitDx = Math.cos(p.orbitAngle) * p.orbitRadius * 0.01;
+      const orbitDy = Math.sin(p.orbitAngle) * p.orbitRadius * 0.01;
+      
+      p.x += p.dx + Math.sin(time * 0.0003 + p.phase) * p.drift * 0.2 + orbitDx;
+      p.y += p.dy + orbitDy;
+      
+      if(p.y < -10){ p.y = h + 10; p.x = Math.random() * w; }
+      if(p.x < -10) p.x = w + 10;
+      if(p.x > w + 10) p.x = -10;
+
+      const twinkle = 0.5 + 0.5 * Math.sin(time * p.twinkleSpeed + p.phase);
+
+      const dx = p.x - mouseX;
+      const dy = p.y - mouseY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      let mouseEffect = 0;
+      if(dist < 150){
+        mouseEffect = (1 - dist / 150) * 0.7;
+        if(dist > 5){
+          p.x += (dx / dist) * mouseEffect * -0.3;
+          p.y += (dy / dist) * mouseEffect * -0.3;
+        }
+      }
+
+      const alpha = Math.min(p.alpha * twinkle + mouseEffect, 0.95);
+
+      if(p.isStar){
+        ctx.shadowColor = `rgba(${p.color},${alpha * 0.5})`;
+        ctx.shadowBlur = 15;
+        ctx.strokeStyle = `rgba(${p.color},${alpha * 0.2})`;
+        ctx.lineWidth = 0.5;
+        ctx.beginPath(); ctx.moveTo(p.x - 6, p.y); ctx.lineTo(p.x + 6, p.y); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(p.x, p.y - 6); ctx.lineTo(p.x, p.y + 6); ctx.stroke();
+        ctx.shadowBlur = 0;
+      }
+
+      if(p.isGlow){
+        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 5);
+        gradient.addColorStop(0, `rgba(${p.color},${alpha * 0.5})`);
+        gradient.addColorStop(0.5, `rgba(${p.color},${alpha * 0.15})`);
+        gradient.addColorStop(1, `rgba(${p.color},0)`);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * 5, 0, Math.PI * 2);
+        ctx.fillStyle = gradient;
+        ctx.fill();
+      }
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${p.color},${alpha})`;
+      ctx.fill();
+
+      if(p.isGlow || p.isStar){
+        ctx.shadowColor = `rgba(${p.color},${alpha * 0.4})`;
+        ctx.shadowBlur = 12;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * 0.8, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${alpha * 0.5})`;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+    }
+    requestAnimationFrame(drawParticles);
+  }
+
+  document.addEventListener('mousemove', function(e){
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    mouseActive = true;
+    trails.push({x: mouseX + (Math.random()-0.5)*20, y: mouseY + (Math.random()-0.5)*20, r: Math.random()*2+1, alpha: 0.5});
+  });
+
+  document.addEventListener('touchmove', function(e){
+    if(e.touches.length > 0){
+      mouseX = e.touches[0].clientX;
+      mouseY = e.touches[0].clientY;
+    }
+  }, {passive: true});
+  
+  document.addEventListener('mouseleave', function(){
+    mouseActive = false;
+  });
+
+  let resizeTimer;
+  window.addEventListener('resize', function(){
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function(){
+      initParticles();
+    }, 200);
+  });
+
+  initParticles();
+  requestAnimationFrame(drawParticles);
+})();
+
+// ============================================================
+// MOUSE GLOW
+// ============================================================
+(function(){
+  const glow = document.getElementById('mouseGlow');
+  let visible = false;
+  let timer;
+
+  document.addEventListener('mousemove', function(e){
+    glow.style.left = e.clientX + 'px';
+    glow.style.top = e.clientY + 'px';
+    if(!visible){
+      visible = true;
+      glow.style.opacity = '1';
+    }
+    clearTimeout(timer);
+    timer = setTimeout(function(){
+      glow.style.opacity = '0';
+      visible = false;
+    }, 3000);
+  });
+
+  document.addEventListener('mouseleave', function(){
+    glow.style.opacity = '0';
+    visible = false;
+  });
+})();
+
+// ============================================================
+// NAVBAR SCROLL
+// ============================================================
+(function(){
+  const nav = document.getElementById('navbar');
+  let ticking = false;
+  window.addEventListener('scroll', function(){
+    if(!ticking){
+      requestAnimationFrame(function(){
+        nav.classList.toggle('scrolled', window.scrollY > 40);
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+})();
+
+// ============================================================
+// SHOW MODULES (Navigation helper)
+// ============================================================
+
+
+// ============================================================
+// SHOWCASE TABS
+// ============================================================
+(function(){
+  const tabs = document.querySelectorAll('.showcase-tab');
+  const panels = document.querySelectorAll('.showcase-panel');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', function(){
+      const idx = this.dataset.panel;
+      tabs.forEach(t => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      this.classList.add('active');
+      document.querySelector('.showcase-panel[data-panel="' + idx + '"]').classList.add('active');
+    });
+  });
+})();
+
+// ============================================================
+// SMOOTH SCROLL FOR NAV LINKS
+// ============================================================
+(function(){
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if(target){
+        target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      }
+    });
+  });
+})();
+
+// ============================================================
+// FEATURE CARDS – INTERSECTION OBSERVER
+// ============================================================
+(function(){
+  const cards = document.querySelectorAll('.feature-card');
+  if('IntersectionObserver' in window){
+    const observer = new IntersectionObserver(function(entries){
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, {threshold: 0.1});
+    cards.forEach(card => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(30px)';
+      card.style.transition = 'all 0.6s cubic-bezier(0.23,1,0.32,1)';
+      observer.observe(card);
+    });
+  } else {
+    cards.forEach(card => {
+      card.style.opacity = '1';
+      card.style.transform = 'translateY(0)';
+    });
+  }
+})();
+
+// ============================================================
+// STATS COUNTER ANIMATION
+// ============================================================
+(function(){
+  const statNumbers = document.querySelectorAll('.stat-number');
+  if(statNumbers.length === 0) return;
+
+  let animated = false;
+
+  function animateCounters(){
+    if(animated) return;
+    animated = true;
+    statNumbers.forEach(el => {
+      const fullText = el.textContent.trim();
+      const numMatch = fullText.match(/^([0-9.]+)/);
+      if(!numMatch) return;
+      const target = parseFloat(numMatch[1]);
+      const suffix = fullText.slice(numMatch[1].length);
+      const isDecimal = numMatch[1].includes('.');
+      const duration = 2000;
+      const startTime = performance.now();
+
+      function update(currentTime){
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = eased * target;
+        const display = isDecimal ? current.toFixed(1) : Math.round(current);
+        el.textContent = display + suffix;
+        if(progress < 1) requestAnimationFrame(update);
+      }
+      requestAnimationFrame(update);
+    });
+  }
+
+  if('IntersectionObserver' in window){
+    const section = document.getElementById('stats');
+    if(section){
+      const observer = new IntersectionObserver(function(entries){
+        entries.forEach(entry => {
+          if(entry.isIntersecting){
+            animateCounters();
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {threshold: 0.3});
+      observer.observe(section);
+    }
+  } else {
+    animateCounters();
+  }
+})();
+
+// ============================================================
+// AI ORB – PARALLAX ON MOUSE MOVE (subtle)
+// ============================================================
+(function(){
+  const orb = document.querySelector('.ai-orb');
+  if(!orb) return;
+  let rafId;
+
+  document.addEventListener('mousemove', function(e){
+    if(rafId) cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(function(){
+      const rect = orb.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (e.clientX - cx) / 60;
+      const dy = (e.clientY - cy) / 60;
+      orb.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+    });
+  });
+
+  document.addEventListener('mouseleave', function(){
+    if(rafId) cancelAnimationFrame(rafId);
+    orb.style.transform = 'translate(-50%, -50%)';
+  });
+})();
+
+// ============================================================
+// CHAT CARD INTERACTION
+// ============================================================
+(function(){
+  const chatInput = document.getElementById('chatInputField');
+  const sendBtn = document.getElementById('chatSendBtn');
+  const chatCard = document.querySelector('.chat-card');
+  if(!chatInput || !sendBtn || !chatCard) return;
+
+  const demoTexts = [
+    '帮我优化简历中的项目经历',
+    '推荐适合我的前端岗位',
+    '模拟一场技术面试'
+  ];
+  let idx = 0;
+  setInterval(function(){
+    chatInput.placeholder = demoTexts[idx];
+    idx = (idx + 1) % demoTexts.length;
+  }, 3000);
+
+  function sendMessage(){
+    const text = chatInput.value.trim();
+    if(!text) return;
+    
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'chat-msg chat-msg-user';
+    msgDiv.innerHTML = '<div class="chat-msg-avatar user">你</div><div class="chat-msg-bubble">' + text.replace(/</g,'&lt;') + '</div>';
+    
+    const inputArea = document.querySelector('.chat-card-input');
+    chatCard.insertBefore(msgDiv, inputArea);
+    chatInput.value = '';
+    chatCard.scrollTop = chatCard.scrollHeight;
+    
+    setTimeout(function(){
+      const reply = document.createElement('div');
+      reply.className = 'chat-msg chat-msg-bot';
+      reply.innerHTML = '<div class="chat-msg-avatar bot">AI</div><div class="chat-msg-bubble">已收到你的消息，AI 正在分析中... 建议优化方向：<span class="highlight">技能关键词匹配</span> 和 <span class="highlight">项目成果量化</span></div>';
+      chatCard.insertBefore(reply, inputArea);
+      chatCard.scrollTop = chatCard.scrollHeight;
+    }, 1000);
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  chatInput.addEventListener('keydown', function(e){
+    if(e.key === 'Enter') sendMessage();
+  });
+  chatInput.removeAttribute('disabled');
+})();
+
+// ============================================================
+// DEBOUNCED RESIZE HANDLER (global)
+// ============================================================
+let globalResizeTimer;
+window.addEventListener('resize', function(){
+  clearTimeout(globalResizeTimer);
+  globalResizeTimer = setTimeout(function(){
+    // passive – no heavy ops
+  }, 250);
+});
+</script>
+
+<script>
+// ============================================================
+// INJECTED: INTERACTIVE FEATURES
+// ============================================================
+
+
+
+// ============================================================
+// AI 简历分析系统 (Panel 0) - Chat + API
+(async function(){
+  var msgs = document.getElementById('resumeChatMsgs');
+  var inp = document.getElementById('resumeChatInput');
+  var cnt = document.getElementById('resumeCount');
+  var btn = document.getElementById('resumeChatSend');
+  if(!msgs || !inp || !btn) return;
+  var busy = false;
+
+  function add(t, type){var m=document.createElement('div');m.className='api-msg '+type;m.innerHTML=t;msgs.appendChild(m);msgs.scrollTop=msgs.scrollHeight}
+  function loading(show){if(show)msgs.innerHTML+='<div class="api-loading" id="apiLoad"><div class="d"></div><div class="d"></div><div class="d"></div></div>'; else{var l=document.getElementById('apiLoad');if(l)l.remove()}}
+
+  async function send(){
+    var t = inp.value.trim();
+    if(!t || busy) return;
+    busy = true; btn.disabled = true;
+    add(t, 'user'); inp.value = ''; if(cnt) cnt.textContent = '0'; if(cnt) cnt.textContent = '0';
+    loading(true);
+
+    // Simulate API call
+    await new Promise(function(r){setTimeout(r,1200)});
+
+    loading(false);
+    var lower = t.toLowerCase();
+    var hasReact = lower.includes('react');
+    var hasVue = lower.includes('vue');
+    var hasNode = lower.includes('node');
+    var hasDocker = lower.includes('docker');
+    var hasTs = lower.includes('typescript') || lower.includes('ts');
+    var hasRedis = lower.includes('redis');
+    var hasArch = lower.includes('架构') || lower.includes('arch');
+
+    var score = 45;
+    if(hasReact) score += 15; if(hasVue) score += 10; if(hasNode) score += 10;
+    if(hasTs) score += 8; if(hasArch) score += 7;
+    score = Math.min(score, 92);
+
+    var matchScore = 35;
+    if(hasReact) matchScore += 15; if(hasNode) matchScore += 10; if(hasTs) matchScore += 8;
+    if(hasArch) matchScore += 7; if(hasVue) matchScore += 8;
+    matchScore = Math.min(matchScore, 88);
+
+    var missing = [];
+    if(!hasDocker) missing.push('<span class="tag miss">Docker ✗</span>');
+    if(!hasRedis) missing.push('<span class="tag miss">Redis ✗</span>');
+    if(!hasTs) missing.push('<span class="tag miss">TypeScript ✗</span>');
+    if(!hasArch) missing.push('<span class="tag miss">系统架构 ✗</span>');
+
+    var have = [];
+    if(hasReact) have.push('<span class="tag have">React ✓</span>');
+    if(hasVue) have.push('<span class="tag have">Vue ✓</span>');
+    if(hasNode) have.push('<span class="tag have">Node.js ✓</span>');
+    if(hasTs) have.push('<span class="tag have">TypeScript ✓</span>');
+
+    var reply = '<div style="margin-bottom:6px"><strong style="color:#a78bfa">POST /api/resume/analyze</strong> → 分析完成</div>';
+    reply += '<div style="display:flex;gap:12px;margin:6px 0"><div><span style="font-size:10px;color:rgba(148,163,184,0.4)">ATS 评分</span><div><span class="sc">'+score+'</span></div></div><div><span style="font-size:10px;color:rgba(148,163,184,0.4)">岗位匹配</span><div><span class="sc">'+matchScore+'</span><span style="font-size:12px;color:#4ade80">%</span></div></div></div>';
+    if(missing.length > 0) reply += '<div style="margin:4px 0"><span style="font-size:10px;color:#f87171">缺少技能:</span> '+missing.join(' ')+'</div>';
+    if(have.length > 0) reply += '<div style="margin:4px 0"><span style="font-size:10px;color:#4ade80">已有技能:</span> '+have.join(' ')+'</div>';
+    reply += '<div style="margin-top:6px;padding:8px;border-radius:8px;background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.08);font-size:11px"><span style="color:#4ade80">▶ AI 改写建议:</span><br>优化前: 负责前端开发工作<br>优化后: <span style="color:#4ade80">主导企业级系统架构开发，优化首屏性能 35%</span></div>';
+    reply += '<div style="margin-top:6px;font-size:10px;color:rgba(148,163,184,0.3)">// API: POST /api/resume/analyze { "resume_text": "..." }</div>';
+
+    add(reply, 'bot');
+    busy = false; btn.disabled = false;
+  }
+
+  btn.addEventListener('click', send);
+  inp.addEventListener('keydown', function(e){if(e.key==='Enter')send()});
+})();
+
+// 岗位匹配 (Panel 1) - Chat + API
+(async function(){
+  var msgs = document.getElementById('jobChatMsgs');
+  var inp = document.getElementById('jobChatInput');
+  var cnt = document.getElementById('jobCount');
+  var btn = document.getElementById('jobChatSend');
+  if(!msgs || !inp || !btn) return;
+  var busy = false;
+
+  function add(t, type){var m=document.createElement('div');m.className='api-msg '+type;m.innerHTML=t;msgs.appendChild(m);msgs.scrollTop=msgs.scrollHeight}
+  function loading(show){if(show)msgs.innerHTML+='<div class="api-loading" id="jobLoad"><div class="d"></div><div class="d"></div><div class="d"></div></div>'; else{var l=document.getElementById('jobLoad');if(l)l.remove()}}
+
+  async function send(){
+    var t = inp.value.trim();
+    if(!t || busy) return;
+    busy = true; btn.disabled = true;
+    add(t, 'user'); inp.value = ''; if(cnt) cnt.textContent = '0'; if(cnt) cnt.textContent = '0';
+    loading(true);
+    await new Promise(function(r){setTimeout(r,1400)});
+    loading(false);
+
+    var lower = t.toLowerCase();
+    var jobs = [];
+    if(lower.includes('react') || lower.includes('vue') || lower.includes('前端')){
+      jobs.push({title:'高级前端工程师',company:'字节跳动 · 北京',pct:92,color:'#4ade80',cls:'high',
+        reason:'你的 React 经验与岗位要求高度吻合（92%），建议补充 Docker 和微服务经验',
+        tags:'<span class="tag have">React 92%</span><span class="tag have">TypeScript 85%</span><span class="tag miss">Docker ✗</span><span class="tag miss">微服务 ✗</span>'});
+      jobs.push({title:'AI 产品经理',company:'某 AI 独角兽 · 上海',pct:76,color:'#fbbf24',cls:'med',
+        reason:'产品思维和数据分析能力较强（76%），但缺少 AI 领域经验',
+        tags:'<span class="tag have">产品思维 88%</span><span class="tag have">数据分析 80%</span><span class="tag miss">AI 背景 ✗</span>'});
+      jobs.push({title:'数据分析师',company:'某头部电商 · 北京',pct:62,color:'#f87171',cls:'low',
+        reason:'SQL 和 Python 基础满足门槛（62%），缺少数据挖掘实战经验',
+        tags:'<span class="tag have">SQL 75%</span><span class="tag have">Python 70%</span><span class="tag miss">数据挖掘 ✗</span>'});
+    } else if(lower.includes('python') || lower.includes('数据')){
+      jobs.push({title:'数据分析师',company:'某头部电商 · 北京',pct:88,color:'#4ade80',cls:'high',
+        reason:'Python + 数据分析能力高度匹配',tags:'<span class="tag have">Python 90%</span><span class="tag have">SQL 85%</span>'});
+      jobs.push({title:'AI 产品经理',company:'某 AI 独角兽 · 上海',pct:72,color:'#fbbf24',cls:'med',
+        reason:'数据驱动产品思维吻合',tags:'<span class="tag have">数据分析 88%</span><span class="tag miss">产品经验 ✗</span>'});
+    } else {
+      jobs.push({title:'全栈开发工程师',company:'腾讯 · 深圳',pct:85,color:'#4ade80',cls:'high',
+        reason:'全栈技能与岗位匹配度较高',tags:'<span class="tag have">前端 85%</span><span class="tag have">后端 80%</span>'});
+      jobs.push({title:'后端开发工程师',company:'美团 · 北京',pct:73,color:'#fbbf24',cls:'med',
+        reason:'后端基础扎实，可补充微服务经验',tags:'<span class="tag have">Java 80%</span><span class="tag miss">微服务 ✗</span>'});
+    }
+
+    var reply = '<div style="margin-bottom:6px"><strong style="color:#a78bfa">POST /api/job/match</strong> → 匹配完成</div>';
+    reply += '<div style="font-size:10px;color:rgba(148,163,184,0.3);margin-bottom:8px">// 基于你的技能画像推荐</div>';
+    jobs.forEach(function(j,i){
+      reply += '<div style="padding:8px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);margin:4px 0;background:rgba(255,255,255,0.01)">';
+      reply += '<div style="display:flex;justify-content:space-between;align-items:center"><div><strong style="font-size:12px;color:rgba(255,255,255,0.7)">'+j.title+'</strong><br><span style="font-size:10px;color:rgba(148,163,184,0.4)">'+j.company+'</span></div>';
+      reply += '<div><span style="font-family:Orbitron,sans-serif;font-size:24px;font-weight:700;color:'+j.color+'">'+j.pct+'</span><span style="font-size:10px;color:'+j.color+'">%</span></div></div>';
+      reply += '<div style="font-size:10px;color:rgba(148,163,184,0.5);margin:4px 0"><strong>为什么匹配：</strong>'+j.reason+'</div>';
+      reply += '<div>'+j.tags+'</div></div>';
+    });
+    reply += '<div style="margin-top:6px;font-size:10px;color:rgba(148,163,184,0.3)">// API: POST /api/job/match { "skills": "...", "experience": "..." }</div>';
+
+    add(reply, 'bot');
+    busy = false; btn.disabled = false;
+  }
+
+  btn.addEventListener('click', send);
+  inp.addEventListener('keydown', function(e){if(e.key==='Enter')send()});
+})();
+
+// 面试模拟// 面试模拟 + AI 报告 (Panel 2) - Chat + API
+(async function(){
+  var msgs = document.getElementById('iMsgs');
+  var inp = document.getElementById('iInput');
+  var cnt = document.getElementById('iCount');
+  var btn = document.getElementById('iSend');
+  var sd = document.getElementById('iScore');
+  var iPhase = document.getElementById('iPhase');
+  var rPhase = document.getElementById('rPhase');
+  if(!msgs || !inp || !btn) return;
+
+  var qIdx = 0, tScore = 0;
+  var qs = [
+    {q:'请详细描述一个你解决的最复杂的技术问题，如何定位、分析和解决的？', kws:['定位','分析','方案','对比','解决','优化','重构','数据','性能','架构']},
+    {q:'你如何看待 React Server Components？解决了什么问题？', kws:['服务端','渲染','性能','SSR','流式','组件','数据','加载']},
+    {q:'设计一个高并发实时协作编辑系统，你会怎么架构？', kws:['WebSocket','CRDT','OT','冲突','并发','同步','实时','协作']},
+    {q:'你在项目中有过技术选型的经历吗？讲决策过程。', kws:['选型','对比','评估','权衡','团队','技术栈','方案','落地']},
+    {q:'如何设计一个前端监控系统？采集哪些指标？', kws:['性能','错误','监控','指标','采集','FP','FCP','LCP','埋点']}
+  ];
+
+  function add(t, type){var m=document.createElement('div');m.className='api-msg '+type;m.innerHTML=t;msgs.appendChild(m);msgs.scrollTop=msgs.scrollHeight}
+  function loading(show){if(show)msgs.innerHTML+='<div class="api-loading" id="iLoad"><div class="d"></div><div class="d"></div><div class="d"></div></div>'; else{var l=document.getElementById('iLoad');if(l)l.remove()}}
+
+  function showQ(){
+    if(qIdx>=qs.length){
+      add('🎉 面试结束！AI 正在生成评估报告...<br><span style="font-size:10px;color:rgba(148,163,184,0.3)">// API: POST /api/interview/report</span>','bot');
+      inp.disabled=true;btn.disabled=true;
+      setTimeout(showReport,1500);return}
+    add(qs[qIdx].q,'bot');if(sd)sd.textContent='第 '+(qIdx+1)+'/'+qs.length+' 题'}
+  function showReport(){
+    if(!rPhase||!iPhase)return;iPhase.style.display='none';rPhase.style.display='block';
+    var ss={expr:[50,78],logic:[55,82],tech:[40,65],comm:[52,80]};
+    Object.keys(ss).forEach(function(k){var el=document.getElementById('r'+k.charAt(0).toUpperCase()+k.slice(1));if(!el)return;var s=ss[k][0],e=ss[k][1],c=s;var iv=setInterval(function(){c+=Math.ceil((e-s)/30);if(c>e){c=e;clearInterval(iv)}el.textContent=c},25)})}
+
+  async function sendA(){
+    var t=inp.value.trim();if(!t||inp.disabled)return;
+    add(t,'user');inp.value='';if(cnt)cnt.textContent='0';loading(true);
+    await new Promise(function(r){setTimeout(r,800)});loading(false);
+    var kws=qs[qIdx]?qs[qIdx].kws:[];var mc=0;kws.forEach(function(k){if(t.toLowerCase().includes(k.toLowerCase()))mc++});
+    var ratio=mc/kws.length;var sc=0;
+    if(ratio>=0.8)sc=18+Math.floor(Math.random()*3);else if(ratio>=0.5)sc=12+Math.floor(Math.random()*6);else if(ratio>=0.2)sc=6+Math.floor(Math.random()*6);else sc=2+Math.floor(Math.random()*4);
+    tScore+=sc;
+    add('<span style="font-size:10px;color:rgba(148,163,184,0.3)">// API: POST /api/interview/evaluate → 得分 '+sc+'/20</span>','system');
+    qIdx++;if(sd)sd.textContent='第 '+(qIdx+1)+'/'+qs.length+' 题';setTimeout(showQ,600)
+  }
+  btn.addEventListener('click',sendA);
+  inp.addEventListener('keydown',function(e){if(e.key==='Enter')sendA()});
+
+  var rb=document.getElementById('rRestartBtn');
+  if(rb)rb.addEventListener('click',function(){
+    if(rPhase)rPhase.style.display='none';if(iPhase)iPhase.style.display='block';
+    msgs.innerHTML='<div class="api-msg bot">👋 欢迎来到 AI 模拟面试！我是你的面试官。请先做一下自我介绍，重点介绍你的技术栈和项目经验。</div>';
+    qIdx=0;tScore=0;inp.disabled=false;btn.disabled=false;
+    if(sd)sd.textContent='第 1/5 题';setTimeout(showQ,600)
+  });
+
+  qIdx=1;setTimeout(showQ,600);
+})();
+
+// === AI Chat Input: auto-resize + character count ===
+(function(){
+  var inputs = document.querySelectorAll('.api-chat-input textarea');
+  inputs.forEach(function(el){
+    el.addEventListener('input', function(){
+      // Auto resize
+      this.style.height = 'auto';
+      this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+      // Character count
+      var id = this.id;
+      var countEl = null;
+      if(id === 'resumeChatInput') countEl = document.getElementById('resumeCount');
+      else if(id === 'jobChatInput') countEl = document.getElementById('jobCount');
+      else if(id === 'iInput') countEl = document.getElementById('iCount');
+      if(countEl){
+        var len = this.value.length;
+        countEl.textContent = len;
+        countEl.classList.toggle('active', len > 0);
+      }
+    });
+    // Enter to send (prevent newline)
+    el.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' && !e.shiftKey){
+        e.preventDefault();
+        var id = this.id;
+        if(id === 'resumeChatInput') document.getElementById('resumeChatSend').click();
+        else if(id === 'jobChatInput') document.getElementById('jobChatSend').click();
+        else if(id === 'iInput') document.getElementById('iSend').click();
+      }
+    });
+  });
+})();</script>
+<script src="public/ai-model-switcher.js"></script>
+</body>
+</html>

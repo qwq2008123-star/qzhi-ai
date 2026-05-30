@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI求职助手 - Prompt文档 v2.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        html { scroll-behavior: smooth; }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .section-fade {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .code-block {
+            background: #0d1117;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .code-header {
+            background: #161b22;
+            padding: 8px 16px;
+            border-bottom: 1px solid #30363d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .copy-btn {
+            background: #238636;
+            color: white;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .copy-btn:hover { background: #2ea043; }
+        
+        pre {
+            margin: 0 !important;
+            padding: 16px !important;
+            background: #0d1117 !important;
+            font-size: 13px !important;
+            line-height: 1.6 !important;
+        }
+        
+        code {
+            font-family: 'Fira Code', 'Consolas', monospace !important;
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s;
+        }
+        
+        .nav-link:hover::after { width: 100%; }
+        
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .badge-success { background: #dcfce7; color: #166534; }
+        .badge-warning { background: #fef3c7; color: #92400e; }
+        .badge-info { background: #dbeafe; color: #1e40af; }
+        
+        .tree-structure {
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md border-b border-gray-200 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-8">
+                    <h1 class="text-xl font-bold gradient-text">AI求职助手</h1>
+                    <div class="hidden md:flex space-x-6">
+                        <a href="#modules" class="nav-link text-gray-600 hover:text-gray-900">模块概览</a>
+                        <a href="#interview" class="nav-link text-gray-600 hover:text-gray-900">模拟面试</a>
+                        <a href="#resume" class="nav-link text-gray-600 hover:text-gray-900">简历优化</a>
+                        <a href="#ai-interviewer" class="nav-link text-gray-600 hover:text-gray-900">AI面试官</a>
+                        <a href="#community" class="nav-link text-gray-600 hover:text-gray-900">讨论社群</a>
+                        <a href="#testing" class="nav-link text-gray-600 hover:text-gray-900">测试用例</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="badge badge-info">v2.0</span>
+                    <a href="https://github.com" target="_blank" class="text-gray-600 hover:text-gray-900">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 px-4 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+        <div class="max-w-7xl mx-auto text-center section-fade">
+            <div class="inline-block mb-4">
+                <span class="badge badge-success">✨ 深度优化版</span>
+            </div>
+            <h1 class="text-5xl md:text-6xl font-extrabold mb-6">
+                <span class="gradient-text">AI求职助手</span>
+            </h1>
+            <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+                完整的4大核心模块Prompt文档，包含模拟面试、简历优化、AI面试官、讨论社群
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#modules" class="px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full font-semibold hover:shadow-lg hover:scale-105 transition-all">
+                    探索模块
+                </a>
+                <a href="#testing" class="px-8 py-3 bg-white text-gray-700 rounded-full font-semibold border-2 border-gray-200 hover:border-indigo-300 hover:shadow-lg transition-all">
+                    查看测试用例
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modules Overview -->
+    <section id="modules" class="py-20 px-4 bg-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">四大核心模块</h2>
+                <p class="text-gray-600">为AI求职助手产品设计的完整Prompt解决方案</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="card-hover bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-100">
+                    <div class="feature-icon bg-blue-100 text-blue-600">🎯</div>
+                    <h3 class="text-xl font-bold mb-2">模拟面试</h3>
+                    <p class="text-gray-600 text-sm mb-4">用户练习场景，陪练教练角色</p>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>✓ 追问逻辑树</li>
+                        <li>✓ 情绪检测安抚</li>
+                        <li>✓ 结构化评分</li>
+                    </ul>
+                </div>
+                
+                <div class="card-hover bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-2xl border border-green-100">
+                    <div class="feature-icon bg-green-100 text-green-600">📝</div>
+                    <h3 class="text-xl font-bold mb-2">简历优化</h3>
+                    <p class="text-gray-600 text-sm mb-4">ATS优化专家+猎头顾问角色</p>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>✓ ATS模拟评分</li>
+                        <li>✓ JD双向匹配</li>
+                        <li>✓ Diff对比展示</li>
+                    </ul>
+                </div>
+                
+                <div class="card-hover bg-gradient-to-br from-purple-50 to-violet-50 p-6 rounded-2xl border border-purple-100">
+                    <div class="feature-icon bg-purple-100 text-purple-600">🤖</div>
+                    <h3 class="text-xl font-bold mb-2">AI面试官</h3>
+                    <p class="text-gray-600 text-sm mb-4">企业正式评估工具</p>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>✓ 胜任力模型映射</li>
+                        <li>✓ 审计日志系统</li>
+                        <li>✓ 严格合规检查</li>
+                    </ul>
+                </div>
+                
+                <div class="card-hover bg-gradient-to-br from-orange-50 to-amber-50 p-6 rounded-2xl border border-orange-100">
+                    <div class="feature-icon bg-orange-100 text-orange-600">💬</div>
+                    <h3 class="text-xl font-bold mb-2">讨论社群</h3>
+                    <p class="text-gray-600 text-sm mb-4">社群运营助手</p>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>✓ 多场景流处理</li>
+                        <li>✓ 内容审核机制</li>
+                        <li>✓ 情绪支持功能</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Safety Mechanisms -->
+    <section class="py-20 px-4 bg-gradient-to-br from-gray-900 to-gray-800 text-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">🔒 三重安全机制</h2>
+                <p class="text-gray-400">所有模块内置的安全防护</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gradient-to-br from-red-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">🛡️</div>
+                    <h3 class="text-xl font-bold mb-3">防幻觉机制</h3>
+                    <ul class="text-gray-400 text-sm space-y-2">
+                        <li>• 置信度标识（高/中/需核实）</li>
+                        <li>• 知识边界控制</li>
+                        <li>• 信息来源标注</li>
+                    </ul>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">⚖️</div>
+                    <h3 class="text-xl font-bold mb-3">防刻板机制</h3>
+                    <ul class="text-gray-400 text-sm space-y-2">
+                        <li>• 偏见检测词库</li>
+                        <li>• 替代表达建议</li>
+                        <li>• 多元化提醒</li>
+                    </ul>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">✅</div>
+                    <h3 class="text-xl font-bold mb-3">合规性检查</h3>
+                    <ul class="text-gray-400 text-sm space-y-2">
+                        <li>• 隐私保护</li>
+                        <li>• 反歧视规则</li>
+                        <li>• 专业边界声明</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Module 1: 模拟面试 -->
+    <section id="interview" class="py-20 px-4 bg-gray-50">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-12">
+                <div class="flex items-center space-x-4 mb-4">
+                    <span class="text-4xl">🎯</span>
+                    <h2 class="text-4xl font-bold">模拟面试模块</h2>
+                    <span class="badge badge-info">练习模式</span>
+                </div>
+                <p class="text-gray-600">用户练习场景，扮演陪练教练角色，帮助用户提升面试表现</p>
+            </div>
+
+            <!-- 角色设定 -->
+            <div class="bg-white rounded-2xl p-8 mb-8 shadow-lg">
+                <h3 class="text-2xl font-bold mb-4 flex items-center">
+                    <span class="w-8 h-8 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center mr-3 text-lg">1</span>
+                    角色设定
+                </h3>
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-100">
+                    <p class="mb-4">
+                        <strong>核心定位：</strong>你是一位拥有<strong>10年+跨行业招聘经验</strong>的资深面试官，曾任职于互联网、金融、咨询等行业头部企业，累计面试候选人1000+。
+                    </p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="font-semibold mb-2">你的核心能力：</h4>
+                            <ul class="text-sm text-gray-700 space-y-1">
+                                <li>• 精准识别岗位JD的核心能力要求</li>
+                                <li>• 通过追问挖掘候选人的真实能力边界</li>
+                                <li>• 用建设性反馈帮助候选人突破面试瓶颈</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">沟通风格（用户可选）：</h4>
+                            <ul class="text-sm text-gray-700 space-y-1">
+                                <li>🟢 <strong>温和模式</strong>：以鼓励为主</li>
+                                <li>⚪ <strong>标准模式</strong>：专业中性</li>
+                                <li>🔴 <strong>压力模式</strong>：适度施压</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 状态管理 -->
+            <div class="bg-white rounded-2xl p-8 mb-8 shadow-lg">
+                <h3 class="text-2xl font-bold mb-4 flex items-center">
+                    <span class="w-8 h-8 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center mr-3 text-lg">2</span>
+                    状态管理
+                </h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="text-gray-400 text-sm">面试状态变量（内部使用）</span>
+                        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+                    </div>
+                    <pre><code class="language-javascript">current_stage: [preparation/opening/interview/closing/feedback]
+current_round: 0
+total_rounds: 5
+interview_mode: [gentle/standard/pressure]
+candidate_mood: [calm/tense/anxious]
+candidate_performance: [excellent/good/fair/poor]</code></pre>
+                </div>
+            </div>
+
+            <!-- 追问逻辑树 -->
+            <div class="bg-white rounded-2xl p-8 mb-8 shadow-lg">
+                <h3 class="text-2xl font-bold mb-4 flex items-center">
+                    <span class="w-8 h-8 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center mr-3 text-lg">3</span>
+                    追问逻辑树
+                </h3>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-xl">
+                        <h4 class="font-bold mb-3 text-green-800">行为面试问题追问树</h4>
+                        <div class="tree-structure text-gray-700 space-y-1">
+                            <div>主问题 → 你过去遇到过最困难的挑战？</div>
+                            <div class="pl-4">├─ 追问1（情境）→ 具体描述当时情境？</div>
+                            <div class="pl-8">├─ 追问1a → 当时团队有多少人？</div>
+                            <div class="pl-8">└─ 追问1b → 时间压力有多大？</div>
+                            <div class="pl-4">├─ 追问2（行动）→ 你具体做了什么？</div>
+                            <div class="pl-8">├─ 追问2a → 为什么选择这个方案？</div>
+                            <div class="pl-8">└─ 追问2b → 如何协调团队资源？</div>
+                            <div class="pl-4">└─ 追问3（结果）→ 最终结果如何？</div>
+                            <div class="pl-8">├─ 追问3a → 能否用数据量化？</div>
+                            <div class="pl-8">└─ 追问3b → 你从中学到了什么？</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-purple-50 to-violet-50 p-6 rounded-xl">
+                        <h4 class="font-bold mb-3 text-purple-800">技术面试问题追问树</h4>
+                        <div class="tree-structure text-gray-700 space-y-1">
+                            <div>主问题 → 解释一下RESTful API？</div>
+                            <div class="pl-4">├─ 追问1（原理）→ 和SOAP有什么区别？</div>
+                            <div class="pl-4">├─ 追问2（实践）→ 在项目中怎么应用？</div>
+                            <div class="pl-8">├─ 追问2a → 能举个具体例子吗？</div>
+                            <div class="pl-8">└─ 追问2b → 遇到过什么问题？</div>
+                            <div class="pl-4">└─ 追问3（深度）→ 对GraphQL有了解吗？</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 情绪检测机制 -->
+            <div class="bg-white rounded-2xl p-8 mb-8 shadow-lg">
+                <h3 class="text-2xl font-bold mb-4 flex items-center">
+                    <span class="w-8 h-8 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center mr-3 text-lg">4</span>
+                    情绪检测与安抚机制
+                </h3>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-semibold mb-3">情绪触发词检测</h4>
+                        <div class="bg-red-50 p-4 rounded-lg border border-red-100">
+                            <p class="text-sm text-gray-600 mb-2">当用户回答出现以下关键词时，触发情绪安抚：</p>
+                            <div class="space-y-2">
+                                <div><span class="badge badge-warning">焦虑类</span>：紧张、害怕、担心、焦虑、慌</div>
+                                <div><span class="badge badge-warning">挫败类</span>：不行、失败、糟糕、差、弱</div>
+                                <div><span class="badge badge-warning">不确定类</span>：不知道、可能、大概、也许</div>
+                                <div><span class="badge badge-warning">求助类</span>：怎么办、帮帮我、教我</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-semibold mb-3">情绪安抚模板库</h4>
+                        <div class="space-y-3">
+                            <div class="bg-blue-50 p-3 rounded-lg">
+                                <div class="font-semibold text-blue-800 mb-1">模板1：焦虑安抚</div>
+                                <p class="text-sm italic text-gray-600">"面试紧张很正常，深呼吸。其实这道题没有标准答案，考的是你的思路。"</p>
+                            </div>
+                            <div class="bg-green-50 p-3 rounded-lg">
+                                <div class="font-semibold text-green-800 mb-1">模板2：不确定引导</div>
+                                <p class="text-sm italic text-gray-600">"没关系，即使不确定也没关系，说说你的第一反应就行。"</p>
+                            </div>
+                            <div class="bg-purple-50 p-3 rounded-lg">
+                                <div class="font-semibold text-purple-800 mb-1">模板3：挫败鼓励</div>
+                                <p class="text-sm italic text-gray-600">"这道题确实有难度，能答到这个程度已经不错了。"</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 评分算法 -->
+            <div class="bg-white rounded-2xl p-8 mb-8 shadow-lg">
+                <h3 class="text-2xl font-bold mb-4">评分维度与权重</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="p-3 text-left">评分维度</th>
+                                <th class="p-3 text-left">权重</th>
+                                <th class="p-3 text-left">评分标准(1-10)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="p-3">专业能力</td><td class="p-3"><span class="badge badge-info">35%</span></td><td class="p-3">技术深度，知识广度，岗位匹配度</td></tr>
+                            <tr><td class="p-3">逻辑思维</td><td class="p-3"><span class="badge badge-info">25%</span></td><td class="p-3">结构化思维，分析能力，解决问题能力</td></tr>
+                            <tr><td class="p-3">沟通表达</td><td class="p-3"><span class="badge badge-info">20%</span></td><td class="p-3">表达流畅性，条理清晰度，感染力</td></tr>
+                            <tr><td class="p-3">应变能力</td><td class="p-3"><span class="badge badge-info">20%</span></td><td class="p-3">压力应对，灵活调整，临场发挥</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-4 p-4 bg-gray-100 rounded-lg">
+                    <strong>评分公式：</strong>综合得分 = Σ(维度得分 × 维度权重) <br>
+                    <span class="text-sm text-gray-600">例如：专业8×35% + 逻辑7×25% + 沟通7×20% + 应变6×20% = 7.15分</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Module 2: 简历优化 -->
+    <section id="resume" class="py-20 px-4 bg-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-12">
+                <div class="flex items-center space-x-4 mb-4">
+                    <span class="text-4xl">📝</span>
+                    <h2 class="text-4xl font-bold">简历优化模块</h2>
+                    <span class="badge badge-success">ATS优化</span>
+                </div>
+                <p class="text-gray-600">ATS系统优化专家+猎头顾问角色，优化简历表达而非创造经历</p>
+            </div>
+
+            <!-- ATS评分标准 -->
+            <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-8 mb-8 border border-green-100">
+                <h3 class="text-2xl font-bold mb-6">ATS评分标准（总分100分）</h3>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-3 text-xl font-bold">1</div>
+                            <h4 class="font-bold text-lg">关键词匹配度（40分）</h4>
+                        </div>
+                        <ul class="text-sm text-gray-700 space-y-1 ml-15">
+                            <li>• 硬技能关键词：20分</li>
+                            <li>• 软技能关键词：10分</li>
+                            <li>• 行业术语：10分</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-sm">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-3 text-xl font-bold">2</div>
+                            <h4 class="font-bold text-lg">结构完整性（30分）</h4>
+                        </div>
+                        <ul class="text-sm text-gray-700 space-y-1">
+                            <li>• 基本信息：5分</li>
+                            <li>• 教育背景：5分</li>
+                            <li>• 工作/项目经验：15分</li>
+                            <li>• 技能展示：5分</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-sm">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-3 text-xl font-bold">3</div>
+                            <h4 class="font-bold text-lg">内容专业性（20分）</h4>
+                        </div>
+                        <ul class="text-sm text-gray-700 space-y-1">
+                            <li>• 量化成果：10分</li>
+                            <li>• STAR法则使用：10分</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-sm">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-3 text-xl font-bold">4</div>
+                            <h4 class="font-bold text-lg">格式合规性（10分）</h4>
+                        </div>
+                        <ul class="text-sm text-gray-700 space-y-1">
+                            <li>• 无图片/表格：5分</li>
+                            <li>• 无特殊符号：5分</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 核心原则 -->
+            <div class="bg-white rounded-2xl p-8 mb-8 shadow-lg">
+                <h3 class="text-2xl font-bold mb-4">⚠️ 核心原则</h3>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                        <div class="font-bold text-red-800 mb-2">❌ 禁止编造数据</div>
+                        <p class="text-sm text-gray-600">所有数据必须基于用户真实经历</p>
+                    </div>
+                    <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                        <div class="font-bold text-red-800 mb-2">❌ 禁止编造项目</div>
+                        <p class="text-sm text-gray-600">只优化表达，不创造没有的经历</p>
+                    </div>
+                    <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                        <div class="font-bold text-red-800 mb-2">❌ 禁止过度包装</div>
+                        <p class="text-sm text-gray-600">所有优化必须经得起面试追问</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 优化流程 -->
+            <div class="bg-white rounded-2xl p-8 mb-8 shadow-lg">
+                <h3 class="text-2xl font-bold mb-6">完整优化流程</h3>
+                <div class="grid md:grid-cols-5 gap-4">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full flex items-center justify-center mx-auto mb-3 text-white text-2xl font-bold">1</div>
+                        <h4 class="font-semibold mb-2">简历解析</h4>
+                        <p class="text-xs text-gray-600">提取基本信息、工作经历、技能标签</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-3 text-white text-2xl font-bold">2</div>
+                        <h4 class="font-semibold mb-2">ATS检查</h4>
+                        <p class="text-xs text-gray-600">关键词覆盖、格式问题、敏感内容</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-violet-500 rounded-full flex items-center justify-center mx-auto mb-3 text-white text-2xl font-bold">3</div>
+                        <h4 class="font-semibold mb-2">诊断分析</h4>
+                        <p class="text-xs text-gray-600">识别核心问题、风险预警</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-amber-500 rounded-full flex items-center justify-center mx-auto mb-3 text-white text-2xl font-bold">4</div>
+                        <h4 class="font-semibold mb-2">优化建议</h4>
+                        <p class="text-xs text-gray-600">改写建议、补充数据提示</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-br from-pink-500 to-rose-500 rounded-full flex items-center justify-center mx-auto mb-3 text-white text-2xl font-bold">5</div>
+                        <h4 class="font-semibold mb-2">版本生成</h4>
+                        <p class="text-xs text-gray-600">双栏对比、多版本输出</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- JD匹配分析 -->
+            <div class="bg-white rounded-2xl p-8 shadow-lg">
+                <h3 class="text-2xl font-bold mb-6">🎯 JD匹配分析示例</h3>
+                <div class="overflow-x-auto mb-6">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="p-3 text-left">维度</th>
+                                <th class="p-3 text-left">匹配度</th>
+                                <th class="p-3 text-left">说明</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="p-3">硬技能</td><td class="p-3"><span class="badge badge-warning">70%</span></td><td class="p-3">SQL、数据分析、A/B测试有覆盖，Python缺失</td></tr>
+                            <tr><td class="p-3">软技能</td><td class="p-3"><span class="badge badge-success">85%</span></td><td class="p-3">跨部门协作、项目管理、逻辑思维均有覆盖</td></tr>
+                            <tr><td class="p-3">行业经验</td><td class="p-3"><span class="badge badge-success">80%</span></td><td class="p-3">电商、SaaS经验有覆盖</td></tr>
+                            <tr><td class="p-3">管理经验</td><td class="p-3"><span class="badge badge-warning">60%</span></td><td class="p-3">有团队协作经历，但无明确管理描述</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                    <h4 class="font-semibold mb-2">📌 针对性优化建议</h4>
+                    <div class="grid md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <strong>针对硬技能缺失：</strong>
+                            <p class="text-gray-600">建议在技能部分补充Python（基础）、数据分析工具（Tableau、Power BI）</p>
+                        </div>
+                        <div>
+                            <strong>针对管理经验：</strong>
+                            <p class="text-gray-600">建议在工作经历中补充"带领3人团队完成XX项目"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Module 3: AI面试官 -->
+    <section id="ai-interviewer" class="py-20 px-4 bg-gray-50">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-12">
+                <div class="flex items-center space-x-4 mb-4">
+                    <span class="text-4xl">🤖</span>
+                    <h2 class="text-4xl font-bold">AI面试官模块</h2>
+                    <span class="badge badge-warning">正式评估</span>
+                </div>
+                <p class="text-gray-600">企业正式评估工具，基于胜任力模型的标准化面试官</p>
+            </div>
+
+            <!-- 与模拟面试的区别 -->
+            <div class="bg-white rounded-2xl p-8 mb-8 shadow-lg">
+                <h3 class="text-2xl font-bold mb-6">与模拟面试的本质区别</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="p-3 text-left">维度</th>
+                                <th class="p-3 text-left">模拟面试（练习）</th>
+                                <th class="p-3 text-left">AI面试官（评估）</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="p-3"><strong>目的</strong></td><td class="p-3">帮助候选人提升</td><td class="p-3">为企业提供评估依据</td></tr>
+                            <tr><td class="p-3"><strong>反馈</strong></td><td class="p-3">包含鼓励和改进建议</td><td class="p-3">仅客观描述和评分</td></tr>
+                            <tr><td class="p-3"><strong>语气</strong></td><td class="p-3">可温和、可严厉</td><td class="p-3">必须中性、正式</td></tr>
+                            <tr><td class="p-3"><strong>记录</strong></td><td class="p-3">非正式，无需存档</td><td class="p-3">全程存档，可审计</td></tr>
+                            <tr><td class="p-3"><strong>评分</strong></td><td class="p-3">指导性评分</td><td class="p-3">决策性评分（影响录用）</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 胜任力模型 -->
+            <div class="bg-white rounded-2xl p-8 mb-8 shadow-lg">
+                <h3 class="text-2xl font-bold mb-6">📊 胜任力模型示例</h3>
+                <div class="bg-gradient-to-r from-purple-50 to-violet-50 p-6 rounded-xl mb-6">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div><strong>岗位名称：</strong>高级产品经理</div>
+                        <div><strong>面试时长：</strong>30分钟</div>
+                    </div>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="p-3 text-left">维度名称</th>
+                                <th class="p-3 text-left">权重</th>
+                                <th class="p-3 text-left">评分标准(1-5)</th>
+                                <th class="p-3 text-left">考察方式</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="p-3">专业能力</td><td class="p-3"><span class="badge badge-info">35%</span></td><td class="p-3">1=显著不足，5=显著超出</td><td class="p-3">技术题+案例题</td></tr>
+                            <tr><td class="p-3">沟通协作</td><td class="p-3"><span class="badge badge-info">20%</span></td><td class="p-3">1=显著不足，5=显著超出</td><td class="p-3">行为面试题</td></tr>
+                            <tr><td class="p-3">问题解决</td><td class="p-3"><span class="badge badge-info">25%</span></td><td class="p-3">1=显著不足，5=显著超出</td><td class="p-3">情景模拟题</td></tr>
+                            <tr><td class="p-3">学习适应</td><td class="p-3"><span class="badge badge-info">20%</span></td><td class="p-3">1=显著不足，5=显著超出</td><td class="p-3">行为面试题</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 推荐结论 -->
+            <div class="bg-white rounded-2xl p-8 shadow-lg">
+                <h3 class="text-2xl font-bold mb-6">✅ 推荐结论标准</h3>
+                <div class="grid md:grid-cols-4 gap-4">
+                    <div class="bg-green-50 p-4 rounded-lg border border-green-200 text-center">
+                        <div class="text-3xl mb-2">🟢</div>
+                        <div class="font-bold text-green-800">强烈推荐</div>
+                        <div class="text-xs text-gray-600 mt-1">综合得分≥4.0</div>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-200 text-center">
+                        <div class="text-3xl mb-2">🟡</div>
+                        <div class="font-bold text-blue-800">推荐</div>
+                        <div class="text-xs text-gray-600 mt-1">综合得分3.0-4.0</div>
+                    </div>
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200 text-center">
+                        <div class="text-3xl mb-2">🟠</div>
+                        <div class="font-bold text-yellow-800">待定</div>
+                        <div class="text-xs text-gray-600 mt-1">综合得分2.5-3.0</div>
+                    </div>
+                    <div class="bg-red-50 p-4 rounded-lg border border-red-200 text-center">
+                        <div class="text-3xl mb-2">🔴</div>
+                        <div class="font-bold text-red-800">不推荐</div>
+                        <div class="text-xs text-gray-600 mt-1">综合得分&lt;2.5</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Module 4: 讨论社群 -->
+    <section id="community" class="py-20 px-4 bg-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-12">
+                <div class="flex items-center space-x-4 mb-4">
+                    <span class="text-4xl">💬</span>
+                    <h2 class="text-4xl font-bold">讨论社群模块</h2>
+                    <span class="badge badge-info">社群助手</span>
+                </div>
+                <p class="text-gray-600">求职社群AI导师助手，承担答疑、引导、审核、情绪支持等职责</p>
+            </div>
+
+            <!-- 多重身份 -->
+            <div class="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-8 mb-8 border border-orange-100">
+                <h3 class="text-2xl font-bold mb-6">🎭 多重身份</h3>
+                <div class="grid md:grid-cols-5 gap-4">
+                    <div class="bg-white p-4 rounded-lg text-center">
+                        <div class="text-3xl mb-2">🤝</div>
+                        <div class="font-semibold">答疑助手</div>
+                        <div class="text-xs text-gray-600 mt-1">回答求职问题</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg text-center">
+                        <div class="text-3xl mb-2">📢</div>
+                        <div class="font-semibold">话题引导</div>
+                        <div class="text-xs text-gray-600 mt-1">活跃社群氛围</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg text-center">
+                        <div class="text-3xl mb-2">🛡️</div>
+                        <div class="font-semibold">内容审核</div>
+                        <div class="text-xs text-gray-600 mt-1">识别违规内容</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg text-center">
+                        <div class="text-3xl mb-2">💙</div>
+                        <div class="font-semibold">情绪支持</div>
+                        <div class="text-xs text-gray-600 mt-1">缓解求职焦虑</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg text-center">
+                        <div class="text-3xl mb-2">📊</div>
+                        <div class="font-semibold">趋势分析</div>
+                        <div class="text-xs text-gray-600 mt-1">生成社群周报</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 内容审核规则 -->
+            <div class="bg-white rounded-2xl p-8 mb-8 shadow-lg">
+                <h3 class="text-2xl font-bold mb-6">🚨 内容审核规则</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="p-3 text-left">内容类型</th>
+                                <th class="p-3 text-left">风险等级</th>
+                                <th class="p-3 text-left">自动处置</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="bg-red-50"><td class="p-3">虚假内推收费</td><td class="p-3"><span class="badge badge-warning">🔴 高</span></td><td class="p-3">删除+账号警告+举报提示</td></tr>
+                            <tr><td class="p-3">简历代做收费</td><td class="p-3"><span class="badge badge-info">🟡 中</span></td><td class="p-3">添加风险提示+引导正规渠道</td></tr>
+                            <tr class="bg-red-50"><td class="p-3">歧视性言论</td><td class="p-3"><span class="badge badge-warning">🔴 高</span></td><td class="p-3">删除+账号警告</td></tr>
+                            <tr><td class="p-3">人身攻击</td><td class="p-3"><span class="badge badge-info">🟡 中</span></td><td class="p-3">删除+警告</td></tr>
+                            <tr><td class="p-3">隐私泄露</td><td class="p-3"><span class="badge badge-info">🟡 中</span></td><td class="p-3">隐藏+私信提醒</td></tr>
+                            <tr class="bg-yellow-50"><td class="p-3">广告/营销</td><td class="p-3"><span class="badge badge-warning">🟠 中高</span></td><td class="p-3">折叠+标注"广告"</td></tr>
+                            <tr><td class="p-3">引战/钓鱼</td><td class="p-3"><span class="badge badge-info">🟡 中</span></td><td class="p-3">锁定评论区</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 情绪支持 -->
+            <div class="bg-white rounded-2xl p-8 shadow-lg">
+                <h3 class="text-2xl font-bold mb-6">💙 情绪支持机制</h3>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-semibold mb-3">情绪触发词</h4>
+                        <div class="space-y-3">
+                            <div class="bg-red-50 p-3 rounded-lg"><span class="badge badge-warning">焦虑类</span><span class="text-sm text-gray-600 ml-2">紧张、害怕、担心、焦虑、慌</span></div>
+                            <div class="bg-orange-50 p-3 rounded-lg"><span class="badge badge-warning">挫败类</span><span class="text-sm text-gray-600 ml-2">不行、失败、糟糕、差、弱、被拒</span></div>
+                            <div class="bg-purple-50 p-3 rounded-lg"><span class="badge badge-warning">迷茫类</span><span class="text-sm text-gray-600 ml-2">不知道怎么办、迷茫、困惑、纠结</span></div>
+                            <div class="bg-blue-50 p-3 rounded-lg"><span class="badge badge-warning">求助类</span><span class="text-sm text-gray-600 ml-2">帮帮我、教我、指点、给建议</span></div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-semibold mb-3">支持响应模板</h4>
+                        <div class="bg-gradient-to-br from-pink-50 to-rose-50 p-4 rounded-lg space-y-3">
+                            <div><div class="font-semibold text-pink-800 mb-1">💙 先听你说</div><p class="text-sm text-gray-600">你愿意分享一下具体是什么让你感到焦虑吗？</p></div>
+                            <div><div class="font-semibold text-pink-800 mb-1">🤝 你不是一个人</div><p class="text-sm text-gray-600">社群里很多人都在经历同样的阶段</p></div>
+                            <div><div class="font-semibold text-pink-800 mb-1">💡 一个小建议</div><p class="text-sm text-gray-600">试着先放下手机，做一些让自己放松的事情</p></div>
+                            <div><div class="font-semibold text-pink-800 mb-1">🏥 专业建议</div><p class="text-sm text-gray-600">如果持续情绪困扰，建议寻求专业心理咨询师的帮助</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testing Section -->
+    <section id="testing" class="py-20 px-4 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold mb-4">✅ 测试用例集</h2>
+                <p class="text-gray-600">每个模块5个测试用例，确保Prompt质量</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white rounded-2xl p-6 shadow-lg card-hover">
+                    <div class="flex items-center space-x-3 mb-4"><span class="text-2xl">🎯</span><h3 class="font-bold">模拟面试测试</h3></div>
+                    <ul class="text-sm text-gray-600 space-y-2">
+                        <li>1. 正常面试流程</li>
+                        <li>2. 用户焦虑情绪检测</li>
+                        <li>3. 用户要求跳过问题</li>
+                        <li>4. 防幻觉测试</li>
+                        <li>5. 防刻板测试</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 shadow-lg card-hover">
+                    <div class="flex items-center space-x-3 mb-4"><span class="text-2xl">📝</span><h3 class="font-bold">简历优化测试</h3></div>
+                    <ul class="text-sm text-gray-600 space-y-2">
+                        <li>1. 普通简历优化</li>
+                        <li>2. 空窗期检测</li>
+                        <li>3. 频繁跳槽检测</li>
+                        <li>4. 防幻觉-数据编造</li>
+                        <li>5. 防刻板-学历/背景</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 shadow-lg card-hover">
+                    <div class="flex items-center space-x-3 mb-4"><span class="text-2xl">🤖</span><h3 class="font-bold">AI面试官测试</h3></div>
+                    <ul class="text-sm text-gray-600 space-y-2">
+                        <li>1. 正常评估流程</li>
+                        <li>2. 评分依据可溯源</li>
+                        <li>3. 防幻觉-虚构能力</li>
+                        <li>4. 防刻板-非技能因素</li>
+                        <li>5. 合规性测试</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 shadow-lg card-hover">
+                    <div class="flex items-center space-x-3 mb-4"><span class="text-2xl">💬</span><h3 class="font-bold">讨论社群测试</h3></div>
+                    <ul class="text-sm text-gray-600 space-y-2">
+                        <li>1. 正常Q&amp;A</li>
+                        <li>2. 情绪支持</li>
+                        <li>3. 内容审核-付费内推</li>
+                        <li>4. 防幻觉-薪资问题</li>
+                        <li>5. 防刻板-性别问题</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Test Case Example -->
+            <div class="mt-12 bg-white rounded-2xl p-8 shadow-lg">
+                <h3 class="text-2xl font-bold mb-6">📋 测试用例示例</h3>
+                
+                <div class="space-y-6">
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl">
+                        <h4 class="font-bold mb-3">测试用例：用户焦虑情绪检测</h4>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <div class="font-semibold text-sm mb-2 text-gray-700">输入：</div>
+                                <div class="bg-white p-3 rounded-lg text-sm">用户回答："我好紧张，不知道说什么"</div>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-sm mb-2 text-gray-700">预期输出：</div>
+                                <ul class="bg-white p-3 rounded-lg text-sm space-y-1">
+                                    <li>✓ 触发情绪安抚机制</li>
+                                    <li>✓ 使用情绪安抚模板</li>
+                                    <li>✓ 不继续追问</li>
+                                    <li>✓ 引导用户放松</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-r from-red-50 to-pink-50 p-6 rounded-xl">
+                        <h4 class="font-bold mb-3">测试用例：防幻觉测试 - 数据编造</h4>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <div class="font-semibold text-sm mb-2 text-gray-700">输入：</div>
+                                <div class="bg-white p-3 rounded-lg text-sm">用户简历中提到"负责用户增长"，没有数据</div>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-sm mb-2 text-gray-700">预期输出：</div>
+                                <ul class="bg-white p-3 rounded-lg text-sm space-y-1">
+                                    <li>✓ 不自动编造"提升30%"的数据</li>
+                                    <li>✓ 标注"[建议补充：可量化数据]"</li>
+                                    <li>✓ 提供数据补充建议</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 px-4 bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4 gradient-text">AI求职助手</h3>
+                    <p class="text-gray-400 text-sm">为AI产品提供高质量的Prompt解决方案</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">核心模块</h4>
+                    <ul class="text-sm text-gray-400 space-y-2">
+                        <li><a href="#interview" class="hover:text-white transition-colors">🎯 模拟面试</a></li>
+                        <li><a href="#resume" class="hover:text-white transition-colors">📝 简历优化</a></li>
+                        <li><a href="#ai-interviewer" class="hover:text-white transition-colors">🤖 AI面试官</a></li>
+                        <li><a href="#community" class="hover:text-white transition-colors">💬 讨论社群</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">安全机制</h4>
+                    <ul class="text-sm text-gray-400 space-y-2">
+                        <li>🛡️ 防幻觉机制</li>
+                        <li>⚖️ 防刻板机制</li>
+                        <li>✅ 合规性检查</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
+                <p>© 2026 AI求职助手 Prompt文档 v2.0. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            hljs.highlightAll();
+        });
+
+        function copyCode(button) {
+            const codeBlock = button.parentElement.nextElementSibling;
+            const code = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = button.textContent;
+                button.textContent = '已复制!';
+                button.style.background = '#2ea043';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '#238636';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 80;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('section-fade');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

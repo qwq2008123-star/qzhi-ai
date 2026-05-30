@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 简历分析 · 智职AI</title>
+<script src="https://cdn.tailwindcss.com">
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--core-size:600px;--glow-indigo:rgba(99,102,241,0.6);--glow-purple:rgba(139,92,246,0.6);--glow-cyan:rgba(6,182,212,0.6)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#050510;color:#fff;overflow-x:hidden;-webkit-font-smoothing:antialiased;min-height:100vh}
+h1,h2,h3,h4{font-family:'Orbitron',sans-serif}
+
+/* Space background */
+.space-bg{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at 15% 40%,rgba(30,20,100,0.5) 0%,transparent 55%),radial-gradient(ellipse at 85% 25%,rgba(80,10,120,0.35) 0%,transparent 50%),radial-gradient(ellipse at 45% 75%,rgba(10,50,100,0.4) 0%,transparent 50%),radial-gradient(ellipse at 55% 45%,rgba(40,10,80,0.5) 0%,transparent 60%),radial-gradient(ellipse at 50% 50%,rgba(15,5,50,0.9) 0%,transparent 70%),#050510}
+.nebula{position:fixed;border-radius:50%;pointer-events:none;z-index:1;filter:blur(100px);mix-blend-mode:screen}
+.n1{width:700px;height:700px;top:-15%;left:5%;background:radial-gradient(circle,rgba(99,102,241,0.18) 0%,transparent 70%);animation:nd1 25s ease-in-out infinite}
+.n2{width:500px;height:500px;bottom:-10%;right:5%;background:radial-gradient(circle,rgba(139,92,246,0.15) 0%,transparent 70%);animation:nd2 22s ease-in-out infinite}
+@keyframes nd1{0%,100%{transform:translate(0,0)}50%{transform:translate(60px,-80px)}}
+@keyframes nd2{0%,100%{transform:translate(0,0)}50%{transform:translate(-50px,60px)}}
+.grid-overlay{position:fixed;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(99,102,241,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.02) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at center,black 25%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at center,black 25%,transparent 70%)}
+.vignette{position:fixed;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse at center,transparent 40%,rgba(5,5,16,0.5) 100%)}
+
+/* Nav */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(5,5,16,0.7);backdrop-filter:blur(28px) saturate(1.6);-webkit-backdrop-filter:blur(28px) saturate(1.6);border-bottom:1px solid rgba(255,255,255,0.04);height:60px;display:flex;align-items:center;padding:0 40px}
+.nav-logo{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:800;background:linear-gradient(135deg,#fff,#a5b4fc,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:1px;text-decoration:none}
+.nav-back{font-size:12px;color:rgba(255,255,255,0.4);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color 0.3s;margin-right:20px}
+.nav-back:hover{color:rgba(255,255,255,0.8)}
+.nav-links{display:flex;gap:24px;margin-left:auto}
+.nav-links a{font-size:12px;font-weight:500;color:rgba(255,255,255,0.4);text-decoration:none;transition:color 0.3s}
+.nav-links a:hover{color:rgba(255,255,255,0.8)}
+.nav-links a.active{color:#a78bfa}
+
+/* Hero */
+.hero{position:relative;z-index:10;padding:100px 0 60px;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px 6px 8px;border-radius:100px;border:1px solid rgba(99,102,241,0.15);background:rgba(99,102,241,0.06);font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:24px}
+.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;animation:dotPulse 2s ease-in-out infinite}
+@keyframes dotPulse{0%,100%{opacity:1}50%{opacity:0.5;transform:scale(1.3)}}
+.hero h1{font-size:clamp(32px,4vw,48px);font-weight:900;line-height:1.1;margin-bottom:16px;letter-spacing:-0.5px}
+.hero h1 .grad{background:linear-gradient(135deg,#fff,#e0e7ff,#c4b5fd,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:15px;color:rgba(255,255,255,0.45);max-width:560px;margin:0 auto 30px;line-height:1.7}
+
+/* Main Layout */
+.main-layout{position:relative;z-index:10;max-width:1440px;margin:0 auto;padding:0 40px 80px;display:grid;grid-template-columns:1.2fr 0.8fr;gap:32px;align-items:start}
+
+/* Chat box */
+.chat-box{background:rgba(12,8,35,0.75);backdrop-filter:blur(32px) saturate(1.5);-webkit-backdrop-filter:blur(32px) saturate(1.5);border:1px solid rgba(139,92,246,0.1);border-radius:20px;overflow:hidden;box-shadow:0 8px 48px rgba(0,0,0,0.45),0 0 0 1px rgba(139,92,246,0.05),0 0 100px rgba(99,102,241,0.04);transition:all 0.5s cubic-bezier(0.4,0,0.2,1)}
+.chat-box:hover{border-color:rgba(139,92,246,0.2);box-shadow:0 16px 70px rgba(0,0,0,0.5),0 0 0 1px rgba(139,92,246,0.1),0 0 120px rgba(99,102,241,0.06)}
+.chat-header{display:flex;align-items:center;gap:12px;padding:16px 24px;border-bottom:1px solid rgba(139,92,246,0.08);background:linear-gradient(135deg,rgba(25,15,55,0.8),rgba(12,8,35,0.6));backdrop-filter:blur(20px) saturate(1.3)}
+.chat-header .icon{font-size:20px}
+.chat-header .name{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:#a78bfa;text-shadow:0 0 30px rgba(139,92,246,0.3)}
+.chat-header .status{margin-left:auto;font-size:10px;color:rgba(148,163,184,0.25);font-family:'Orbitron',sans-serif;letter-spacing:0.5px}
+.chat-header .api-tag{padding:4px 12px;border-radius:12px;font-size:10px;background:rgba(99,102,241,0.12);color:#c4b5fd;border:1px solid rgba(99,102,241,0.1);font-weight:600;letter-spacing:0.3px}
+.chat-msgs{height:420px;overflow-y:auto;padding:24px 28px;display:flex;flex-direction:column;gap:14px;scroll-behavior:smooth}
+.chat-msgs::-webkit-scrollbar{width:4px}
+.chat-msgs::-webkit-scrollbar-track{background:transparent}
+.chat-msgs::-webkit-scrollbar-thumb{background:rgba(139,92,246,0.15);border-radius:2px}
+.msg{max-width:90%;padding:14px 20px;border-radius:16px;font-size:14px;line-height:1.75;animation:msgIn 0.35s ease-out}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.msg.bot{align-self:flex-start;background:rgba(139,92,246,0.07);border:1px solid rgba(139,92,246,0.06);border-bottom-left-radius:4px;color:rgba(255,255,255,0.88);backdrop-filter:blur(8px)}
+.msg.user{align-self:flex-end;background:rgba(99,102,241,0.05);border:1px solid rgba(99,102,241,0.06);border-bottom-right-radius:4px;color:rgba(255,255,255,0.88);backdrop-filter:blur(8px)}
+.msg.system{align-self:center;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.08);border-radius:20px;font-size:12px;color:#4ade80;text-align:center;max-width:80%}
+.msg .hl{color:#a78bfa;font-weight:600}.msg .sc{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:700;background:linear-gradient(135deg,#fff,#a5b4fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.msg .tag{display:inline-block;padding:2px 10px;border-radius:12px;font-size:11px;margin:1px 3px}
+.msg .tag.miss{background:rgba(239,68,68,0.1);color:#f87171;border:1px solid rgba(239,68,68,0.1)}
+.msg .tag.have{background:rgba(34,197,94,0.1);color:#4ade80;border:1px solid rgba(34,197,94,0.1)}
+.loading{display:flex;gap:5px;align-items:center;padding:14px 22px;align-self:flex-start;border-radius:16px;background:rgba(139,92,246,0.07);border:1px solid rgba(139,92,246,0.05);border-bottom-left-radius:4px}
+.loading .d{width:6px;height:6px;border-radius:50%;background:rgba(129,140,248,0.4);animation:dot 1.4s ease-in-out infinite}
+.loading .d:nth-child(2){animation-delay:0.2s}
+.loading .d:nth-child(3){animation-delay:0.4s}
+@keyframes dot{0%,80%,100%{transform:scale(0.6);opacity:0.3}40%{transform:scale(1);opacity:0.8}}
+
+/* Input area */
+.chat-input{display:flex;align-items:center;gap:12px;padding:14px 20px 16px;border-top:2px solid rgba(139,92,246,0.08);background:linear-gradient(180deg,rgba(15,10,40,0.7),rgba(8,4,25,0.9));backdrop-filter:blur(24px) saturate(1.3);position:relative}
+.chat-input::before{content:'';position:absolute;top:-2px;left:5%;right:5%;height:2px;background:linear-gradient(90deg,transparent,rgba(139,92,246,0.25),rgba(99,102,241,0.2),rgba(6,182,212,0.15),transparent);pointer-events:none;filter:blur(3px)}
+.input-wrap{flex:1;position:relative}
+.input-wrap textarea{width:100%;background:rgba(0,0,0,0.2);border:1px solid rgba(139,92,246,0.06);border-radius:16px;padding:14px 18px;font-size:14px;color:rgba(255,255,255,0.9);outline:none;font-family:'Plus Jakarta Sans',sans-serif;transition:all 0.4s cubic-bezier(0.4,0,0.2,1);box-shadow:inset 0 4px 20px rgba(0,0,0,0.25);resize:none;min-height:50px;max-height:130px;line-height:1.65}
+.input-wrap textarea:focus{border-color:rgba(139,92,246,0.25);background:rgba(99,102,241,0.03);box-shadow:0 0 0 4px rgba(139,92,246,0.06),0 0 30px rgba(99,102,241,0.03),inset 0 4px 20px rgba(0,0,0,0.25);animation:breath 3s ease-in-out infinite}
+.input-wrap textarea::placeholder{color:rgba(148,163,184,0.15);font-weight:300;font-style:italic}
+@keyframes breath{0%,100%{border-color:rgba(139,92,246,0.2);box-shadow:0 0 0 4px rgba(139,92,246,0.04),inset 0 4px 20px rgba(0,0,0,0.25)}50%{border-color:rgba(139,92,246,0.3);box-shadow:0 0 0 6px rgba(139,92,246,0.08),0 0 40px rgba(99,102,241,0.04),inset 0 4px 20px rgba(0,0,0,0.25)}}
+.char-count{font-size:11px;color:rgba(148,163,184,0.15);font-family:'Orbitron',sans-serif;letter-spacing:0.8px;transition:all 0.3s;white-space:nowrap;padding:3px 10px;background:rgba(0,0,0,0.12);border-radius:8px;border:1px solid rgba(148,163,184,0.03)}
+.char-count.active{color:#c4b5fd;border-color:rgba(139,92,246,0.08);background:rgba(99,102,241,0.04);box-shadow:0 0 20px rgba(99,102,241,0.02)}
+.btn-send{width:48px;height:48px;border-radius:16px;border:none;background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;transition:all 0.35s cubic-bezier(0.4,0,0.2,1);flex-shrink:0;box-shadow:0 4px 24px rgba(99,102,241,0.3),inset 0 1px 0 rgba(255,255,255,0.15);position:relative;overflow:hidden}
+.btn-send::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 0%,rgba(255,255,255,0.1) 50%,transparent 100%);transform:translateX(-100%);transition:transform 0.5s ease}
+.btn-send:hover::before{transform:translateX(100%)}
+.btn-send:hover{transform:translateY(-3px) scale(1.06);background:linear-gradient(135deg,#8b5cf6,#6366f1);box-shadow:0 16px 40px rgba(99,102,241,0.5),0 0 80px rgba(99,102,241,0.1)}
+.btn-send:active{transform:translateY(0) scale(0.97)}
+.btn-send .icon{position:relative;z-index:1;filter:drop-shadow(0 0 6px rgba(255,255,255,0.2))}
+
+/* Sidebar */
+.sidebar{display:flex;flex-direction:column;gap:20px}
+.sidebar-card{background:rgba(12,8,35,0.6);backdrop-filter:blur(28px) saturate(1.4);-webkit-backdrop-filter:blur(28px) saturate(1.4);border:1px solid rgba(255,255,255,0.04);border-radius:20px;padding:24px;transition:all 0.4s ease}
+.sidebar-card:hover{border-color:rgba(139,92,246,0.08);box-shadow:0 0 40px rgba(99,102,241,0.02)}
+.sidebar-card h4{font-size:13px;font-weight:600;color:rgba(255,255,255,0.5);margin-bottom:14px;letter-spacing:0.5px;display:flex;align-items:center;gap:8px}
+.api-doc{font-size:11px;color:rgba(148,163,184,0.5);line-height:1.8}
+.api-doc code{display:block;background:rgba(0,0,0,0.2);border:1px solid rgba(139,92,246,0.04);border-radius:8px;padding:10px 14px;margin:6px 0;font-size:11px;color:#a78bfa;font-family:'Plus Jakarta Sans',sans-serif;overflow-x:auto}
+.api-doc .arrow{color:rgba(148,163,184,0.3);margin:0 4px}
+.api-doc .field{color:rgba(148,163,184,0.6)}
+.api-doc .val{color:#67e8f9}
+.benefit-list{display:flex;flex-direction:column;gap:10px}
+.benefit-item{display:flex;align-items:flex-start;gap:10px;font-size:12px;color:rgba(255,255,255,0.5);line-height:1.5;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,0.01);transition:all 0.3s}
+.benefit-item:hover{background:rgba(99,102,241,0.03);color:rgba(255,255,255,0.7)}
+.benefit-item .dot{width:6px;height:6px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#4f46e5);margin-top:5px;flex-shrink:0;box-shadow:0 0 10px rgba(99,102,241,0.2)}
+
+/* Result display */
+.result-box{padding:14px;border-radius:14px;margin:8px 0}
+.result-box .label{font-size:10px;color:rgba(148,163,184,0.3);font-family:'Orbitron',sans-serif;letter-spacing:1px;margin-bottom:8px}
+.score-row{display:flex;gap:12px;margin:8px 0}
+.score-item{text-align:center;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,0.01);border:1px solid rgba(255,255,255,0.03);flex:1}
+.score-item .v{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:700;color:#a78bfa;line-height:1.2}
+.score-item .l{font-size:9px;color:rgba(148,163,184,0.3);margin-top:4px}
+
+/* Responsive */
+@media(max-width:1024px){.main-layout{grid-template-columns:1fr;padding:0 20px 60px}.sidebar{order:-1}}
+@media(max-width:640px){.hero{padding:80px 16px 40px}.chat-msgs{height:340px;padding:16px}.chat-header{padding:12px 16px;flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<div class="space-bg"></div>
+<div class="nebula n1"></div>
+<div class="nebula n2"></div>
+<div class="grid-overlay"></div>
+<div class="vignette"></div>
+
+<nav>
+  <a href="app.html" class="nav-back">← 返回首页</a>
+  <a href="app.html" class="nav-logo">智职AI</a>
+  <div class="nav-links">
+    <a href="feature-resume-builder.html">制作简历</a>
+    <a href="feature-ai-resume.html">AI 生成</a>
+    
+    <a href="feature-resume.html" class="active">简历分析</a>
+    <a href="feature-job.html">岗位匹配</a>
+    <a href="feature-interview.html">面试模拟</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge"><span class="hero-badge-dot"></span>AI 驱动 · 实时分析</div>
+  <h1><span class="grad">AI 简历分析系统</span></h1>
+  <p>粘贴你的简历内容或描述工作经历，AI 自动分析 ATS 匹配度、技能缺口，并直接给出优化改写方案</p>
+</section>
+
+<div class="main-layout">
+  <!-- Chat -->
+  <div class="chat-box">
+    <div class="chat-header">
+      <span class="icon">📄</span>
+      <span class="name">AI 简历分析</span>
+      <span class="api-tag">API v1</span>
+      <span class="status">POST /api/resume/analyze</span>
+    </div>
+    <div class="chat-msgs" id="chatMsgs">
+      <div class="msg bot">👋 你好！请粘贴你的简历内容或描述你的工作经历，AI 将为你分析 ATS 匹配度、技能缺口并生成优化建议。</div>
+    </div>
+    <div class="chat-input">
+      <div class="input-wrap">
+        <textarea id="chatInput" placeholder="粘贴简历内容或描述工作经历..." rows="1"></textarea>
+      </div>
+      <span class="char-count" id="charCount">0</span>
+      <button class="btn-send" id="sendBtn"><span class="icon">➤</span></button>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+
+    <div class="sidebar-card">
+      <h4>📋 分析结果</h4>
+      <div id="resultPanel">
+        <div style="font-size:12px;color:rgba(148,163,184,0.3);text-align:center;padding:20px">输入简历内容后点击发送，AI 分析结果将显示在这里</div>
+      </div>
+    </div>
+
+    <div class="sidebar-card">
+      <h4>⚡ API 文档</h4>
+      <div class="api-doc">
+        POST /api/resume/analyze<br>
+        <code>{<br>
+  <span class="field">"resume_text"</span>: <span class="val">"string"</span><br>
+}</code>
+        响应格式:<br>
+        <code>{<br>
+  <span class="field">"ats_score"</span>: <span class="val">82</span>,<br>
+  <span class="field">"job_match"</span>: <span class="val">82%</span>,<br>
+  <span class="field">"skill_gaps"</span>: [...]<br>
+}</code>
+      </div>
+    </div>
+
+    <div class="sidebar-card">
+      <h4>✨ 核心能力</h4>
+      <div class="benefit-list">
+        <div class="benefit-item"><div class="dot"></div>ATS 多维评分：关键词/结构/量化/排版</div>
+        <div class="benefit-item"><div class="dot"></div>技能缺口可视化：缺什么、有什么一目了然</div>
+        <div class="benefit-item"><div class="dot"></div>AI 直接改写：优化前 vs 优化后对比</div>
+        <div class="benefit-item"><div class="dot"></div>一键导出优化版简历</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const msgs = document.getElementById('chatMsgs');
+  const inp = document.getElementById('chatInput');
+  const btn = document.getElementById('sendBtn');
+  const cnt = document.getElementById('charCount');
+  const resultPanel = document.getElementById('resultPanel');
+  if(!msgs || !inp || !btn) return;
+
+  let busy = false;
+
+  function add(t, type){const m=document.createElement('div');m.className='msg '+type;m.innerHTML=t;msgs.appendChild(m);msgs.scrollTop=msgs.scrollHeight}
+  function loading(show){if(show)msgs.innerHTML+='<div class="loading" id="ld"><div class="d"></div><div class="d"></div><div class="d"></div></div>'; else{const l=document.getElementById('ld');if(l)l.remove()}}
+
+  inp.addEventListener('input', function(){
+    this.style.height='auto';this.style.height=Math.min(this.scrollHeight,130)+'px';
+    cnt.textContent=this.value.length;cnt.classList.toggle('active',this.value.length>0)
+  });
+  inp.addEventListener('keydown', function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}});
+
+  async function send(){
+    const t = inp.value.trim();
+    if(!t || busy) return;
+    busy = true; btn.disabled = true;
+    add(t, 'user'); inp.value = ''; cnt.textContent = '0';
+    loading(true);
+    
+    try {
+      var mid = getCurrentModelId();
+      var key = getCurrentApiKey();
+      var ep = getCurrentEndpoint();
+      
+      var response = await AiClient.generate({
+        model: mid,
+        prompt: '请分析以下简历内容，给出 ATS 评分(0-100分)、岗位匹配度百分比、缺少的技能、已有的技能，以及优化建议。请按以下JSON格式回复，不要加markdown：{"ats_score":85,"match_pct":72,"missing_skills":["Docker","Redis"],"existing_skills":["React","Vue"],"suggestions":"优化建议文本"}。\n\n简历内容：' + t,
+        system: '你是一个专业的简历分析助手。只回复JSON格式，不要其他文字。',
+        temperature: 0.3,
+        maxTokens: 1024,
+        apiKey: key,
+        endpoint: ep,
+        userModelConfig: {}
+      });
+      
+      loading(false);
+      
+      var content = response.content || '';
+      var data = null;
+      try { data = JSON.parse(content); } catch(e) {}
+      
+      if (data) {
+        var score = data.ats_score || 75;
+        var matchScore = data.match_pct || 70;
+        var missing = data.missing_skills || [];
+        var existing = data.existing_skills || [];
+        var suggestions = data.suggestions || '建议补充更多量化数据';
+        
+        var missingHtml = missing.map(function(s){ return '<span class="tag miss">' + s + ' ✗</span>'; }).join('');
+        var haveHtml = existing.map(function(s){ return '<span class="tag have">' + s + ' ✓</span>'; }).join('');
+        
+        var reply = '<div style="margin-bottom:8px"><strong style="color:#a78bfa">AI 简历分析</strong> <span style="font-size:11px;color:rgba(148,163,184,0.3)">→ ' + mid + '</span></div>' +
+          '<div class="score-row">' +
+            '<div class="score-item"><div class="v">' + score + '</div><div class="l">ATS 评分</div></div>' +
+            '<div class="score-item"><div class="v" style="color:#4ade80">' + matchScore + '%</div><div class="l">岗位匹配</div></div>' +
+          '</div>' +
+          (missingHtml ? '<div style="margin:6px 0"><span style="font-size:10px;color:#f87171;font-weight:600">缺少技能:</span><br>' + missingHtml + '</div>' : '') +
+          (haveHtml ? '<div style="margin:6px 0"><span style="font-size:10px;color:#4ade80;font-weight:600">已有技能:</span><br>' + haveHtml + '</div>' : '') +
+          '<div style="margin-top:8px;padding:12px;border-radius:10px;background:rgba(34,197,94,0.04);border:1px solid rgba(34,197,94,0.06);font-size:12px">' +
+            '<span style="color:#4ade80;font-weight:600">▶ AI 优化建议:</span><br><span style="color:rgba(148,163,184,0.6)">' + suggestions + '</span></div>';
+        
+        add(reply, 'bot');
+        
+        resultPanel.innerHTML = '<div class="result-box">' +
+          '<div class="label">分析结果</div>' +
+          '<div class="score-row">' +
+            '<div class="score-item"><div class="v">' + score + '</div><div class="l">ATS评分</div></div>' +
+            '<div class="score-item"><div class="v" style="color:#4ade80">' + matchScore + '%</div><div class="l">匹配度</div></div>' +
+          '</div>' +
+          '<div style="font-size:11px;color:rgba(148,163,184,0.4);margin-top:8px;padding:8px;border-radius:8px;background:rgba(34,197,94,0.03);border:1px solid rgba(34,197,94,0.04)">' +
+            '✅ 分析完成 · 建议：' + suggestions.substring(0, 50) + '</div>' +
+        '</div>';
+      } else {
+        add(content, 'bot');
+        resultPanel.innerHTML = '<div style="color:rgba(148,163,184,0.3);padding:12px;text-align:center">分析完成，但响应格式异常</div>';
+      }
+    } catch(err) {
+      loading(false);
+      add('⚠️ API 调用失败: ' + err.message, 'bot');
+      resultPanel.innerHTML = '<div style="color:#f87171;padding:12px;text-align:center;font-size:12px">❌ 分析失败: ' + err.message + '</div>';
+    }
+    
+    busy = false; btn.disabled = false;
+  }
+
+  btn.addEventListener('click', send);
+  
+  // Init - nothing extra needed, ai-shared.js handles toolbar
+})();
+</script>
+<script src="public/ai-shared.js"></script>
+</body>
+</html>
