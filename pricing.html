@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>会员价格 · 智职AI</title>
+<script src="https://cdn.tailwindcss.com">
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --glow-indigo: rgba(99,102,241,0.6);
+  --glow-purple: rgba(139,92,246,0.6);
+  --glow-cyan: rgba(6,182,212,0.6);
+  --glow-pink: rgba(236,72,153,0.6);
+  --glow-gold: rgba(250,204,21,0.4);
+}
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}body{font-family:'Plus Jakarta Sans',sans-serif;background:#050510;color:#fff;overflow-x:hidden;-webkit-font-smoothing:antialiased;min-height:100vh}
+h1,h2,h3,h4{font-family:'Orbitron',sans-serif}
+
+/* ===== BACKGROUND LAYERS ===== */
+.space-bg{position:fixed;inset:0;z-index:0;background:
+  radial-gradient(ellipse at 15% 40%,rgba(30,20,100,0.5) 0%,transparent 55%),
+  radial-gradient(ellipse at 85% 25%,rgba(80,10,120,0.35) 0%,transparent 50%),
+  radial-gradient(ellipse at 45% 75%,rgba(10,50,100,0.4) 0%,transparent 50%),
+  radial-gradient(ellipse at 55% 45%,rgba(40,10,80,0.5) 0%,transparent 60%),
+  radial-gradient(ellipse at 50% 50%,rgba(15,5,50,0.9) 0%,transparent 70%),
+  #050510}
+
+.nebula-orb{position:fixed;border-radius:50%;pointer-events:none;z-index:1;filter:blur(100px);mix-blend-mode:screen}
+.n1{width:750px;height:750px;top:-15%;left:8%;background:radial-gradient(circle,rgba(99,102,241,0.22) 0%,rgba(139,92,246,0.08) 40%,transparent 70%);animation:nebulaDrift1 25s ease-in-out infinite}
+.n2{width:600px;height:600px;bottom:-10%;right:5%;background:radial-gradient(circle,rgba(139,92,246,0.2) 0%,rgba(168,85,247,0.06) 35%,transparent 70%);animation:nebulaDrift2 22s ease-in-out infinite}
+.n3{width:500px;height:500px;top:30%;left:55%;background:radial-gradient(circle,rgba(6,182,212,0.12) 0%,rgba(99,102,241,0.05) 40%,transparent 70%);animation:nebulaDrift3 28s ease-in-out infinite}
+.n4{width:400px;height:400px;top:50%;right:65%;background:radial-gradient(circle,rgba(168,85,247,0.14) 0%,rgba(236,72,153,0.05) 40%,transparent 70%);animation:nebulaDrift4 18s ease-in-out infinite}
+.n5{width:300px;height:300px;top:65%;left:25%;background:radial-gradient(circle,rgba(236,72,153,0.1) 0%,rgba(139,92,246,0.04) 40%,transparent 70%);animation:nebulaDrift1 30s ease-in-out infinite reverse}
+.n6{width:200px;height:200px;top:20%;right:20%;background:radial-gradient(circle,rgba(250,204,21,0.06) 0%,transparent 70%);animation:nebulaDrift2 35s ease-in-out infinite 5s}
+
+@keyframes nebulaDrift1{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(70px,-60px) scale(1.08)}50%{transform:translate(-60px,-120px) scale(0.92)}75%{transform:translate(-80px,-40px) scale(1.06)}}
+@keyframes nebulaDrift2{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(-80px,50px) scale(1.06)}50%{transform:translate(70px,90px) scale(0.92)}75%{transform:translate(50px,-60px) scale(1.04)}}
+@keyframes nebulaDrift3{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(100px,40px) scale(1.05)}66%{transform:translate(-40px,-80px) scale(0.94)}}
+@keyframes nebulaDrift4{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(-60px,-50px) scale(1.06)}66%{transform:translate(50px,60px) scale(0.93)}}
+
+.light-rays{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.light-ray{position:absolute;height:200%;top:-50%;background:linear-gradient(180deg,transparent,rgba(99,102,241,0.06),transparent);animation:raySweep 25s linear infinite}
+.lr1{left:8%;width:2.5px;transform:rotate(12deg);opacity:0.05}
+.lr2{left:22%;width:1.5px;transform:rotate(35deg);animation-delay:-6s;opacity:0.04}
+.lr3{left:38%;width:3px;transform:rotate(58deg);animation-delay:-12s;opacity:0.035;background:linear-gradient(180deg,transparent,rgba(139,92,246,0.08),transparent)}
+.lr4{left:52%;width:1.5px;transform:rotate(80deg);animation-delay:-4s;opacity:0.045;background:linear-gradient(180deg,transparent,rgba(6,182,212,0.08),transparent)}
+.lr5{left:68%;width:2px;transform:rotate(105deg);animation-delay:-18s;opacity:0.04}
+.lr6{left:82%;width:2.5px;transform:rotate(130deg);animation-delay:-9s;opacity:0.035;background:linear-gradient(180deg,transparent,rgba(168,85,247,0.08),transparent)}
+.lr7{left:48%;width:1px;transform:rotate(160deg);animation-delay:-14s;opacity:0.03}
+.lr8{left:30%;width:2px;transform:rotate(72deg);animation-delay:-21s;opacity:0.03}
+@keyframes raySweep{0%{transform:translateY(-50%) rotate(var(--r,0deg))}100%{transform:translateY(50%) rotate(var(--r,0deg))}}
+
+.grd-overlay{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(99,102,241,0.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(99,102,241,0.03) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse at center,black 20%,transparent 70%);
+  -webkit-mask-image:radial-gradient(ellipse at center,black 20%,transparent 70%);
+  animation:gridPulse 8s ease-in-out infinite}
+@keyframes gridPulse{0%,100%{opacity:0.8}50%{opacity:1.2}}
+
+.vignette-overlay{position:fixed;inset:0;z-index:2;pointer-events:none;
+  background:radial-gradient(ellipse at center,transparent 50%,rgba(2,0,15,0.4) 75%,rgba(0,0,0,0.6) 100%);
+  animation:vignettePulse 6s ease-in-out infinite}
+@keyframes vignettePulse{0%,100%{opacity:0.9}50%{opacity:1}}
+
+.atmospheric-fog{position:fixed;bottom:0;left:0;right:0;height:40vh;z-index:2;pointer-events:none;
+  background:linear-gradient(0deg,rgba(5,5,16,0.95) 0%,rgba(5,5,16,0.4) 40%,transparent 100%)}
+
+#starCanvas{position:fixed;inset:0;z-index:2;pointer-events:none}
+
+.mouse-glow{position:fixed;width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(139,92,246,0.05) 0%,rgba(99,102,241,0.03) 30%,transparent 70%);
+  pointer-events:none;z-index:3;transform:translate(-50%,-50%);transition:opacity 0.5s ease;opacity:0}
+
+/* ===== NAVIGATION ===== */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(5,5,16,0.5);backdrop-filter:blur(28px) saturate(1.6);
+  -webkit-backdrop-filter:blur(28px) saturate(1.6);
+  border-bottom:1px solid rgba(255,255,255,0.04);transition:all 0.5s cubic-bezier(0.4,0,0.2,1)}
+nav.scrolled{background:rgba(5,5,16,0.88);border-bottom-color:rgba(99,102,241,0.1)}
+.nav-logo{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:800;
+  background:linear-gradient(135deg,#fff 0%,#a5b4fc 50%,#818cf8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  letter-spacing:1px}
+.nav-link{position:relative;font-size:13px;font-weight:500;color:rgba(255,255,255,0.45);
+  transition:color 0.3s ease;text-decoration:none;padding:4px 0;letter-spacing:0.3px}
+.nav-link:hover{color:rgba(255,255,255,0.85)}
+.nav-link::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1.5px;
+  background:linear-gradient(90deg,var(--glow-indigo),var(--glow-purple));
+  transition:width 0.3s cubic-bezier(0.4,0,0.2,1);border-radius:1px}
+.nav-link:hover::after{width:100%}
+.nav-link.active{color:#c4b5fd}
+.nav-link.active::after{width:100%}
+.nav-btn{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:600;
+  padding:8px 22px;border-radius:8px;border:1px solid rgba(139,92,246,0.3);
+  background:linear-gradient(135deg,rgba(139,92,246,0.12),rgba(99,102,241,0.08));
+  color:#c4b5fd;cursor:pointer;transition:all 0.3s ease;letter-spacing:0.5px}
+.nav-btn:hover{background:linear-gradient(135deg,rgba(139,92,246,0.25),rgba(99,102,241,0.18));
+  border-color:rgba(139,92,246,0.5);box-shadow:0 0 25px rgba(139,92,246,0.15);transform:translateY(-1px)}
+
+/* ===== HERO ===== */
+.hero{position:relative;z-index:10;min-height:auto;display:flex;align-items:center;padding:140px 0 60px;overflow:hidden}
+.hero-content{max-width:800px;margin:0 auto;text-align:center;padding:0 20px;position:relative;z-index:5}
+.hero-title{font-size:clamp(32px,4vw,52px);font-weight:900;line-height:1.12;letter-spacing:-1px;margin-bottom:16px}
+.hero-title-grad{background:linear-gradient(135deg,#fff 0%,#e0e7ff 30%,#c4b5fd 60%,#818cf8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 40px rgba(99,102,241,0.15))}
+.hero-sub{font-size:16px;font-weight:400;color:rgba(255,255,255,0.5);line-height:1.8;max-width:560px;margin:0 auto}
+
+/* ===== PRICING CARDS ===== */
+.pricing-section{position:relative;z-index:10;padding:40px 0 100px}
+.pricing-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:20px;max-width:1400px;margin:0 auto;padding:0 40px}
+@media(max-width:1300px){.pricing-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:900px){.pricing-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.pricing-grid{grid-template-columns:1fr;max-width:380px}}
+
+.pricing-card{position:relative;border-radius:20px;
+  border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.015);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  padding:32px 24px 28px;transition:all 0.5s cubic-bezier(0.23,1,0.32,1);
+  cursor:default;overflow:hidden;display:flex;flex-direction:column}
+.pricing-card::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;
+  background:linear-gradient(135deg,transparent 0%,rgba(139,92,246,0.08) 50%,transparent 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;opacity:0;transition:opacity 0.5s ease}
+.pricing-card:hover::before{opacity:1}
+.pricing-card:hover{transform:translateY(-6px);border-color:rgba(139,92,246,0.15);
+  box-shadow:0 20px 60px rgba(0,0,0,0.3),0 0 40px rgba(99,102,241,0.06)}
+.pricing-card-scan{position:absolute;top:0;left:-100%;width:70%;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(139,92,246,0.4),rgba(99,102,241,0.3),rgba(6,182,212,0.2),transparent);
+  transition:left 0.6s cubic-bezier(0.23,1,0.32,1);pointer-events:none;z-index:2;
+  box-shadow:0 0 15px rgba(139,92,246,0.2)}
+.pricing-card:hover .pricing-card-scan{left:150%}
+.pricing-card-glow{position:absolute;inset:0;border-radius:20px;z-index:-1;pointer-events:none;opacity:0;
+  transition:opacity 0.5s ease;background:radial-gradient(ellipse at 50% 30%,rgba(139,92,246,0.12),rgba(99,102,241,0.06),transparent 60%)}
+.pricing-card:hover .pricing-card-glow{opacity:1}
+
+/* ===== RECOMMENDED CARD ===== */
+.pricing-card.recommended{border-color:rgba(139,92,246,0.25);
+  background:rgba(139,92,246,0.03);
+  box-shadow:0 0 50px rgba(139,92,246,0.08),0 8px 40px rgba(0,0,0,0.2);
+  transform:translateY(-8px)}
+.pricing-card.recommended::before{opacity:1}
+.pricing-card.recommended:hover{transform:translateY(-12px);
+  box-shadow:0 20px 70px rgba(99,102,241,0.15),0 0 60px rgba(139,92,246,0.1)}
+.recommended-badge{position:absolute;top:12px;right:12px;padding:4px 14px;
+  font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;
+  border-radius:100px;color:#fff;
+  background:linear-gradient(135deg,#7c3aed,#4f46e5);
+  box-shadow:0 0 20px rgba(139,92,246,0.3);z-index:5}
+
+.pricing-card-icon{width:48px;height:48px;border-radius:14px;margin-bottom:16px;
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+  background:rgba(99,102,241,0.08);transition:all 0.4s ease}
+.pricing-card:hover .pricing-card-icon{transform:scale(1.08) translateY(-2px)}
+.pricing-card.recommended .pricing-card-icon{background:rgba(139,92,246,0.15);box-shadow:0 0 20px rgba(139,92,246,0.1)}
+
+.pricing-card-name{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:rgba(255,255,255,0.9);margin-bottom:6px;letter-spacing:0.3px}
+.pricing-card-desc{font-size:12px;color:rgba(255,255,255,0.35);line-height:1.5;margin-bottom:16px}
+.pricing-card-price{margin-bottom:18px;display:flex;align-items:baseline;gap:4px}
+.pricing-card-currency{font-size:16px;font-weight:600;color:rgba(255,255,255,0.5)}
+.pricing-card-amount{font-family:'Orbitron',sans-serif;font-size:42px;font-weight:900;
+  background:linear-gradient(135deg,#fff 0%,#c4b5fd 50%,#818cf8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1}
+.pricing-card-unit{font-size:13px;color:rgba(255,255,255,0.35);font-weight:400}
+.pricing-card-features{list-style:none;padding:0;margin:0 0 auto;flex:1}
+.pricing-card-features li{display:flex;align-items:flex-start;gap:8px;padding:7px 0;font-size:13px;color:rgba(255,255,255,0.5);line-height:1.5;border-bottom:1px solid rgba(255,255,255,0.02)}
+.pricing-card-features li:last-child{border-bottom:none}
+.pricing-card-features li::before{content:'✓';color:#a78bfa;font-weight:700;flex-shrink:0;margin-top:1px}
+.pricing-card-btn{display:block;width:100%;padding:12px;margin-top:20px;border-radius:12px;border:1px solid rgba(139,92,246,0.25);
+  background:linear-gradient(135deg,rgba(139,92,246,0.1),rgba(99,102,241,0.06));
+  color:#c4b5fd;font-family:'Orbitron',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.5px;
+  cursor:pointer;transition:all 0.3s ease;text-align:center;text-decoration:none}
+.pricing-card-btn:hover{background:linear-gradient(135deg,rgba(139,92,246,0.25),rgba(99,102,241,0.15));
+  border-color:rgba(139,92,246,0.4);box-shadow:0 0 25px rgba(139,92,246,0.15);transform:translateY(-2px)}
+.pricing-card.recommended .pricing-card-btn{background:linear-gradient(135deg,#7c3aed,#4f46e5);border-color:transparent;color:#fff;box-shadow:0 4px 20px rgba(99,102,241,0.3)}
+.pricing-card.recommended .pricing-card-btn:hover{box-shadow:0 8px 35px rgba(99,102,241,0.4);transform:translateY(-2px)}
+
+/* ===== BENEFITS SECTION ===== */
+.benefits-section{position:relative;z-index:10;padding:60px 0 100px}
+.benefits-inner{max-width:1100px;margin:0 auto;padding:0 40px}
+.benefits-header{text-align:center;margin-bottom:50px}
+.benefits-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 16px;
+  border-radius:100px;border:1px solid rgba(99,102,241,0.12);
+  background:rgba(99,102,241,0.04);font-size:11px;font-weight:600;color:rgba(167,139,250,0.8);
+  font-family:'Orbitron',sans-serif;letter-spacing:1px;margin-bottom:16px;text-transform:uppercase}
+.benefits-title{font-size:clamp(28px,3.5vw,42px);font-weight:800;line-height:1.15;letter-spacing:-0.5px;margin-bottom:12px}
+.benefits-title-grad{background:linear-gradient(135deg,#fff 0%,#c4b5fd 50%,#818cf8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.benefits-sub{font-size:15px;font-weight:400;color:rgba(255,255,255,0.45);line-height:1.75}
+
+.benefits-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:900px){.benefits-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.benefits-grid{grid-template-columns:1fr}}
+.benefit-item{display:flex;align-items:flex-start;gap:14px;padding:22px 20px;
+  border-radius:16px;border:1px solid rgba(255,255,255,0.04);
+  background:rgba(255,255,255,0.01);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  transition:all 0.4s ease}
+.benefit-item:hover{border-color:rgba(139,92,246,0.1);background:rgba(255,255,255,0.02);
+  box-shadow:0 8px 30px rgba(0,0,0,0.15),0 0 20px rgba(99,102,241,0.03);transform:translateY(-2px)}
+.benefit-check{width:32px;height:32px;border-radius:10px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.15);
+  color:#a78bfa;font-size:14px;font-weight:700}
+.benefit-item:hover .benefit-check{background:rgba(139,92,246,0.15);box-shadow:0 0 15px rgba(139,92,246,0.1)}
+.benefit-text h4{font-size:14px;font-weight:600;color:rgba(255,255,255,0.85);margin-bottom:4px}
+.benefit-text p{font-size:12px;color:rgba(255,255,255,0.35);line-height:1.5}
+
+/* ===== FOOTER ===== */
+footer{position:relative;z-index:10;border-top:1px solid rgba(255,255,255,0.03);overflow:hidden;background:rgba(2,2,10,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.footer-top-line{position:absolute;top:0;left:10%;right:10%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(139,92,246,0.2),rgba(99,102,241,0.15),transparent);z-index:1}
+.footer-energy-line{position:absolute;top:0;left:0;right:0;height:2px;z-index:2;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(99,102,241,0.3),rgba(139,92,246,0.4),rgba(6,182,212,0.3),rgba(99,102,241,0.2),transparent);
+  background-size:200% 100%;animation:energyLineSweep 4s linear infinite;filter:blur(1px);box-shadow:0 0 15px rgba(99,102,241,0.1)}
+@keyframes energyLineSweep{0%{background-position:-200% 0}100%{background-position:200% 0}}
+
+.footer-inner{max-width:1100px;margin:0 auto;padding:60px 40px 40px;position:relative;z-index:2}
+.footer-main{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
+.footer-brand-wrap{display:flex;align-items:center;gap:10px}
+.footer-brand-dot{width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#4f46e5);box-shadow:0 0 10px rgba(99,102,241,0.3)}
+.footer-brand{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:800;
+  background:linear-gradient(135deg,#fff 0%,#c4b5fd 50%,#818cf8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  letter-spacing:1px;animation:footerGlow 3s ease-in-out infinite}
+@keyframes footerGlow{0%,100%{filter:drop-shadow(0 0 20px rgba(99,102,241,0.15))}50%{filter:drop-shadow(0 0 40px rgba(139,92,246,0.3)) drop-shadow(0 0 60px rgba(99,102,241,0.15))}}
+.footer-links{display:flex;gap:24px;flex-wrap:wrap}
+.footer-links a{font-size:13px;color:rgba(255,255,255,0.3);text-decoration:none;transition:all 0.3s ease}
+.footer-links a:hover{color:rgba(167,139,250,0.7)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:30px;margin-top:30px;
+  border-top:1px solid rgba(255,255,255,0.03);font-size:12px;color:rgba(255,255,255,0.2);flex-wrap:wrap;gap:12px}
+.footer-bottom-links{display:flex;gap:20px}
+.footer-bottom-links a{color:rgba(255,255,255,0.2);text-decoration:none;transition:color 0.3s ease}
+.footer-bottom-links a:hover{color:rgba(167,139,250,0.5)}
+.footer-ai-tag{font-size:11px;color:rgba(167,139,250,0.45)}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  .pricing-grid{padding:0 20px}
+  .benefits-inner{padding:0 20px}
+  .footer-inner{padding:40px 20px 30px}
+  .hero-title{font-size:clamp(28px,8vw,42px)}
+  nav .nav-links{display:none}
+}
+@media(max-width:480px){
+  .pricing-grid{padding:0 12px}
+  .pricing-card{padding:24px 18px 22px}
+  .pricing-card-amount{font-size:34px}
+}
+
+.gradient-text{background:linear-gradient(135deg,#c4b5fd,#818cf8,#a78bfa);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.glow-text{text-shadow:0 0 20px rgba(139,92,246,0.3),0 0 40px rgba(99,102,241,0.15)}
+
+</style>
+</head>
+<body>
+
+<!-- ===== BACKGROUND ===== -->
+<div class="space-bg"></div>
+<div class="nebula-orb n1"></div>
+<div class="nebula-orb n2"></div>
+<div class="nebula-orb n3"></div>
+<div class="nebula-orb n4"></div>
+<div class="nebula-orb n5"></div>
+<div class="nebula-orb n6"></div>
+<div class="light-rays">
+  <div class="light-ray lr1" style="--r:12deg"></div>
+  <div class="light-ray lr2" style="--r:35deg"></div>
+  <div class="light-ray lr3" style="--r:58deg"></div>
+  <div class="light-ray lr4" style="--r:80deg"></div>
+  <div class="light-ray lr5" style="--r:105deg"></div>
+  <div class="light-ray lr6" style="--r:130deg"></div>
+  <div class="light-ray lr7" style="--r:160deg"></div>
+  <div class="light-ray lr8" style="--r:72deg"></div>
+</div>
+<div class="grd-overlay"></div>
+<div class="atmospheric-fog"></div>
+<div class="vignette-overlay"></div>
+<canvas id="starCanvas"></canvas>
+<div class="mouse-glow" id="mouseGlow"></div>
+
+<!-- ===== NAVIGATION ===== -->
+<nav id="navbar">
+  <div style="max-width:1400px;margin:0 auto;padding:0 50px;display:flex;align-items:center;justify-content:space-between;height:64px">
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#4f46e5);box-shadow:0 0 10px rgba(99,102,241,0.3)"></div>
+      <a href="app.html" style="text-decoration:none"><span class="nav-logo">智职AI</span></a>
+    </div>
+    <div class="nav-links" style="display:flex;align-items:center;gap:28px">
+      <a href="app.html" class="nav-link">首页</a>
+      <a href="feature-ai-resume.html" class="nav-link">AI简历</a>
+      <a href="feature-job.html" class="nav-link">岗位匹配</a>
+      <a href="hr-chat.html" class="nav-link">HR聊天助手</a>
+      <a href="feature-interview.html" class="nav-link">模拟面试</a>
+      <a href="#decision" class="nav-link">公司决策卡</a>
+      <a href="pricing.html" class="nav-link active">会员价格</a>
+    </div>
+    <button class="nav-btn" onclick="window.location='feature-ai-resume.html'">开始使用</button>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-content">
+    <h1 class="hero-title">
+      <span class="hero-title-grad">选择适合你的方案</span>
+    </h1>
+    <p class="hero-sub">从免费试用到无限畅用，找到最适合你的求职助力计划</p>
+  </div>
+</section>
+
+<!-- ===== PRICING CARDS ===== -->
+<section class="pricing-section">
+  <div class="pricing-grid">
+
+    <!-- 单次体验 -->
+    <div class="pricing-card">
+      <div class="pricing-card-scan"></div>
+      <div class="pricing-card-glow"></div>
+      <div class="pricing-card-icon">⚡</div>
+      <div class="pricing-card-name">单次体验</div>
+      <div class="pricing-card-desc">简历优化一次，快速体验</div>
+      <div class="pricing-card-price">
+        <span class="pricing-card-currency">¥</span>
+        <span class="pricing-card-amount">6.6</span>
+      </div>
+      <ul class="pricing-card-features">
+        <li>AI简历优化 ×1次</li>
+        <li>基础简历模板</li>
+        <li>48小时有效</li>
+      </ul>
+      <a href="feature-ai-resume.html" class="pricing-card-btn">立即体验</a>
+    </div>
+
+    <!-- 学生专享 - RECOMMENDED -->
+    <div class="pricing-card recommended">
+      <div class="pricing-card-scan"></div>
+      <div class="pricing-card-glow"></div>
+      <div class="recommended-badge">推荐</div>
+      <div class="pricing-card-icon">🎓</div>
+      <div class="pricing-card-name">学生专享</div>
+      <div class="pricing-card-desc">前2次，需学生认证</div>
+      <div class="pricing-card-price">
+        <span class="pricing-card-currency">¥</span>
+        <span class="pricing-card-amount">1.9</span>
+      </div>
+      <ul class="pricing-card-features">
+        <li>AI简历优化 ×2次</li>
+        <li>精选简历模板</li>
+        <li>需学信网认证</li>
+        <li>7天有效</li>
+      </ul>
+      <a href="feature-ai-resume.html" class="pricing-card-btn">学生认证</a>
+    </div>
+
+    <!-- 月会员 -->
+    <div class="pricing-card">
+      <div class="pricing-card-scan"></div>
+      <div class="pricing-card-glow"></div>
+      <div class="pricing-card-icon">👑</div>
+      <div class="pricing-card-name">月会员</div>
+      <div class="pricing-card-desc">无限畅用，求职全流程</div>
+      <div class="pricing-card-price">
+        <span class="pricing-card-currency">¥</span>
+        <span class="pricing-card-amount">39</span>
+        <span class="pricing-card-unit">/月</span>
+      </div>
+      <ul class="pricing-card-features">
+        <li>无限简历优化</li>
+        <li>每日岗位任务包</li>
+        <li>HR聊天助手</li>
+        <li>AI模拟面试</li>
+        <li>公司决策卡</li>
+        <li>求职进度管理</li>
+      </ul>
+      <a href="feature-ai-resume.html" class="pricing-card-btn">订阅月会员</a>
+    </div>
+
+    <!-- 简历+面试训练包 -->
+    <div class="pricing-card">
+      <div class="pricing-card-scan"></div>
+      <div class="pricing-card-glow"></div>
+      <div class="pricing-card-icon">📋</div>
+      <div class="pricing-card-name">简历+面试训练包</div>
+      <div class="pricing-card-desc">组合训练，一举拿下</div>
+      <div class="pricing-card-price">
+        <span class="pricing-card-currency">¥</span>
+        <span class="pricing-card-amount">19.9</span>
+      </div>
+      <ul class="pricing-card-features">
+        <li>AI简历优化 ×3次</li>
+        <li>AI模拟面试 ×5次</li>
+        <li>面试技巧评估报告</li>
+        <li>30天有效</li>
+      </ul>
+      <a href="feature-interview.html" class="pricing-card-btn">立即购买</a>
+    </div>
+
+    <!-- 真人导师点评 -->
+    <div class="pricing-card">
+      <div class="pricing-card-scan"></div>
+      <div class="pricing-card-glow"></div>
+      <div class="pricing-card-icon">🧑‍🏫</div>
+      <div class="pricing-card-name">真人导师点评</div>
+      <div class="pricing-card-desc">专业导师1v1指导</div>
+      <div class="pricing-card-price">
+        <span class="pricing-card-currency">¥</span>
+        <span class="pricing-card-amount">49</span>
+        <span class="pricing-card-unit">起</span>
+      </div>
+      <ul class="pricing-card-features">
+        <li>简历专业修改建议</li>
+        <li>模拟面试点评</li>
+        <li>求职策略指导</li>
+        <li>行业导师匹配</li>
+      </ul>
+      <a href="#contact" class="pricing-card-btn">预约导师</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== BENEFITS SECTION ===== -->
+<section class="benefits-section">
+  <div class="benefits-inner">
+    <div class="benefits-header">
+      <div class="benefits-tag">✦ 会员权益</div>
+      <h2 class="benefits-title">
+        <span class="benefits-title-grad">全能求职工具箱</span>
+      </h2>
+      <p class="benefits-sub">所有权益一目了然，助你求职更高效</p>
+    </div>
+    <div class="benefits-grid">
+      <div class="benefit-item">
+        <div class="benefit-check">✓</div>
+        <div class="benefit-text">
+          <h4>无限简历优化</h4>
+          <p>不限次数AI优化简历，自动挖掘课程作业与社团经历中的亮点</p>
+        </div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-check">✓</div>
+        <div class="benefit-text">
+          <h4>每日岗位任务包</h4>
+          <p>精准匹配冲刺、高匹配、保底三档岗位，附带投递攻略</p>
+        </div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-check">✓</div>
+        <div class="benefit-text">
+          <h4>HR聊天助手</h4>
+          <p>智能分析HR消息意图，帮你起草高情商回复，不再卡壳</p>
+        </div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-check">✓</div>
+        <div class="benefit-text">
+          <h4>AI模拟面试</h4>
+          <p>模拟真实面试场景，涵盖行为面、技术面、压力面等多种类型</p>
+        </div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-check">✓</div>
+        <div class="benefit-text">
+          <h4>公司决策卡</h4>
+          <p>企业口碑、薪资范围、加班文化一目了然，帮你避坑选好公司</p>
+        </div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-check">✓</div>
+        <div class="benefit-text">
+          <h4>求职进度管理</h4>
+          <p>可视化追踪投递进度、面试安排、offer状态，求职不再一团乱</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-top-line"></div>
+  <div class="footer-energy-line"></div>
+  <div class="footer-inner">
+    <div class="footer-main">
+      <div class="footer-brand-wrap">
+        <div class="footer-brand-dot"></div>
+        <span class="footer-brand">智职AI</span>
+      </div>
+      <div class="footer-links">
+        <a href="app.html">首页</a>
+        <a href="feature-ai-resume.html">AI简历</a>
+        <a href="feature-job.html">岗位匹配</a>
+        <a href="hr-chat.html">HR聊天助手</a>
+        <a href="feature-interview.html">模拟面试</a>
+        <a href="pricing.html">会员价格</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 智职AI · AI求职陪跑教练</span>
+      <div class="footer-bottom-links">
+        <a href="#">隐私政策</a>
+        <a href="#">用户协议</a>
+        <a href="#">联系我们</a>
+      </div>
+      <div class="footer-ai-tag">由智职AI智能生成</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== STARFIELD CANVAS ===== -->
+<script>
+(function() {
+  var c = document.getElementById('starCanvas');
+  if (!c) return;
+  var ctx = c.getContext('2d');
+  var w, h;
+  var stars = [];
+  var STAR_COUNT = 180;
+
+  function resize() {
+    w = c.width = window.innerWidth;
+    h = c.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  for (var i = 0; i < STAR_COUNT; i++) {
+    stars.push({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: Math.random() * 1.8 + 0.2,
+      a: Math.random(),
+      da: (Math.random() - 0.5) * 0.008,
+      speed: Math.random() * 0.3 + 0.05
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    for (var i = 0; i < stars.length; i++) {
+      var s = stars[i];
+      s.a += s.da;
+      if (s.a > 0.8 || s.a < 0.1) s.da *= -1;
+      s.y -= s.speed;
+      if (s.y < -5) { s.y = h + 5; s.x = Math.random() * w; }
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(180,180,255,' + s.a + ')';
+      ctx.fill();
+      if (s.r > 1.2) {
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r * 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(139,92,246,' + (s.a * 0.15) + ')';
+        ctx.fill();
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+
+  var glow = document.getElementById('mouseGlow');
+  document.addEventListener('mousemove', function(e) {
+    if (!glow) return;
+    glow.style.left = e.clientX + 'px';
+    glow.style.top = e.clientY + 'px';
+    glow.style.opacity = '1';
+  });
+  document.addEventListener('mouseleave', function() {
+    if (glow) glow.style.opacity = '0';
+  });
+})();
+</script>
+
+</body>
+</html>
