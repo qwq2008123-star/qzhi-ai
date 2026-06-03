@@ -138,13 +138,15 @@ app.post('/api/generate/stream', async (req, res) => {
 // ============================================================
 app.post('/api/resume/analyze', async (req, res) => {
   try {
-    const { resume_text, model, userModelConfig } = req.body;
+    const { resume_text, model, apiKey, endpoint, userModelConfig } = req.body;
     const prompt = PROMPTS.resumeAnalyze(resume_text);
     const result = await generate({
       model: model || 'deepseek-v4-flash',
       system: prompt.system,
       prompt: prompt.user,
       maxTokens: 4096,
+      apiKey: apiKey || '',
+      endpoint: endpoint || '',
       userModelConfig: userModelConfig || {},
     });
     // Try to parse JSON from response
@@ -166,13 +168,15 @@ app.post('/api/resume/analyze', async (req, res) => {
 // ============================================================
 app.post('/api/job/match', async (req, res) => {
   try {
-    const { skills, experience, model, userModelConfig } = req.body;
+    const { skills, experience, model, apiKey, endpoint, userModelConfig } = req.body;
     const prompt = PROMPTS.jobMatch(skills, experience);
     const result = await generate({
       model: model || 'deepseek-v4-flash',
       system: prompt.system,
       prompt: prompt.user,
       maxTokens: 4096,
+      apiKey: apiKey || '',
+      endpoint: endpoint || '',
       userModelConfig: userModelConfig || {},
     });
     let parsed;
@@ -193,13 +197,15 @@ app.post('/api/job/match', async (req, res) => {
 // ============================================================
 app.post('/api/interview/evaluate', async (req, res) => {
   try {
-    const { answer, question, position, model, userModelConfig } = req.body;
+    const { answer, question, position, model, apiKey, endpoint, userModelConfig } = req.body;
     const prompt = PROMPTS.interviewEvaluate(question, answer, position || '前端开发');
     const result = await generate({
       model: model || 'deepseek-v4-flash',
       system: prompt.system,
       prompt: prompt.user,
       maxTokens: 2048,
+      apiKey: apiKey || '',
+      endpoint: endpoint || '',
       userModelConfig: userModelConfig || {},
     });
     let parsed;
@@ -220,13 +226,15 @@ app.post('/api/interview/evaluate', async (req, res) => {
 // ============================================================
 app.post('/api/interview/report', async (req, res) => {
   try {
-    const { conversation, model, userModelConfig } = req.body;
+    const { conversation, model, apiKey, endpoint, userModelConfig } = req.body;
     const prompt = PROMPTS.interviewReport(conversation);
     const result = await generate({
       model: model || 'deepseek-v4-flash',
       system: prompt.system,
       prompt: prompt.user,
       maxTokens: 4096,
+      apiKey: apiKey || '',
+      endpoint: endpoint || '',
       userModelConfig: userModelConfig || {},
     });
     let parsed;
@@ -247,13 +255,15 @@ app.post('/api/interview/report', async (req, res) => {
 // ============================================================
 app.post('/api/resume/generate', async (req, res) => {
   try {
-    const { formData, model, userModelConfig } = req.body;
+    const { formData, model, apiKey, endpoint, userModelConfig } = req.body;
     const prompt = PROMPTS.resumeGenerate(formData);
     const result = await generate({
       model: model || 'deepseek-v4-flash',
       system: prompt.system,
       prompt: prompt.user,
       maxTokens: 8192,
+      apiKey: apiKey || '',
+      endpoint: endpoint || '',
       userModelConfig: userModelConfig || {},
     });
     res.json({ content: result.content });
@@ -267,7 +277,7 @@ app.post('/api/resume/generate', async (req, res) => {
 // ============================================================
 app.post('/api/chat', async (req, res) => {
   try {
-    const { message, context, model, userModelConfig } = req.body;
+    const { message, context, model, apiKey, endpoint, userModelConfig } = req.body;
     const prompt = PROMPTS.generalChat(message, context);
     const result = await generate({
       model: model || 'gpt-4o-mini',
@@ -275,6 +285,8 @@ app.post('/api/chat', async (req, res) => {
       prompt: prompt.user,
       context: context,
       maxTokens: 2048,
+      apiKey: apiKey || '',
+      endpoint: endpoint || '',
       userModelConfig: userModelConfig || {},
     });
     res.json({ content: result.content });

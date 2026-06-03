@@ -1,145 +1,203 @@
 /**
  * 智职AI — Frontend AI Client
  * Unified API calls for all model operations
+ * v2 — Auto-injects apiKey/endpoint/userModelConfig from localStorage
  */
-const AiClient = {
-  BASE: '',  // Set to backend URL if different origin
+var AiClient = {
+  BASE: '',
 
-  /**
-   * Fetch available models
-   */
+  _getConfig: function() {
+    var mid = typeof getCurrentModelId === 'function' ? getCurrentModelId() : 'deepseek-v4-flash';
+    var key = '';
+    var ep = '';
+    var ucm = {};
+    try {
+      if (typeof getCurrentApiKey === 'function') key = getCurrentApiKey();
+      if (typeof getCurrentEndpoint === 'function') ep = getCurrentEndpoint();
+      if (typeof aiGetModelConfigs === 'function') {
+        ucm = aiGetModelConfigs();
+      } else {
+        var mc = localStorage.getItem('ai_model_configs');
+        if (mc) ucm = JSON.parse(mc);
+      }
+    } catch(e) {}
+    return { model: mid, apiKey: key, endpoint: ep, userModelConfig: ucm };
+  },
+
   async getModels() {
-    const res = await fetch(`${this.BASE}/api/models`);
+    var res = await fetch(this.BASE + '/api/models');
     return res.json();
   },
 
-  /**
-   * Unified generate (no stream)
-   */
-  async generate({ model, messages, prompt, system, temperature, maxTokens, apiKey, endpoint, userModelConfig }) {
-    const res = await fetch(`${this.BASE}/api/generate`, {
+  async generate(opts) {
+    var cfg = this._getConfig();
+    var res = await fetch(this.BASE + '/api/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model, messages, prompt, system, temperature, maxTokens, apiKey, endpoint, userModelConfig }),
+      body: JSON.stringify({
+        model: opts.model || cfg.model,
+        messages: opts.messages,
+        prompt: opts.prompt,
+        system: opts.system,
+        temperature: opts.temperature,
+        maxTokens: opts.maxTokens,
+        apiKey: opts.apiKey || cfg.apiKey,
+        endpoint: opts.endpoint || cfg.endpoint,
+        userModelConfig: opts.userModelConfig || cfg.userModelConfig,
+      }),
     });
     if (!res.ok) throw new Error((await res.json()).error || '请求失败');
     return res.json();
   },
 
-  /**
-   * Streaming generate — returns an EventSource-compatible endpoint
-   * Instead, we use fetch + ReadableStream for SSE
-   */
-  async generateStream({ model, prompt, system, temperature, maxTokens, apiKey, endpoint, userModelConfig, onChunk, onDone, onError }) {
+  async generateStream(opts) {
+    var cfg = this._getConfig();
     try {
-      const res = await fetch(`${this.BASE}/api/generate/stream`, {
+      var res = await fetch(this.BASE + '/api/generate/stream', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ model, prompt, system, temperature, maxTokens, apiKey, endpoint, userModelConfig }),
+        body: JSON.stringify({
+          model: opts.model || cfg.model,
+          prompt: opts.prompt,
+          system: opts.system,
+          temperature: opts.temperature,
+          maxTokens: opts.maxTokens,
+          apiKey: opts.apiKey || cfg.apiKey,
+          endpoint: opts.endpoint || cfg.endpoint,
+          userModelConfig: opts.userModelConfig || cfg.userModelConfig,
+        }),
       });
       if (!res.ok) throw new Error('Stream request failed');
-
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = '';
-
+      var reader = res.body.getReader();
+      var decoder = new TextDecoder();
+      var buffer = '';
       while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split('\n');
+        var rd = await reader.read();
+        if (rd.done) break;
+        buffer += decoder.decode(rd.value, { stream: true });
+        var lines = buffer.split('\n');
         buffer = lines.pop() || '';
-
-        for (const line of lines) {
-          if (line.startsWith('data: ')) {
+        for (var i = 0; i < lines.length; i++) {
+          var line = lines[i];
+          if (line.indexOf('data: ') === 0) {
             try {
-              const data = JSON.parse(line.slice(6));
-              if (data.done) { onDone?.(); return; }
-              if (data.error) { onError?.(data.error); return; }
-              if (data.content) onChunk?.(data.content);
-            } catch (e) { /* skip */ }
+              var data = JSON.parse(line.slice(6));
+              if (data.done) { opts.onDone && opts.onDone(); return; }
+              if (data.error) { opts.onError && opts.onError(data.error); return; }
+              if (data.content) opts.onChunk && opts.onChunk(data.content);
+            } catch(e) {}
           }
         }
       }
-      onDone?.();
-    } catch (err) {
-      onError?.(err.message);
+      opts.onDone && opts.onDone();
+    } catch(err) {
+      opts.onError && opts.onError(err.message);
     }
   },
 
-  /**
-   * Resume Analysis
-   */
   async analyzeResume(resumeText, model) {
-    const res = await fetch(`${this.BASE}/api/resume/analyze`, {
+    var cfg = this._getConfig();
+    var res = await fetch(this.BASE + '/api/resume/analyze', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ resume_text: resumeText, model }),
+      body: JSON.stringify({
+        resume_text: resumeText,
+        model: model || cfg.model,
+        apiKey: cfg.apiKey,
+        endpoint: cfg.endpoint,
+        userModelConfig: cfg.userModelConfig,
+      }),
     });
+    if (!res.ok) throw new Error((await res.json()).error || '简历分析失败');
     return res.json();
   },
 
-  /**
-   * Resume Generation
-   */
   async generateResume(formData, model) {
-    const res = await fetch(`${this.BASE}/api/resume/generate`, {
+    var cfg = this._getConfig();
+    var res = await fetch(this.BASE + '/api/resume/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ formData, model }),
+      body: JSON.stringify({
+        formData: formData,
+        model: model || cfg.model,
+        apiKey: cfg.apiKey,
+        endpoint: cfg.endpoint,
+        userModelConfig: cfg.userModelConfig,
+      }),
     });
+    if (!res.ok) throw new Error((await res.json()).error || '简历生成失败');
     return res.json();
   },
 
-  /**
-   * Job Matching
-   */
   async matchJobs(skills, experience, model) {
-    const res = await fetch(`${this.BASE}/api/job/match`, {
+    var cfg = this._getConfig();
+    var res = await fetch(this.BASE + '/api/job/match', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ skills, experience, model }),
+      body: JSON.stringify({
+        skills: skills,
+        experience: experience,
+        model: model || cfg.model,
+        apiKey: cfg.apiKey,
+        endpoint: cfg.endpoint,
+        userModelConfig: cfg.userModelConfig,
+      }),
     });
+    if (!res.ok) throw new Error((await res.json()).error || '岗位匹配失败');
     return res.json();
   },
 
-  /**
-   * Interview Evaluate
-   */
   async evaluateAnswer(question, answer, position, model) {
-    const res = await fetch(`${this.BASE}/api/interview/evaluate`, {
+    var cfg = this._getConfig();
+    var res = await fetch(this.BASE + '/api/interview/evaluate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ question, answer, position, model }),
+      body: JSON.stringify({
+        question: question,
+        answer: answer,
+        position: position,
+        model: model || cfg.model,
+        apiKey: cfg.apiKey,
+        endpoint: cfg.endpoint,
+        userModelConfig: cfg.userModelConfig,
+      }),
     });
+    if (!res.ok) throw new Error((await res.json()).error || '评估失败');
     return res.json();
   },
 
-  /**
-   * Interview Report
-   */
   async generateReport(conversation, model) {
-    const res = await fetch(`${this.BASE}/api/interview/report`, {
+    var cfg = this._getConfig();
+    var res = await fetch(this.BASE + '/api/interview/report', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ conversation, model }),
+      body: JSON.stringify({
+        conversation: conversation,
+        model: model || cfg.model,
+        apiKey: cfg.apiKey,
+        endpoint: cfg.endpoint,
+        userModelConfig: cfg.userModelConfig,
+      }),
     });
+    if (!res.ok) throw new Error((await res.json()).error || '报告生成失败');
     return res.json();
   },
 
-  /**
-   * General Chat
-   */
   async chat(message, context, model) {
-    const res = await fetch(`${this.BASE}/api/chat`, {
+    var cfg = this._getConfig();
+    var res = await fetch(this.BASE + '/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message, context, model }),
+      body: JSON.stringify({
+        message: message,
+        context: context,
+        model: model || cfg.model,
+        apiKey: cfg.apiKey,
+        endpoint: cfg.endpoint,
+        userModelConfig: cfg.userModelConfig,
+      }),
     });
+    if (!res.ok) throw new Error((await res.json()).error || '对话失败');
     return res.json();
   },
 };
-
-// Export for module usage
-if (typeof module !== 'undefined') module.exports = AiClient;
